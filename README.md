@@ -16,7 +16,7 @@
 | `slides/lesson-01/index.html` | 第一堂「歌唱序論」課堂投影片（單一 HTML 檔，可直接用瀏覽器開啟） |
 | `slides/lesson-02/index.html` | 第二堂「歌唱基本條件與呼吸」課堂投影片 |
 
-| `assets/` | 共用樣式與腳本：`deck.css`／`deck.js`（投影片）、`site.css`（首頁與講義）、`pixel.js`（插入 Logo）、`logo-dark.png`（深色底用，白色標語）、`logo-light.png`（淺色底用）、`logo-mark.png`（PIXEL 小標）、`favicon.png`、`og-image.png` |
+| `assets/` | 共用樣式與腳本：`deck.css`／`deck.js`（投影片）、`site.css`（首頁與講義）、`ui.js`（表格轉卡片、目錄抽屜）、`interact.css`／`interact.js`（課堂互動）、`pixel.js`（插入 Logo）、`logo-dark.png`（深色底用，白色標語）、`logo-light.png`（淺色底用）、`logo-mark.png`（PIXEL 小標）、`favicon.png`、`og-image.png` |
 
 ## 投影片操作
 
@@ -50,7 +50,7 @@
 | `.qr` | QR Code：手機同步、課前問卷 |
 
 網站沒有後台：計票、分數、名單、出場券與錄音都只存在操作的那台裝置。麥克風功能需以 https 開啟並允許瀏覽器使用麥克風。
-- 手機或直立平板會自動改成上下捲動的閱讀模式，頂端有回到課程首頁的連結
+- 手機或直立平板會自動改成課程 App 模式：上方 App 列顯示目前張數與閱讀進度，右下角「目錄」可跳到任一張，每張標出編號、起承轉合段落與互動類型；表格自動轉成卡片，QR Code 改為按鈕
 - 列印時每張投影片各佔一頁
 
 新增一堂投影片時，複製 `slides/lesson-02/index.html`，保留 `<head>` 與底部的兩個 `<script>`，替換 `<section class="slide">` 內容即可沿用同一套設計。

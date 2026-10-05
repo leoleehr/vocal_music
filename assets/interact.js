@@ -458,7 +458,11 @@
     q.appendChild(el('div', 'qr-url', esc(url.replace(/^https?:\/\//, ''))));
     if (window.QRCode) new window.QRCode(box, { text: url, width: 220, height: 220, colorDark: '#000000', colorLight: '#ffffff', correctLevel: window.QRCode.CorrectLevel.M });
     else box.innerHTML = '<a href="' + esc(url) + '">' + esc(url) + '</a>';
+    // 手機上不需要掃碼：同一頁顯示「已同步」，其他連結改成按鈕
+    q.appendChild(href === 'self' ? el('div', 'qr-mobile here', '✓ 你已在手機上開啟這份簡報') : el('a', 'qr-mobile go', '開啟課前問卷 →'));
+    if (href !== 'self') q.lastChild.href = url;
   });
+  if (window.PixelUI) window.PixelUI.labelTables(document);
 
   /* ---------- 換頁時停止聲音與麥克風 ---------- */
   document.addEventListener('slide:change', function (e) {

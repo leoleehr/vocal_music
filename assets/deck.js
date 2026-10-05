@@ -17,11 +17,47 @@
     s.appendChild(b);
   });
 
-  // 行動裝置頂欄
-  var bar = document.createElement('div');
-  bar.className = 'mobile-bar';
-  bar.innerHTML = '<a href="../../index.html" aria-label="回課程首頁">' + PixelStudio.pixelWord('PIXEL') + '</a><span class="title">' + title + '</span><a href="../../index.html">課程首頁</a>';
+  // 每張投影片的手機標頭：編號、起承轉合、互動類型
+  var SEG = { 't-qi': ['起', 'var(--navy)'], 't-cheng': ['承', 'var(--gold)'], 't-zhuan': ['轉', 'var(--red)'], 't-he': ['合', 'var(--green)'] };
+  var toc = [];
+  slides.forEach(function (s, k) {
+    var tag = s.querySelector('.kicker .tag'), seg = null;
+    if (tag) Object.keys(SEG).forEach(function (c) { if (tag.classList.contains(c)) seg = SEG[c]; });
+    var ixEl = s.querySelector('.ix-tag'), ix = ixEl ? ixEl.textContent.replace(/^\s*互動/, '').trim() : '';
+    var head = s.querySelector('h2,h1,.quote,.timer'), label = head ? head.textContent.replace(/\s+/g, ' ').trim() : '';
+    if (s.querySelector('#timer')) label = '休息十分鐘';
+    var meta = document.createElement('div'); meta.className = 'slide-meta';
+    meta.innerHTML = '<span class="sm-no">' + String(k + 1).padStart(2, '0') + '</span>' +
+      (seg ? '<span class="sm-seg"><i style="background:' + seg[1] + '"></i>' + seg[0] + '</span>' : '') +
+      (ix ? '<span class="sm-ix">' + ix + '</span>' : '');
+    if (!s.classList.contains('cover')) s.insertBefore(meta, s.firstChild);
+    toc.push({ href: '#s' + (k + 1), no: String(k + 1).padStart(2, '0'), label: label.length > 30 ? label.slice(0, 30) + '…' : label, dot: seg ? seg[1] : null, ix: !!ix });
+  });
+
+  // 行動裝置 App 頂欄、目錄按鈕與抽屜
+  var bar = document.createElement('header');
+  bar.className = 'appbar';
+  var parts = title.split('｜');
+  bar.innerHTML = '<a class="back" href="../../index.html#lessons" aria-label="回課程首頁">' + PixelUI.ICON.back + '</a>' +
+    '<div class="ab-title"><small>' + (parts.length > 1 ? parts[0] : 'PIXEL STUDIO') + '</small><b>' + (parts[1] || title) + '</b></div>' +
+    '<span class="ab-count">1 / ' + slides.length + '</span><span class="ab-progress"></span>';
   document.body.insertBefore(bar, document.body.firstChild);
+  var sh = PixelUI.sheet('本堂目錄', toc);
+  var fab = document.createElement('button');
+  fab.type = 'button'; fab.className = 'toc-fab'; fab.innerHTML = PixelUI.ICON.list + '目錄';
+  fab.onclick = sh.open; document.body.appendChild(fab);
+  PixelUI.labelTables(document);
+  var abCount = bar.querySelector('.ab-count'), abProg = bar.querySelector('.ab-progress');
+  function onScroll() {
+    if (!mq.matches) return;
+    var max = document.documentElement.scrollHeight - innerHeight;
+    abProg.style.width = (max > 0 ? scrollY / max * 100 : 0) + '%';
+    var cur = 0;
+    slides.forEach(function (s, k) { if (s.getBoundingClientRect().top < innerHeight * 0.35) cur = k; });
+    abCount.textContent = (cur + 1) + ' / ' + slides.length;
+    [].forEach.call(sh.list.children, function (a, k) { a.classList.toggle('cur', k === cur); });
+  }
+  addEventListener('scroll', onScroll, { passive: true });
 
   function fromHash() {
     var h = parseInt((location.hash || '').replace(/\D/g, ''), 10);
