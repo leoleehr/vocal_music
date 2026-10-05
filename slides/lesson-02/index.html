@@ -11,12 +11,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/deck.css">
+<link rel="stylesheet" href="../../assets/interact.css">
 </head>
 <body data-title="第二堂｜歌唱基本條件與呼吸">
 <div class="progress" id="progress"></div>
 <main class="deck" id="deck">
 <div class="stage" id="stage">
-
 <!-- 1 封面 -->
 <section class="slide cover">
   <div data-pixel-logo="tagline"></div>
@@ -26,81 +26,86 @@
   <p class="meta">主講：畫素音樂工作坊　李奕勳<br>musicallanding@gmail.com</p>
 </section>
 
-<!-- 2 路線 -->
+<!-- 2 路線 + 手機同步 -->
 <section class="slide">
+  <div class="ix-tag"><b>互動</b>手機同步</div>
   <div class="kicker">TODAY · 120 MINUTES</div>
   <h2>今天的路線：讓吐氣秒數真的變長</h2>
   <div class="timeline">
-    <div class="bar-qi" style="flex:20"><b>起</b><small>/s/ 計時挑戰｜20 分</small></div>
+    <div class="bar-qi" style="flex:20"><b>起</b><small>/s/ 前測｜20 分</small></div>
     <div class="bar-cheng" style="flex:35"><b>承</b><small>原理、姿勢、呼吸｜35 分</small></div>
     <div class="bar-rest" style="flex:10"><b>休</b><small>10 分</small></div>
     <div class="bar-zhuan" style="flex:35"><b>轉</b><small>呼吸運動會｜35 分</small></div>
-    <div class="bar-he" style="flex:20"><b>合</b><small>標換氣點、再測｜20 分</small></div>
+    <div class="bar-he" style="flex:20"><b>合</b><small>換氣點、後測｜20 分</small></div>
   </div>
-  <div class="grid2">
-    <ul class="clean">
+  <div class="split wide">
+    <ul class="clean compact">
       <li>學會胸腹式呼吸，吸氣時肩膀不上抬</li>
       <li>知道歌唱姿勢與聲帶保養的重點</li>
-    </ul>
-    <ul class="clean">
       <li>在歌詞上標出大換氣與小換氣</li>
-      <li>下課前，/s/ 吐氣秒數比開場更長</li>
+      <li>下課前，/s/ 吐氣秒數比開場更長；手機掃 QR Code，自己測給自己看</li>
     </ul>
+    <div class="qr" data-href="self"></div>
   </div>
 </section>
 
-<!-- 3 起：作業分享 + 計時 -->
+<!-- 3 前測 -->
 <section class="slide">
+  <div class="ix-tag"><b>互動</b>前測・吐氣測量</div>
   <div class="kicker"><span class="tag t-qi">起</span>00:00–00:20</div>
-  <h2>開場：/s/ 吐氣計時挑戰</h2>
-  <div class="grid2" style="align-items:center">
-    <div>
-      <ul class="clean">
-        <li>兩位同學分享上週的曲式地圖</li>
-        <li>全班站立，吸飽一口氣</li>
-        <li>以 /s/ 平穩吐氣，像輪胎慢慢漏氣</li>
-        <li>氣用完就坐下，老師記下每人秒數</li>
-      </ul>
-    </div>
-    <div class="card center" style="display:flex;flex-direction:column">
-      <div class="sw-time timer" style="font-size:110px">0.0</div>
-      <p class="muted" style="font-size:18px">秒</p>
-      <div class="btn-row sw-ui"><button type="button" class="btn sw-start">開始</button><button type="button" class="btn sw-reset">重設</button></div>
-    </div>
+  <h2>開場：/s/ 吐氣前測</h2>
+  <div class="split narrow">
+    <ul class="clean compact">
+      <li>兩位同學分享上週的曲式地圖</li>
+      <li>全班站立，吸飽一口氣</li>
+      <li>以 /s/ 平穩吐氣，像輪胎慢慢漏氣</li>
+      <li>麥克風會自動計時，並算出吐氣的穩定度</li>
+      <li>在手機上自己測，秒數會保留到下課後測</li>
+    </ul>
+    <div class="panel breath" data-key="l2-before"></div>
   </div>
 </section>
 
-<!-- 4 提問 -->
-<section class="slide center">
+<!-- 4 預測 -->
+<section class="slide">
+  <div class="ix-tag"><b>互動</b>預測—觀察—解釋</div>
   <div class="kicker"><span class="tag t-qi">起</span>想一想</div>
-  <p class="quote">同樣大小的肺，<br>為什麼有人只撐 10 秒，<br>有人可以吐到 30 秒？</p>
-  <div style="height:30px"></div>
-  <p class="lead muted">答案不在肺活量，在於「怎麼吸」和「怎麼控制吐」。</p>
-</section>
-
-<!-- 5 發聲路徑 -->
-<section class="slide">
-  <div class="kicker"><span class="tag t-cheng">承</span>00:20–00:55　一、歌唱發聲的原理</div>
-  <h2>一個聲音，從腰腹走到嘴巴</h2>
-  <div class="chain">
-    <div class="fbox"><b>腰腹肌肉</b><span>收縮施力</span></div><i></i>
-    <div class="fbox"><b>橫膈膜</b><span>往上推</span></div><i></i>
-    <div class="fbox"><b>肺</b><span>空氣送出</span></div><i></i>
-    <div class="fbox"><b>氣管</b><span>氣流通道</span></div><i></i>
-    <div class="fbox hl"><b>聲帶</b><span>振動發聲</span></div><i></i>
-    <div class="fbox"><b>共鳴腔</b><span>放大美化</span></div><i></i>
-    <div class="fbox"><b>舌、唇、齒</b><span>塑造成字</span></div>
+  <h2>同樣大小的肺，為什麼有人 10 秒、有人 30 秒？</h2>
+  <div class="split">
+    <div>
+      <p class="muted" style="font-size:18px;margin-bottom:10px">你猜原因是什麼？舉手投票，老師計票</p>
+      <div class="poll" data-id="l2-why" data-options="肺活量天生不同|吸氣的方式|吐氣的控制|運動量不同"></div>
+    </div>
+    <div>
+      <div class="reveal" data-label="揭曉">
+        <div class="card"><p>肺活量確實有個別差異，但課堂上的秒數差距，多半來自<b>怎麼吸</b>和<b>怎麼控制吐</b>：</p><p style="margin-top:8px">吸進胸口上方，氣很快就用完；吸到腰腹一圈，再用腹部慢慢推，秒數就會拉長。今天下課前，我們用後測證明給你看。</p></div>
+      </div>
+    </div>
   </div>
-  <p style="margin-top:40px">任何一個環節緊繃，整條路徑都會受到影響。歌聲與說話同樣來自發聲，但歌聲的音域更寬、持續時間更長，也更仰賴氣息的穩定供應。</p>
 </section>
 
-<!-- 6 聆聽 -->
+<!-- 5 發聲路徑：排序 -->
 <section class="slide">
+  <div class="ix-tag"><b>互動</b>排序遊戲</div>
+  <div class="kicker"><span class="tag t-cheng">承</span>00:20–00:55　一、歌唱發聲的原理</div>
+  <h2 style="margin-bottom:12px">一個聲音，從腰腹走到嘴巴</h2>
+  <p class="compact" style="margin-bottom:14px">挑戰：把七個環節依照「氣流前進的順序」排好。</p>
+  <div class="order" data-items="腰腹肌肉收縮|橫膈膜上移|肺部送出空氣|經過氣管|聲帶振動|共鳴腔放大|舌、唇、齒咬字"></div>
+  <div class="reveal" data-label="為什麼這很重要？"><p class="compact">任何一個環節緊繃，整條路徑都會受到影響。歌聲與說話同樣來自發聲，但歌聲的音域更寬、持續時間更長，也更仰賴氣息的穩定供應。</p></div>
+</section>
+
+<!-- 6 聆聽 + 音準挑戰 -->
+<section class="slide">
+  <div class="ix-tag"><b>互動</b>即時回饋・音準挑戰</div>
   <div class="kicker"><span class="tag t-cheng">承</span>二、聆聽的重要性</div>
-  <h2>聽得準，才唱得準</h2>
-  <div class="grid2">
-    <div class="card"><h3 class="c-navy">音準 Pitch</h3><p>「五音不全」多半是耳朵尚未訓練，發聲器官本身並無問題。</p><p class="muted" style="margin-top:10px">練習：吉他彈一個音 → 先在心裡哼一次 → 再發出聲音 → 用調音器 App 檢查。</p></div>
-    <div class="card"><h3 class="c-gold">音色 Tone</h3><p>發聲部位的高低、共鳴的多寡、呼吸的深淺，都仰賴耳朵分辨。</p><p class="muted" style="margin-top:10px">練習：錄下自己的歌聲重複聆聽，這是訓練辨聲能力最直接的方法。</p></div>
+  <h2 style="margin-bottom:16px">聽得準，才唱得準</h2>
+  <div class="split narrow">
+    <div class="compact">
+      <p><b class="c-navy">音準 Pitch</b>：「五音不全」多半是耳朵尚未訓練，發聲器官本身並無問題。</p>
+      <p style="margin-top:8px"><b class="c-gold">音色 Tone</b>：錄下自己的歌聲重複聆聽，是訓練辨聲最直接的方法。</p>
+      <div class="card" style="margin-top:14px"><p><b>先聽、再想、再唱</b>：播放目標音 → 在心裡哼一次 → 再發出聲音，看指針是否落在綠色區間。</p></div>
+    </div>
+    <div class="panel pitch"></div>
   </div>
 </section>
 
@@ -137,53 +142,59 @@
   </div>
 </section>
 
-<!-- 9 聲帶保養 -->
+<!-- 9 聲帶保養：迷思或事實 -->
 <section class="slide">
+  <div class="ix-tag"><b>互動</b>迷思破解・翻牌</div>
   <div class="kicker"><span class="tag t-cheng">承</span>四、聲帶的保養</div>
-  <h2 style="margin-bottom:18px">養生之道，也是養聲之道</h2>
-  <div class="grid2" style="gap:14px 36px">
-    <p><b class="c-red">1 菸酒</b>　菸刺激氣管，酒讓聲帶充血</p>
-    <p><b class="c-red">2 辛辣</b>　咖哩、麻辣容易刺激喉部</p>
-    <p><b class="c-red">3 過度用聲</b>　尖叫是大忌，耳語也會讓聲帶緊繃</p>
-    <p><b class="c-red">4 保重身體</b>　感冒、咽喉炎時暫停高強度練習</p>
-    <p><b class="c-red">5 演唱環境</b>　KTV 的菸霧、熬夜與吵雜最傷嗓</p>
-    <p><b class="c-navy">6 充足飲水</b>　每天 1,500 到 2,000 c.c. 溫水</p>
-    <p><b class="c-navy">7 演唱前飲食</b>　牛奶、巧克力、甜食易生痰</p>
-    <p><b class="c-navy">8 想清喉嚨時</b>　吞口水代替咳嗽；沙啞超過兩週請就醫</p>
+  <h2 style="margin-bottom:14px">迷思還是事實？先舉手猜，再翻牌</h2>
+  <div class="flips">
+    <div class="flip"><div class="f">喉嚨乾，喝冰水最舒服</div><div class="b"><strong>迷思</strong>冰水讓喉部肌肉收縮，溫水才能滋潤聲帶。</div></div>
+    <div class="flip"><div class="f">說悄悄話可以讓聲帶休息</div><div class="b"><strong>迷思</strong>耳語反而讓聲帶緊繃，真的要休息就不說話。</div></div>
+    <div class="flip"><div class="f">唱歌前喝牛奶可以潤喉</div><div class="b"><strong>迷思</strong>牛奶、巧克力容易生痰，演出前三小時避免。</div></div>
+    <div class="flip"><div class="f">每天喝 1,500 到 2,000 c.c. 溫水</div><div class="b"><strong class="fact">事實</strong>黏膜滋潤，聲帶才能順利振動；少量多次。</div></div>
+    <div class="flip"><div class="f">喉嚨卡卡，就用力咳一下</div><div class="b"><strong>迷思</strong>用吞口水代替，用力咳嗽會撞擊聲帶。</div></div>
+    <div class="flip"><div class="f">唱完 KTV 隔天沙啞很正常，不用管</div><div class="b"><strong>迷思</strong>要休息與補水；沙啞超過兩週請就醫耳鼻喉科。</div></div>
+    <div class="flip"><div class="f">偶爾喝酒沒關係，演出前後也一樣</div><div class="b"><strong>迷思</strong>酒會讓聲帶充血，演唱前後切忌。</div></div>
+    <div class="flip"><div class="f">感冒時暫停高強度練習</div><div class="b"><strong class="fact">事實</strong>聲帶水腫時硬唱，最容易受傷。</div></div>
   </div>
 </section>
 
-<!-- 10 暖身 -->
+<!-- 10 暖身：跟做計時 -->
 <section class="slide">
-  <div class="kicker"><span class="tag t-cheng">承</span>五、暖身動作｜跟著做</div>
-  <h2>由上而下放鬆，再反向做一次</h2>
-  <div class="steps">
-    <div class="card"><div class="big-num c-navy">1</div><h3>站立姿勢</h3><p>雙腳與肩同寬，切勿三七步</p></div>
-    <div class="card"><div class="big-num c-navy">2</div><h3>頭部與頸部</h3><p>嘴巴 O 型開合，旋轉頸部後自然下垂</p></div>
-    <div class="card"><div class="big-num c-gold">3</div><h3>肩膀與手部</h3><p>肩關節順、逆時針轉動，手自然下垂</p></div>
-    <div class="card"><div class="big-num c-gold">4</div><h3>上背部</h3><p>上背往前傾，感受上腹部收縮</p></div>
-    <div class="card"><div class="big-num c-red">5</div><h3>下背部</h3><p>上半身往前傾，感受下腹部收縮</p></div>
+  <div class="ix-tag"><b>互動</b>示範—跟做</div>
+  <div class="kicker"><span class="tag t-cheng">承</span>五、暖身動作｜跟著做，每步 30 秒</div>
+  <h2 style="margin-bottom:14px">由上而下放鬆，再反向做一次</h2>
+  <div class="steps" style="margin-bottom:16px">
+    <div class="card"><div class="big-num c-navy">1</div><h3>站立姿勢</h3><p>雙腳與肩同寬</p></div>
+    <div class="card"><div class="big-num c-navy">2</div><h3>頭部與頸部</h3><p>O 型開合，旋轉頸部</p></div>
+    <div class="card"><div class="big-num c-gold">3</div><h3>肩膀與手部</h3><p>肩關節順、逆時針轉</p></div>
+    <div class="card"><div class="big-num c-gold">4</div><h3>上背部</h3><p>往前傾，感受上腹部</p></div>
+    <div class="card"><div class="big-num c-red">5</div><h3>下背部</h3><p>上半身前傾，感受下腹</p></div>
   </div>
-  <p class="muted" style="margin-top:22px">唱歌時發現自己太緊繃，隨時可以用這套動作讓肌肉放鬆。</p>
+  <div class="phase" data-phases="1 站立|30;2 頭頸|30;3 肩膀與手|30;4 上背|30;5 下背|30;反向放鬆|30"></div>
 </section>
 
-<!-- 11 胸腹式呼吸 -->
+<!-- 11 胸腹式呼吸 + 手指投票 -->
 <section class="slide">
+  <div class="ix-tag"><b>互動</b>手指投票</div>
   <div class="kicker"><span class="tag t-cheng">承</span>六、胸腹式呼吸</div>
-  <h2>雙手叉腰，感受一圈「游泳圈」</h2>
-  <div class="grid2">
-    <div>
-      <p>歌唱呼吸以小腹肌肉為基礎，與平日集中在胸口的呼吸不同。有人稱為丹田呼吸、橫膈膜呼吸或腹式呼吸，名稱不同，重點都是<b>胸腹結合</b>。</p>
+  <h2 style="margin-bottom:16px">雙手叉腰，感受一圈「游泳圈」</h2>
+  <div class="split narrow">
+    <div class="compact">
+      <p>歌唱呼吸以小腹肌肉為基礎，有人稱為丹田呼吸、橫膈膜呼吸或腹式呼吸，重點都是<b>胸腹結合</b>。</p>
+      <p class="muted" style="margin-top:10px">照鏡子或請隔壁同學看：肩膀上抬，代表氣吸進了胸口上方。</p>
     </div>
-    <div class="card">
-      <h3 class="c-navy">自我檢查</h3>
-      <p>✓ 吸氣時，腰的前、側、後一圈往外擴張<br>✓ 肩膀與鎖骨不動<br>✓ 吐氣時，腰腹慢慢收回<br><br><span class="muted">照鏡子：肩膀上抬 = 氣吸進了胸口上方</span></p>
+    <div class="quiz" data-answer="3">
+      <p class="q">吸氣時，哪一個現象代表氣吸對了位置？</p>
+      <ol><li>肩膀往上抬</li><li>胸口鼓起來</li><li>腰的前、側、後一圈擴張</li><li>肚子用力往內縮</li></ol>
+      <div class="why">吸氣時腰圍一圈往外擴張、肩膀與鎖骨不動；吐氣時腰腹再慢慢收回。</div>
     </div>
   </div>
 </section>
 
-<!-- 12 四種呼吸 -->
+<!-- 12 四種呼吸 + 節拍器 -->
 <section class="slide">
+  <div class="ix-tag"><b>互動</b>節拍器跟練</div>
   <div class="kicker"><span class="tag t-cheng">承</span>七、基本呼吸練習｜節拍器 60 BPM</div>
   <h2 style="margin-bottom:12px">四種呼吸，對應四種歌</h2>
   <table>
@@ -205,20 +216,23 @@
   <div class="btn-row"><button type="button" class="btn" id="timerBtn">開始倒數</button><button type="button" class="btn" id="timerReset">重設</button></div>
 </section>
 
-<!-- 14 呼吸運動會 -->
+<!-- 14 呼吸運動會 + 計分 -->
 <section class="slide">
+  <div class="ix-tag"><b>互動</b>遊戲化・分組競賽</div>
   <div class="kicker"><span class="tag t-zhuan">轉</span>01:05–01:40　分組競賽</div>
-  <h2>呼吸運動會</h2>
-  <div class="grid2" style="gap:22px 30px">
-    <div class="card"><h3><span class="c-red">①</span> 吐氣彈壁</h3><p>腹部抵住牆面吐氣，正確的呼吸會讓身體彈離牆面。</p></div>
-    <div class="card"><h3><span class="c-red">②</span> 紙張乒乓球（兩人）</h3><p>一人吹過去、一人吹回來，訓練力道與反應。</p></div>
-    <div class="card"><h3><span class="c-red">③</span> 面牆吹紙</h3><p>輕薄的紙貼在牆上，持續吹氣不讓它落下。</p></div>
-    <div class="card"><h3><span class="c-red">④</span> 吹動衛生紙</h3><p>以 /s/ 吹一張懸垂的衛生紙，讓它穩定飄動、角度不變。</p></div>
+  <h2 style="margin-bottom:14px">呼吸運動會</h2>
+  <div class="cards-mini" style="grid-template-columns:repeat(4,1fr)">
+    <div class="card"><h3>① 吐氣彈壁</h3><p>腹部抵牆吐氣，身體被彈離牆面</p></div>
+    <div class="card"><h3>② 紙張乒乓</h3><p>兩人一吹一回，比誰不落地</p></div>
+    <div class="card"><h3>③ 面牆吹紙</h3><p>持續吹氣，紙停在牆上最久</p></div>
+    <div class="card"><h3>④ 吹衛生紙</h3><p>/s/ 吹氣，紙角度穩定不變</p></div>
   </div>
+  <div class="score" data-id="l2-games" data-teams="4"></div>
 </section>
 
-<!-- 15 肌肉運用 -->
+<!-- 15 肌肉 + 節拍器 -->
 <section class="slide">
+  <div class="ix-tag"><b>互動</b>節拍器跟練</div>
   <div class="kicker"><span class="tag t-zhuan">轉</span>八、主要肌肉之運用｜4/4 拍，每個四分音符換氣一次</div>
   <h2>三組肌肉訓練，各四小節</h2>
   <div class="grid3">
@@ -240,49 +254,46 @@
   </div>
 </section>
 
-<!-- 17 換氣點 -->
+<!-- 17 換氣點 + 提取練習 -->
 <section class="slide">
+  <div class="ix-tag"><b>互動</b>提取練習</div>
   <div class="kicker"><span class="tag t-he">合</span>01:40–02:00</div>
-  <h2>換氣點，要先標在譜上</h2>
-  <div class="grid2">
-    <div class="card"><h3 class="c-navy">大換氣</h3><p>樂句與樂句之間，時間充裕，吸飽一口。</p><p class="big-num c-navy" style="margin-top:12px">∨</p></div>
-    <div class="card"><h3 class="c-red">小換氣（偷氣）</h3><p>句子中間，利用半拍空隙快速補氣。</p><p class="big-num c-red" style="margin-top:12px">ˇ</p></div>
+  <h2 style="margin-bottom:16px">換氣點，要先標在譜上</h2>
+  <div class="split">
+    <div>
+      <div class="card" style="margin-bottom:12px"><h3 class="c-navy">∨ 大換氣</h3><p>樂句與樂句之間，時間充裕，吸飽一口。</p></div>
+      <div class="card"><h3 class="c-red">ˇ 小換氣（偷氣）</h3><p>句子中間利用半拍空隙快速補氣。</p></div>
+    </div>
+    <div class="quiz" data-answer="2">
+      <p class="q">唱到一半才找氣，最常出現什麼結果？</p>
+      <ol><li>音量變大</li><li>句尾無力、拖拍</li><li>音更準</li><li>沒有影響</li></ol>
+      <div class="why">氣不夠時，句尾會無力、拖拍，甚至在不該斷的字中間斷開。先標好換氣點，再開口。</div>
+    </div>
   </div>
-  <p style="margin-top:24px">唱到一半才找氣，句尾常會無力。先標好，再開口。</p>
 </section>
 
-<!-- 18 刻在我心底的名字 -->
+<!-- 18 刻在我心底的名字：標記換氣 -->
 <section class="slide">
+  <div class="ix-tag"><b>互動</b>動手標記・同儕比對</div>
   <div class="kicker"><span class="tag t-he">合</span>盧廣仲《刻在我心底的名字》｜原調 B♭・男調 A・女調 E・68 BPM</div>
-  <h2 style="margin-bottom:16px">副歌：先標換氣點，再齊唱</h2>
-  <div class="lyric">
-    <p>刻在我心底的名字 <em>∨</em> 忘記了時間這回事 <em>∨</em></p>
-    <p>於是謊言說了一次 <em class="sm">ˇ</em> 就一輩子 <em>∨</em></p>
-  </div>
-  <div class="pill-row" style="margin-top:28px">
-    <span class="pill">① 老師示範</span><span class="pill">② 全班標記</span><span class="pill">③ 全班齊唱</span><span class="pill">④ 分組輪唱</span>
-  </div>
-  <p class="muted" style="margin-top:18px;font-size:20px">慢歌、樂句長、長音多，最適合練習「快吸慢吐」。</p>
+  <h2 style="margin-bottom:6px">副歌：你會在哪裡換氣？</h2>
+  <div class="lyricmark" data-id="l2-name" data-lines="刻在我心底的名字|忘記了時間這回事|;於是謊言說了一次^就一輩子|"></div>
+  <p class="muted" style="font-size:18px;margin-top:6px">先自己標、和隔壁比對，再對照老師版；接著全班齊唱、分組輪唱。</p>
 </section>
 
-<!-- 19 再測 -->
+<!-- 19 後測 -->
 <section class="slide">
+  <div class="ix-tag"><b>互動</b>後測・看見進步</div>
   <div class="kicker"><span class="tag t-he">合</span>驗收</div>
   <h2>再測一次 /s/，和開場比比看</h2>
-  <div class="grid2" style="align-items:center">
-    <div>
-      <ul class="clean">
-        <li>同樣站好、同樣吸飽一口氣</li>
-        <li>這次記得：肩膀不動、腰腹一圈擴張</li>
-        <li>吐氣平穩，聲音大小不變</li>
-        <li>把秒數寫在開場的數字旁邊</li>
-      </ul>
-    </div>
-    <div class="card center" style="display:flex;flex-direction:column">
-      <div class="sw-time timer" style="font-size:110px">0.0</div>
-      <p class="muted" style="font-size:18px">秒</p>
-      <div class="btn-row sw-ui"><button type="button" class="btn sw-start">開始</button><button type="button" class="btn sw-reset">重設</button></div>
-    </div>
+  <div class="split narrow">
+    <ul class="clean compact">
+      <li>同樣站好、同樣吸飽一口氣</li>
+      <li>這次記得：肩膀不動、腰腹一圈擴張</li>
+      <li>吐氣平穩，聲音大小不變</li>
+      <li>右邊會自動和開場的前測比較</li>
+    </ul>
+    <div class="panel breath" data-key="l2-after" data-compare="l2-before"></div>
   </div>
 </section>
 
@@ -292,8 +303,20 @@
   <p class="quote">氣從腰腹來，<br>肩膀不上抬，<br>換氣先標好。</p>
 </section>
 
-<!-- 21 課後練習 -->
+<!-- 21 出場券 -->
 <section class="slide">
+  <div class="ix-tag"><b>互動</b>出場券 3-2-1</div>
+  <div class="kicker"><span class="tag t-he">合</span>EXIT TICKET</div>
+  <h2 style="margin-bottom:14px">離開教室前，寫下 3-2-1</h2>
+  <div class="split wide">
+    <div class="exit" data-prompts="3 個今天學到的呼吸重點|2 個回家要練的項目|1 個還想問老師的問題"></div>
+    <div class="card"><h3>怎麼用</h3><p>用手機掃第 2 張的 QR Code，在自己的手機上填寫，按「複製全部」貼到社團群組。<br><br>老師下週會從大家的問題開場。</p></div>
+  </div>
+</section>
+
+<!-- 22 每日課表 + 七天紀錄 -->
+<section class="slide">
+  <div class="ix-tag"><b>互動</b>自主學習紀錄</div>
   <div class="kicker">HOMEWORK</div>
   <h2 style="margin-bottom:12px">每日 15 分鐘呼吸課表</h2>
   <div class="routine">
@@ -303,24 +326,36 @@
     <div class="bar-orange" style="flex:3">快吸慢吐讀秒<br><small>3 分</small></div>
     <div class="bar-zhuan" style="flex:4">/s/ /hei/ /hu/<br><small>4 分</small></div>
   </div>
-  <ul class="checks">
-    <li>完成七天呼吸紀錄表：/s/ 秒數、肩膀是否上抬、今天的感受</li>
+  <div class="log7" data-cols="/s/ 秒數|肩膀上抬？|今天的感受"></div>
+</section>
+
+<!-- 23 課後練習 -->
+<section class="slide">
+  <div class="ix-tag"><b>互動</b>自主學習追蹤</div>
+  <div class="kicker">HOMEWORK</div>
+  <h2 style="margin-bottom:12px">課後練習：完成一項，點一下打勾</h2>
+  <ul class="checks" data-id="l2-hw">
+    <li>完成七天呼吸紀錄：/s/ 秒數、肩膀是否上抬、今天的感受</li>
     <li>在《太陽》歌詞上標出所有換氣點，區分大換氣與小換氣</li>
     <li>錄下《太陽》副歌一次，聆聽時檢查句尾是否無力</li>
     <li>每天喝水 1,500 c.c. 以上，並記錄睡眠時數</li>
   </ul>
 </section>
 
-<!-- 22 下週預告 -->
-<section class="slide center">
-  <div data-pixel-logo style="width:220px;margin-bottom:26px"></div>
+<!-- 24 下週預告 -->
+<section class="slide">
+  <div class="ix-tag"><b>互動</b>課前問卷</div>
   <div class="kicker">NEXT WEEK</div>
-  <h1 style="font-size:58px">第三堂　歌唱共鳴條件</h1>
-  <p class="lead muted" style="margin-top:18px">胸腔、口腔、頭腔：聲音如何變亮、變厚、變遠。<br>練習曲：茄子蛋《浪流連》《浪子回頭》</p>
-  <div style="height:36px"></div>
-  <p style="font-size:20px">畫素音樂工作坊　李奕勳　musicallanding@gmail.com</p>
+  <h2>第三堂　歌唱共鳴條件</h2>
+  <div class="split wide">
+    <div>
+      <p class="lead">胸腔、口腔、頭腔：聲音如何變亮、變厚、變遠。<br>練習曲：茄子蛋《浪流連》《浪子回頭》</p>
+      <p class="muted" style="margin-top:20px">掃右邊的 QR Code，打開第三堂的課前問卷題目。</p>
+      <div data-pixel-logo style="width:300px;margin-top:36px"></div>
+    </div>
+    <div class="qr" data-href="../../handbook.html#lesson-3"></div>
+  </div>
 </section>
-
 </div>
 </main>
 
@@ -334,5 +369,7 @@
 
 <script src="../../assets/pixel.js"></script>
 <script src="../../assets/deck.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="../../assets/interact.js"></script>
 </body>
 </html>

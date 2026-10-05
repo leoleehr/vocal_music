@@ -1,0 +1,204 @@
+/* ===== Pixel Studio 課堂互動元件樣式（搭配 deck.css） ===== */
+.ix-tag{position:absolute;top:26px;right:40px;display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink);border:1px solid var(--line);background:rgba(255,255,255,.04);padding:5px 12px 5px 6px;border-radius:3px;z-index:3}
+.ix-tag b{background:var(--amber);color:#1a1200;font-size:12px;padding:2px 7px;border-radius:2px;letter-spacing:.08em}
+.btn.primary{background:var(--amber);border-color:var(--amber);color:#1a1200;font-weight:700}
+.btn.on{border-color:var(--amber);color:var(--amber)}
+.btn-row{flex-wrap:wrap}
+.panel{border:1px solid var(--line);background:var(--card);border-radius:4px;padding:18px 20px}
+.panel h3{font-size:20px;margin-bottom:10px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+.split.wide{grid-template-columns:1.25fr 1fr}
+.split.narrow{grid-template-columns:.85fr 1.15fr}
+.compact p,.compact li{font-size:21px;line-height:1.6}
+.cards-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:18px}
+.cards-mini .card{padding:14px 18px}.cards-mini .card h3{font-size:20px;margin-bottom:4px}.cards-mini .card p{font-size:17px}
+
+/* 選擇題 */
+.quiz .q{font-size:22px;font-weight:700;margin-bottom:12px;line-height:1.5}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quiz-opt{display:flex;align-items:center;gap:12px;text-align:left;font-size:18px;padding:12px 14px;min-height:54px}
+.quiz-opt b{flex:none;width:28px;height:28px;display:grid;place-items:center;background:rgba(255,255,255,.08);border-radius:2px}
+.quiz-opt.right{border-color:var(--green);background:rgba(108,187,75,.18)}
+.quiz-opt.wrong{border-color:var(--red);background:rgba(236,74,54,.14)}
+.quiz-foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:15px}
+.quiz .why{display:none;margin-top:12px;font-size:18px;line-height:1.6;border-left:4px solid var(--green);padding-left:14px}
+.quiz .why.on{display:block}
+
+/* 舉手計票 */
+.poll-row{display:flex;gap:6px;margin-bottom:8px}
+.poll-hit{flex:1;display:grid;grid-template-columns:150px 1fr 40px;align-items:center;gap:12px;font:inherit;font-size:17px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:3px;padding:8px 12px;cursor:pointer;text-align:left}
+.poll-hit:hover{border-color:var(--amber)}
+.poll-bar{height:16px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.poll-bar i{display:block;height:100%;background:var(--rainbow);transition:width .3s}
+.poll-n{font-weight:900;text-align:right;font-variant-numeric:tabular-nums}
+.poll-minus{font:inherit;width:38px;background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:3px;cursor:pointer}
+.poll-foot{display:flex;justify-content:space-between;align-items:center;font-size:14px;margin-top:4px}
+
+/* 揭曉 */
+.reveal{display:none;margin-top:12px}
+.reveal.on{display:block;animation:fadeup .3s ease}
+@keyframes fadeup{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* 隨機點名 */
+.picker{text-align:center}
+.picker-name{font-size:54px;font-weight:900;min-height:80px;display:grid;place-items:center;margin-bottom:12px;color:var(--amber)}
+.picker-name.pop{animation:pop .4s ease}
+@keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+.picker .btn-row{justify-content:center;align-items:center}
+.picker-opt{font-size:15px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.picker-edit{display:none;margin-top:12px}
+.picker.editing .picker-edit{display:block}
+.picker textarea,.exit textarea{width:100%;font:inherit;font-size:16px;background:#0b0b0d;color:var(--ink);border:1px solid var(--line);border-radius:3px;padding:10px;margin-bottom:8px;resize:vertical}
+.picker-meta{font-size:13px;margin-top:10px}
+
+/* 計分板 */
+.score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.score-team{border:1px solid var(--line);border-radius:4px;background:var(--card);padding:12px;text-align:center}
+.score-team.lead{border-color:var(--amber);box-shadow:0 0 0 1px var(--amber) inset}
+.score-name{font-size:16px;font-weight:700;outline:none;border-bottom:1px dashed transparent}
+.score-name:focus{border-bottom-color:var(--muted)}
+.score-pts{font-size:52px;font-weight:900;line-height:1.2;font-variant-numeric:tabular-nums}
+.score-team .btn-row{justify-content:center}
+.score-team .btn{padding:5px 12px;font-size:15px}
+.score-reset{margin-top:10px;font-size:13px!important;padding:4px 10px!important}
+
+/* 聲波實驗室 */
+.wavelab canvas{width:100%;height:170px;display:block;background:#0b0b0d;border:1px solid var(--line);border-radius:3px}
+.wl-ctrl{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:12px 0}
+.wl-ctrl label{display:flex;align-items:center;gap:12px;font-size:17px}
+.wl-ctrl input{flex:1;accent-color:var(--amber)}
+.wl-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.wl-read{font-size:17px}.wl-read b{font-size:22px;color:var(--amber)}
+
+/* 音準挑戰 */
+.pt-top{display:flex;align-items:center;gap:20px;margin-bottom:10px}
+.pt-note{font-size:64px;font-weight:900;min-width:150px;line-height:1;font-variant-numeric:tabular-nums}
+.pitch.hit .pt-note{color:var(--green)}
+.pt-sub{flex:1;display:flex;flex-direction:column;gap:2px;font-size:17px}
+.pt-target{color:var(--amber);font-weight:700}
+.pt-score{font-size:16px;color:var(--muted)}.pt-score b{font-size:36px;color:var(--ink);margin-left:6px}
+.pt-needle{position:relative;height:14px;background:rgba(255,255,255,.06);border-radius:7px;margin-bottom:10px}
+.pt-zone{position:absolute;left:35%;width:30%;top:0;bottom:0;background:rgba(108,187,75,.25);border-radius:7px}
+.pt-needle i{position:absolute;top:-4px;width:6px;height:22px;margin-left:-3px;background:var(--amber);left:50%;border-radius:3px;transition:left .08s}
+.pitch canvas,.breath canvas{width:100%;height:120px;display:block;background:#0b0b0d;border:1px solid var(--line);border-radius:3px;margin-bottom:10px}
+
+/* 吐氣測量 */
+.br-top{display:flex;align-items:center;gap:24px;margin-bottom:10px}
+.br-sec{font-size:84px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+.br-unit{font-size:15px;text-align:center}
+.br-info{flex:1;font-size:17px;line-height:1.6}
+.br-stab{color:var(--green)}.br-cmp{color:var(--amber);font-weight:700}
+
+/* 錄音 */
+.recorder{text-align:center}
+.rec-time{font-size:72px;font-weight:900;font-variant-numeric:tabular-nums;margin-bottom:10px}
+.recorder .btn-row{justify-content:center}
+.recorder audio,.recorder .dl{display:none}
+.recorder.has audio{display:block;width:100%;margin:14px 0 8px}
+.recorder.has .dl{display:inline-block;text-decoration:none}
+.rec-note{font-size:13px;margin-top:8px}
+
+/* 排序遊戲 */
+.order-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.order-tile{display:flex;align-items:center;gap:10px;font-size:18px;padding:12px;min-height:58px;text-align:left}
+.order-tile small{flex:none;width:24px;height:24px;display:grid;place-items:center;font-size:13px;background:rgba(255,255,255,.08);border-radius:2px}
+.order-tile.sel{border-color:var(--amber);background:rgba(244,166,42,.16)}
+.order-tile.ok{border-color:var(--green);background:rgba(108,187,75,.16)}
+.order-tile.no{border-color:var(--red)}
+.order-msg{font-size:15px;margin-top:8px}
+
+/* 翻牌 */
+.flips{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.flips.cols3{grid-template-columns:repeat(3,1fr)}
+.flip{position:relative;min-height:132px;perspective:900px;cursor:pointer;outline:none}
+.flip>div{position:absolute;inset:0;border:1px solid var(--line);border-radius:4px;padding:14px 16px;display:flex;flex-direction:column;justify-content:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .45s ease;font-size:17px;line-height:1.5}
+.flip .f{background:var(--card);font-weight:700;font-size:18px}
+.flip .b{background:#1f1d17;transform:rotateY(180deg);border-color:var(--amber)}
+.flip.on .f{transform:rotateY(-180deg)}.flip.on .b{transform:rotateY(0)}
+.flip:focus-visible>div{border-color:var(--amber)}
+.flip .b strong{color:var(--amber)}
+.flip .b strong.fact{color:var(--green)}
+.flips-all{margin-top:10px;font-size:14px!important;padding:5px 12px!important}
+
+/* 分段計時 */
+.phase{border:1px solid var(--line);background:var(--card);border-radius:4px;padding:16px 18px}
+.ph-steps{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.ph-steps span{flex:1;min-width:90px;font-size:14px;padding:6px 8px;border-radius:2px;background:rgba(255,255,255,.05);color:var(--muted);text-align:center}
+.ph-steps span.on{background:var(--amber);color:#1a1200;font-weight:700}
+.ph-steps span.past{color:var(--green)}
+.ph-main{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:8px}
+.ph-name{font-size:24px;font-weight:700}
+.ph-time{font-size:60px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1}
+
+/* 歌詞換氣點 */
+.lm-line{font-size:38px;line-height:2.1;font-weight:700;letter-spacing:.02em}
+.lm-ch{position:relative;cursor:pointer;padding:0 3px;border-radius:2px}
+.lm-ch:hover{background:rgba(255,255,255,.08)}
+.lm-ch[data-m]:not([data-m=""])::after{content:attr(data-m);position:absolute;right:-12px;top:-18px;font-size:30px;color:var(--navy);font-weight:900}
+.lm-ch[data-m="ˇ"]::after{color:var(--red)!important}
+.lm-ch[data-t]:not([data-t=""])::before{content:attr(data-t);position:absolute;right:-12px;bottom:-26px;font-size:24px;color:var(--green);font-weight:900}
+.lm-ch.match{background:rgba(108,187,75,.18)}
+.lm-msg{font-size:15px;margin-top:8px}
+
+/* 出場券 */
+.exit{display:grid;gap:10px}
+.exit-field{display:block}
+.exit-field span{display:block;font-size:17px;font-weight:700;margin-bottom:4px}
+.exit textarea{margin:0}
+
+/* 七天紀錄 */
+.log7-t th,.log7-t td{font-size:15px;padding:4px 8px}
+.log7-t input{width:100%;font:inherit;font-size:15px;background:#0b0b0d;color:var(--ink);border:1px solid var(--line);border-radius:2px;padding:4px 6px}
+.log7-note{font-size:13px;margin-top:6px}
+
+/* 作業勾選 */
+.checks[data-id] li{cursor:pointer}
+.checks[data-id] li.done{color:var(--muted);text-decoration:line-through}
+.checks[data-id] li.done::before{background:var(--amber)}
+
+/* QR Code */
+.qr{text-align:center}
+.qr-box{display:inline-block;background:#fff;padding:10px;border-radius:4px;line-height:0}
+.qr-box img,.qr-box canvas{width:200px!important;height:200px!important}
+.qr-url{font-size:13px;color:var(--muted);margin-top:8px;word-break:break-all}
+
+/* ===== 行動裝置 ===== */
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){
+  .ix-tag{position:static;display:inline-flex;margin-bottom:10px;font-size:12px}
+  .split,.split.wide,.split.narrow{grid-template-columns:1fr;gap:16px}
+  .compact p,.compact li{font-size:16px}
+  .cards-mini{grid-template-columns:1fr;gap:8px}
+  .cards-mini .card p{font-size:14px}
+  .quiz .q{font-size:17px}
+  .quiz-opts{grid-template-columns:1fr}
+  .quiz-opt{font-size:15px;min-height:44px}
+  .quiz .why{font-size:15px}
+  .poll-hit{grid-template-columns:96px 1fr 28px;font-size:14px;gap:8px}
+  .picker-name{font-size:34px;min-height:56px}
+  .score-grid{grid-template-columns:1fr 1fr}
+  .score-pts{font-size:38px}
+  .wl-ctrl{grid-template-columns:1fr;gap:8px}
+  .wavelab canvas{height:120px}
+  .wl-read{font-size:14px}.wl-read b{font-size:18px}
+  .pt-note{font-size:42px;min-width:96px}
+  .pt-sub{font-size:13px}
+  .pt-top{flex-wrap:wrap;gap:10px}
+  .br-sec{font-size:56px}
+  .br-info{font-size:14px}
+  .rec-time{font-size:48px}
+  .order-tiles{grid-template-columns:1fr 1fr}
+  .order-tile{font-size:15px;min-height:46px}
+  .flips,.flips.cols3{grid-template-columns:1fr 1fr}
+  .flip{min-height:150px}
+  .flip>div{font-size:14px;padding:10px}
+  .flip .f{font-size:15px}
+  .ph-name{font-size:18px}.ph-time{font-size:40px}
+  .lm-line{font-size:22px;line-height:2.3}
+  .lm-ch[data-m]:not([data-m=""])::after{font-size:20px;right:-8px;top:-12px}
+  .lm-ch[data-t]:not([data-t=""])::before{font-size:16px;right:-8px;bottom:-18px}
+  .exit-field span{font-size:15px}
+}
+
+.flip .b strong{display:block;margin-bottom:4px;font-size:19px}
+.reveal-btn,.flips-all,.score-reset{align-self:flex-start;width:auto}
+.reveal-btn{margin-top:12px}
