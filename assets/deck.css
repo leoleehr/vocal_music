@@ -1,9 +1,9 @@
 /* ===== Pixel Studio 課堂投影片樣式 ===== */
 :root{
   --bg:#060607; --paper:#111114; --card:#18181d; --ink:#f5f2ea; --muted:#a8a49b; --line:rgba(255,255,255,.14); --frame:rgba(255,255,255,.82);
-  --navy:#2f9bff; --gold:#ffd400; --red:#ff4545; --green:#7ed321; --amber:#f5b942;
-  --navy-t:rgba(47,155,255,.16); --gold-t:rgba(255,212,0,.15); --red-t:rgba(255,69,69,.16); --green-t:rgba(126,211,33,.16);
-  --rainbow:linear-gradient(90deg,#ff2e2e,#ff7a00,#ffd400,#7ed321,#00c9a7,#1e90ff,#7b4dff,#d63cff);
+  --navy:#45b3e6; --gold:#e3d83a; --red:#ec4a36; --green:#6cbb4b; --amber:#f4a62a; --pink:#e2407f; --purple:#9a5fd0;
+  --navy-t:rgba(69,179,230,.16); --gold-t:rgba(227,216,58,.15); --red-t:rgba(236,74,54,.16); --green-t:rgba(108,187,75,.16);
+  --rainbow:linear-gradient(90deg,#e8412b,#e2407f,#8a4fc0,#2f5fc4,#45b3e6,#6cbb4b,#d6e03a,#f4a62a);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -20,7 +20,7 @@ a{color:var(--gold)}
   transition:opacity .35s ease,transform .35s ease;overflow:hidden;box-shadow:0 0 0 2px var(--frame),0 30px 80px rgba(0,0,0,.6)}
 .slide.active{opacity:1;pointer-events:auto;transform:none}
 .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:12px;
-  background:linear-gradient(#ff2e2e 0 12.5%,#ff7a00 0 25%,#ffd400 0 37.5%,#7ed321 0 50%,#00c9a7 0 62.5%,#1e90ff 0 75%,#7b4dff 0 87.5%,#d63cff 0);
+  background:linear-gradient(#e8412b 0 12.5%,#e2407f 0 25.0%,#8a4fc0 0 37.5%,#2f5fc4 0 50.0%,#45b3e6 0 62.5%,#6cbb4b 0 75.0%,#d6e03a 0 87.5%,#f4a62a 0);
   -webkit-mask:repeating-linear-gradient(#000 0 10px,transparent 10px 12px);mask:repeating-linear-gradient(#000 0 10px,transparent 10px 12px)}
 .slide-brand{position:absolute;right:40px;bottom:24px;display:flex;align-items:center;gap:12px;font-size:14px;color:var(--muted);letter-spacing:.06em}
 .slide-brand .pixel-word{height:16px;width:auto}
@@ -59,24 +59,22 @@ th{font-size:17px;color:var(--amber);font-weight:500;letter-spacing:.08em}
 
 /* ---- cover ---- */
 .cover{justify-content:center}
-.cover .pixel-logo{width:420px;margin-bottom:36px}
+.cover .pixel-logo{width:560px;margin-bottom:40px}
 .cover h1{font-size:68px}
 .cover .lead{font-size:28px;color:var(--amber);letter-spacing:.04em}
 .cover .meta{margin-top:40px;font-size:20px;color:var(--muted);line-height:1.8}
-.cover::after{content:"";position:absolute;right:-60px;top:-60px;width:520px;height:520px;opacity:.16;
-  background:conic-gradient(from 200deg,#ff2e2e,#ff7a00,#ffd400,#7ed321,#00c9a7,#1e90ff,#7b4dff,#d63cff,#ff2e2e);
-  -webkit-mask:radial-gradient(circle,#000 0 1px,transparent 1.5px) 0 0/22px 22px,radial-gradient(circle at 70% 30%,#000,transparent 70%);
-  -webkit-mask-composite:source-in;mask:radial-gradient(circle,#000 0 1px,transparent 1.5px) 0 0/22px 22px,radial-gradient(circle at 70% 30%,#000,transparent 70%);mask-composite:intersect}
+.cover::after{content:"";position:absolute;right:56px;top:50%;width:468px;height:468px;transform:translateY(-50%);opacity:.5;
+  background:linear-gradient(135deg,#e8412b,#e2407f 18%,#8a4fc0 34%,#2f5fc4 50%,#45b3e6 62%,#6cbb4b 76%,#d6e03a 90%,#f4a62a);
+  -webkit-mask:repeating-linear-gradient(90deg,#000 0 46px,transparent 46px 52px),repeating-linear-gradient(#000 0 46px,transparent 46px 52px),radial-gradient(circle at 62% 45%,#000 0 30%,transparent 72%);
+  -webkit-mask-composite:source-in,source-in;
+  mask:repeating-linear-gradient(90deg,#000 0 46px,transparent 46px 52px),repeating-linear-gradient(#000 0 46px,transparent 46px 52px),radial-gradient(circle at 62% 45%,#000 0 30%,transparent 72%);
+  mask-composite:intersect}
 
-.cover-visual{position:absolute;right:84px;top:50%;transform:translateY(-50%) rotate(2deg);width:400px;padding:7px;background:#000;border:2px solid var(--frame);box-shadow:0 30px 70px rgba(0,0,0,.7);z-index:1}
-.cover-visual img{display:block;width:100%;height:auto}
-.cover > :not(.cover-visual){max-width:640px;position:relative;z-index:2}
 
 /* ---- logo ---- */
-.pixel-logo{display:inline-flex;flex-direction:column;align-items:center;gap:10px}
-.pixel-logo .pixel-word{width:100%;height:auto;display:block}
-.pixel-logo-studio{width:62%}
-.pixel-logo-tag{font-weight:700;font-size:15px;letter-spacing:.04em;color:#fff}
+.pixel-logo{display:block;max-width:100%}
+.pixel-logo img{display:block;width:100%;height:auto}
+img.pixel-word{display:block;width:auto}
 
 /* ---- venn ---- */
 .venn{position:relative;width:250px;height:230px;margin:0 auto}
@@ -96,8 +94,8 @@ th{font-size:17px;color:var(--amber);font-weight:500;letter-spacing:.08em}
 .routine{height:84px;margin-bottom:18px}
 .routine div{display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff;font-size:18px;font-weight:700;text-align:center;line-height:1.3}
 .routine small{font-weight:400;opacity:.9}
-.bar-qi{background:#1e6fd9}.bar-cheng{background:#e6b800;color:#1a1500!important}.bar-rest{background:#3a3a42}.bar-zhuan{background:#e53935}.bar-he{background:#3f9b3a}
-.bar-teal{background:#00a3a3}.bar-orange{background:#f57c00}
+.bar-qi{background:#2f5fc4}.bar-cheng{background:#d6cf2c;color:#1a1800!important}.bar-rest{background:#3a3a42}.bar-zhuan{background:#e0402b}.bar-he{background:#4f9e3a}
+.bar-teal{background:#2a9fd0}.bar-orange{background:#e8892a}.bar-pink{background:#d23a76}.bar-purple{background:#7f48b8}
 
 /* ---- flow / chain ---- */
 .flow{display:flex;flex-direction:column;align-items:center}
@@ -145,7 +143,7 @@ th{font-size:17px;color:var(--amber);font-weight:500;letter-spacing:.08em}
 /* ===== 行動裝置：改為上下捲動的閱讀模式 ===== */
 @media (max-width:900px),(orientation:portrait) and (max-width:1100px){
   body{overflow:auto}
-  .deck{position:static;display:block;padding:64px 12px 32px}
+  .deck{position:static;display:block;place-items:normal;padding:64px 12px 32px}
   .stage{width:auto;height:auto;transform:none!important}
   .slide{position:relative;inset:auto;opacity:1;transform:none;pointer-events:auto;padding:30px 20px 52px 28px;margin:0 0 18px;min-height:0;scroll-margin-top:64px}
   .slide::before{width:7px}
@@ -179,7 +177,7 @@ th{font-size:17px;color:var(--amber);font-weight:500;letter-spacing:.08em}
   .routine{height:auto;flex-wrap:wrap}
   .routine div{flex:1 1 30%!important;padding:10px 4px;font-size:13px}
   .six{grid-template-columns:repeat(2,1fr);gap:0 8px;margin-top:6px}
-  .six .venn{transform:scale(.6);height:145px;width:250px;margin-left:50%;translate:-50% 0}
+  .six .venn{transform:none;translate:none;zoom:.6;height:230px;margin:0 auto}
   .venn-cap{font-size:13px;margin-top:-6px;margin-bottom:12px}
   .chain{flex-direction:column;align-items:stretch;gap:0}
   .chain i{flex:0 0 18px;width:2px;height:18px;align-self:center}
@@ -191,10 +189,9 @@ th{font-size:17px;color:var(--amber);font-weight:500;letter-spacing:.08em}
   .lyric p{font-size:20px}
   .checks li{font-size:15px;padding-left:34px}.checks li::before{width:18px;height:18px;top:11px}
   .pill{font-size:14px;padding:6px 10px}
-  .cover .pixel-logo{width:240px;margin-bottom:22px}
-  .cover-visual{display:none}
+  .cover .pixel-logo{width:280px;margin-bottom:22px}
   .cover .meta{font-size:14px;margin-top:22px}
-  .cover::after{width:260px;height:260px;right:-40px;top:-40px}
+  .cover::after{display:none}
   .metro .bpm{font-size:18px;min-width:80px}
   .metro button,.btn{font-size:14px;padding:6px 10px}
   [style*="height:40px"],[style*="height:36px"]{height:16px!important}
@@ -203,7 +200,7 @@ th{font-size:17px;color:var(--amber);font-weight:500;letter-spacing:.08em}
 @media print{
   body{overflow:visible}
   body::before{display:none}
-  .deck{position:static;display:block}
+  .deck{position:static;display:block;place-items:normal}
   .stage{transform:none!important;width:1280px;height:auto}
   .slide{position:relative;opacity:1;transform:none;page-break-after:always;height:720px;box-shadow:none}
   .ui,.progress,.mobile-bar{display:none}
