@@ -16,7 +16,7 @@
 | `slides/lesson-01/index.html` | 第一堂「歌唱序論」課堂投影片（單一 HTML 檔，可直接用瀏覽器開啟） |
 | `slides/lesson-02/index.html` | 第二堂「歌唱基本條件與呼吸」課堂投影片 |
 
-| `assets/` | 共用樣式與腳本：`deck.css`／`deck.js`（投影片）、`site.css`（首頁與講義）、`ui.js`（表格轉卡片、目錄抽屜）、`interact.css`／`interact.js`（課堂互動）、`pixel.js`（插入 Logo）、`logo-dark.png`（深色底用，白色標語）、`logo-light.png`（淺色底用）、`logo-mark.png`（PIXEL 小標）、`favicon.png`、`og-image.png` |
+| `assets/` | 共用樣式與腳本：`deck.css`／`deck.js`（投影片）、`site.css`（首頁與講義）、`ui.js`（表格轉卡片、目錄抽屜）、`interact.css`／`interact.js`（課堂互動）、`pixel.js`（插入 Logo）、`logo-dark-notag.png`（網站使用的主 Logo，標語以文字呈現）、`logo-dark.png`（深色底完整版，含白色標語）、`logo-light.png`（淺色底用）、`logo-mark.png`（PIXEL 小標）、`favicon.png`、`og-image.png` |
 
 ## 投影片操作
 

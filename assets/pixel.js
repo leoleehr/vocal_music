@@ -8,11 +8,13 @@
     return '<img class="pixel-word" src="' + BASE + 'logo-mark.png" alt="PIXEL STUDIO" width="560" height="111">';
   }
   // 完整 Logo：PIXEL STUDIO + We Perform the Pixel of Music
-  function logo() {
-    return '<div class="pixel-logo"><img src="' + BASE + 'logo-dark.png" alt="PIXEL STUDIO — We Perform the Pixel of Music" width="1234" height="470"></div>';
+  // 小尺寸使用不含標語的圖檔，標語改以文字呈現，維持清晰
+  function logo(withTagline) {
+    return '<div class="pixel-logo"><img src="' + BASE + 'logo-dark-notag.png" alt="PIXEL STUDIO" width="1211" height="373">' +
+      (withTagline ? '<span class="pixel-tagline">We Perform the Pixel of Music</span>' : '') + '</div>';
   }
   function mount(root) {
-    (root || document).querySelectorAll('[data-pixel-logo]').forEach(function (el) { el.innerHTML = logo(); });
+    (root || document).querySelectorAll('[data-pixel-logo]').forEach(function (el) { el.innerHTML = logo(el.getAttribute('data-pixel-logo') === 'tagline'); });
     (root || document).querySelectorAll('[data-pixel-word]').forEach(function (el) { el.innerHTML = pixelWord(); });
   }
 

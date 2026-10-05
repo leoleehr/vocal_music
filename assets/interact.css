@@ -44,7 +44,7 @@
 
 /* 隨機點名 */
 .picker{text-align:center}
-.picker-name{font-size:54px;font-weight:900;min-height:84px;display:grid;place-items:center;margin-bottom:12px;color:var(--amber)}
+.picker-name{font-size:52px;font-weight:700;min-height:84px;display:grid;place-items:center;margin-bottom:12px;color:var(--amber)}
 .picker-name.pop{animation:pop .4s ease}
 @keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
 .picker .btn-row{justify-content:center;align-items:center}
