@@ -64,7 +64,7 @@ tr:last-child td{border-bottom:0}
 
 /* ---- cover ---- */
 .cover{justify-content:center}
-.cover .pixel-logo{width:125px;margin-bottom:40px}
+.cover .pixel-logo{width:312px;margin-bottom:40px}
 .cover h1{font-size:68px}
 .cover .lead{font-size:28px;color:var(--amber);letter-spacing:.04em;font-family:var(--display)}
 .cover .meta{margin-top:40px;font-size:20px;color:var(--muted);line-height:1.8}
@@ -195,7 +195,7 @@ img.pixel-word{display:block;width:auto}
 
   /* cover */
   .slide.cover{padding:32px 20px 36px;background:radial-gradient(90% 60% at 100% 0%,rgba(244,166,42,.12),transparent 70%)}
-  .cover .pixel-logo{width:80px;max-width:80px;margin-bottom:22px}
+  .cover .pixel-logo{width:200px;max-width:200px;margin-bottom:22px}
   .pixel-tagline{font-size:10px;letter-spacing:.24em;margin-top:10px}
   .cover .meta{font-size:14px;margin-top:20px}
   .cover::after{display:none}
