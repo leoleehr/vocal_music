@@ -169,7 +169,8 @@
     // 頂欄放學員資料按鈕：網站頁面放在 topbar，投影片放在 App 列與桌機控制列
     var tb = document.querySelector('.topbar .wrap'); if (tb) tb.appendChild(chip('top'));
     var ab = document.querySelector('.appbar'); if (ab) ab.insertBefore(chip('icon'), ab.querySelector('.ab-count'));
-    var ui = document.querySelector('.ui'); if (ui) ui.appendChild(chip('ui'));
+    // 投影片桌機版：固定在右下角，避免擋住換頁按鈕
+    if (document.querySelector('.ui')) document.body.appendChild(chip('corner'));
     setTimeout(flush, 1500);
   }
   window.PixelBackend = { configured: !!URL_, profile: profile, saveProfile: saveProfile, checkCode: checkCode, ensureProfile: ensureProfile, openProfile: openProfile, send: send, log: log, upload: upload, flush: flush, toast: toast, chip: chip };

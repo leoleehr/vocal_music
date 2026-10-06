@@ -225,3 +225,16 @@
   .qr-mobile.go{background:var(--amber);color:#1a1200}
 }
 .pt-clock{display:block;font-family:var(--display);font-size:13px;color:var(--amber);margin-top:2px;font-variant-numeric:tabular-nums}
+
+/* 歌曲投影片：影片與互動並排 */
+.song-split{grid-template-columns:1.05fr 1fr;gap:28px;align-items:start}
+.song-split.rev{grid-template-columns:1fr 470px}
+.score.compact .score-grid{grid-template-columns:1fr 1fr;gap:8px}
+.score.compact .score-team{padding:8px 10px}
+.score.compact .score-pts{font-size:36px}
+.lyric-col .lm-line{font-size:30px;line-height:2.15}
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){
+  .song-split,.song-split.rev{grid-template-columns:1fr}
+  .song-split.rev .yt{order:-1}
+  .lyric-col .lm-line{font-size:22px}
+}

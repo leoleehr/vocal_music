@@ -9,8 +9,7 @@
 .pb-chip.icon svg{width:30px;height:30px;padding:5px}
 .pb-chip.icon span{display:none}
 .pb-chip.icon.empty svg{box-shadow:0 0 0 2px rgba(244,166,42,.5)}
-.pb-chip.ui{border:0;background:transparent;padding:4px 12px 4px 6px}
-.pb-chip.ui small{display:none}
+.pb-chip.corner{position:fixed;right:16px;bottom:14px;z-index:6;padding:6px 14px 6px 6px;background:rgba(20,20,25,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .topbar .wrap>.pb-chip{margin-left:4px}
 
 .pb-modal{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
@@ -46,6 +45,7 @@
 .pb-send .btn{font-size:14px}
 
 @media (max-width:900px),(orientation:portrait) and (max-width:1100px){
+  .pb-chip.corner{display:none}
   .topbar .wrap>.pb-chip{padding:0;border:0;background:none;width:40px;height:40px;justify-content:center;margin-right:-8px}
   .topbar .wrap>.pb-chip span{display:none}
   .topbar .wrap>.pb-chip svg{width:30px;height:30px;padding:5px}
