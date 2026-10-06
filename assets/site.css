@@ -30,7 +30,9 @@ img.pixel-word{display:block;width:auto}
 .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px}
 .topbar .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--muted);font-size:13px;letter-spacing:.08em}
 .topbar .pixel-word{height:15px}
-.brand-cn{font-family:"Yuji Syuku","Noto Serif TC",serif;font-size:21px;line-height:1;letter-spacing:.1em;color:#f3f0e9;white-space:nowrap}
+.brand-en{font-family:var(--display);font-size:15px;font-weight:500;letter-spacing:.06em;color:#f3f0e9;white-space:nowrap}
+.hero-cn{font-family:"Yuji Syuku","Noto Serif TC",serif;font-size:26px;letter-spacing:.22em;color:#f3f0e9;margin:-14px 0 26px;padding-left:.22em}
+.br-m{display:none}
 .topbar nav{display:flex;gap:4px}
 .topbar nav a{color:var(--ink);text-decoration:none;font-size:15px;padding:8px 14px;border-radius:999px;opacity:.85}
 .topbar nav a:hover,.topbar nav a.cur{opacity:1;background:rgba(255,255,255,.07)}
@@ -45,7 +47,7 @@ img.pixel-word{display:block;width:auto}
 
 /* hero */
 .hero{padding:64px 0 40px;text-align:center}
-.hero .pixel-logo{width:min(375px,80%);margin:0 auto 36px;display:flex;flex-direction:column;align-items:center}
+.hero .pixel-logo{width:min(412px,82%);margin:0 auto 36px;display:flex;flex-direction:column;align-items:center}
 .hero h1{font-size:40px;line-height:1.3;font-weight:700;margin:14px 0 16px;letter-spacing:.02em}
 .hero p.sub{font-size:18px;color:var(--muted);max-width:36em;margin:0 auto}
 .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px;justify-content:center}
@@ -165,11 +167,13 @@ footer{margin-top:24px;padding:28px 0 40px;color:var(--faint);font-size:13px;tex
   .topbar .wrap{height:56px}
   .topbar nav{display:none}
   .topbar .pixel-word{height:13px}
-  .brand-cn{font-size:18px}
+  .brand-en{font-size:13px;letter-spacing:.04em}
+  .hero-cn{font-size:20px;margin:-8px 0 20px}
+  .br-m{display:inline}
   .hero{padding:28px 0 20px}
-  .hero .pixel-logo{width:min(240px,66%);margin-bottom:22px}
+  .hero .pixel-logo{width:min(264px,72%);margin-bottom:22px}
   .pixel-tagline{font-size:10px;letter-spacing:.24em}
-  .hero h1{font-size:26px}
+  .hero h1{font-size:24px}
   .hero p.sub{font-size:15.5px}
   .cta{flex-direction:column;gap:10px}
   .cta .btn{width:100%}
