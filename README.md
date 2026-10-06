@@ -34,9 +34,9 @@
 | `backend.js`、`backend.css` | 學員資料、送出佇列、上傳錄音、送出提示 |
 | `surveys.js` | 問卷題目 |
 | `pixel.js` | 插入 Logo |
-| `logo-dark-notag.png` | 網站主 Logo（標語以文字呈現） |
-| `logo-mark-white.png`、`logo-mark.png` | 頂欄白色小標、彩色小標 |
-| `logo-dark.png`、`logo-light.png` | 含標語的完整 Logo（深色底、淺色底） |
+| `logo-color-dark-notag.png` | 首頁與講義封面使用的主 Logo（深色底、不含英文標語，下方接「畫素音樂工作坊」） |
+| `logo-color-dark.png`、`logo-color-light.png` | 含英文標語的彩色 Logo（深色底、淺色底用，透明背景） |
+| `logo-mono-white.png`、`logo-mono-black.png` | 單色 Logo（深色底用白色、淺色底用黑色，透明背景） |
 | `favicon.png`、`og-image.png` | 瀏覽器分頁圖示、分享預覽圖 |
 
 ## 投影片操作

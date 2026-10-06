@@ -5,12 +5,12 @@
 
   // 只有 PIXEL 字樣的小標（頂欄、頁尾標記）
   function pixelWord(white) {
-    return '<img class="pixel-word" src="' + BASE + (white ? 'logo-mark-white.png' : 'logo-mark.png') + '" alt="PIXEL STUDIO" width="560" height="111">';
+    return '<img class="pixel-word" src="' + BASE + (white ? 'logo-mono-white.png' : 'logo-color-dark.png') + '" alt="PIXEL STUDIO" width="1200" height="444">';
   }
   // 完整 Logo：PIXEL STUDIO + We Perform the Pixel of Music
   // 小尺寸使用不含標語的圖檔，標語改以文字呈現，維持清晰
   function logo(withTagline) {
-    return '<div class="pixel-logo"><img src="' + BASE + 'logo-dark-notag.png" alt="PIXEL STUDIO" width="1211" height="373">' +
+    return '<div class="pixel-logo"><img src="' + BASE + 'logo-color-dark-notag.png" alt="PIXEL STUDIO" width="1200" height="372">' +
       (withTagline ? '<span class="pixel-tagline">We Perform the Pixel of Music</span>' : '') + '</div>';
   }
   function mount(root) {
