@@ -10,7 +10,9 @@
   // 完整 Logo：PIXEL STUDIO + We Perform the Pixel of Music
   // 小尺寸使用不含標語的圖檔，標語改以文字呈現，維持清晰
   function logo(withTagline) {
-    return '<div class="pixel-logo"><img src="' + BASE + 'logo-color-dark-notag.png" alt="PIXEL STUDIO" width="1200" height="372">' +
+    var src = BASE + 'logo-color-dark-notag.png';
+    // 彩色 Logo 以刷淡、流光呈現：.pl-art 內含光暈層與沿著 Logo 形狀流動的光
+    return '<div class="pixel-logo"><span class="pl-art" style="--logo:url(' + src + ')"><img src="' + src + '" alt="PIXEL STUDIO" width="1200" height="372"></span>' +
       (withTagline ? '<span class="pixel-tagline">We Perform the Pixel of Music</span>' : '') + '</div>';
   }
   function mount(root) {

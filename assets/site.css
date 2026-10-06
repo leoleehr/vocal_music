@@ -23,6 +23,16 @@ img{max-width:100%;height:auto;display:block}
 .pixel-logo{display:block;max-width:100%}
 .pixel-logo img{display:block;width:100%;height:auto}
 img.pixel-word{display:block;width:auto}
+/* 彩色 Logo：刷淡、光暈與流動光澤 */
+.pl-art{position:relative;display:block;isolation:isolate}
+.pl-art img{position:relative;z-index:1;opacity:.5;filter:saturate(.9);animation:pl-breathe 7s ease-in-out infinite}
+.pl-art::before{content:"";position:absolute;inset:-6% -4%;z-index:0;background:var(--logo) center/contain no-repeat;filter:blur(22px) saturate(1.4);opacity:.32;animation:pl-drift 12s ease-in-out infinite alternate}
+.pl-art::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(105deg,transparent 0%,transparent 38%,rgba(255,255,255,.8) 47%,rgba(255,236,200,.55) 53%,transparent 62%,transparent 100%);background-size:250% 100%;
+  -webkit-mask:var(--logo) center/contain no-repeat;mask:var(--logo) center/contain no-repeat;mix-blend-mode:screen;opacity:.85;animation:pl-flow 5.5s linear infinite}
+@keyframes pl-breathe{0%,100%{opacity:.42}50%{opacity:.62}}
+@keyframes pl-drift{0%{transform:translate(-2%,1%) scale(1);opacity:.24}100%{transform:translate(2%,-1%) scale(1.04);opacity:.38}}
+@keyframes pl-flow{0%{background-position:120% 0}100%{background-position:-120% 0}}
 .pixel-tagline{display:block;margin-top:12px;font-family:var(--display);font-size:11px;font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
 
 /* top bar */
