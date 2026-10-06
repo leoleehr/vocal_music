@@ -65,8 +65,8 @@
   }
   function fit() {
     if (mq.matches) { stage.style.transform = ''; return; }
-    var s = Math.min(innerWidth / 1340, (innerHeight - 56) / 770);
-    stage.style.transform = 'scale(' + s + ')';
+    var s = Math.min((innerWidth - 32) / 1280, (innerHeight - 76) / 720);
+    stage.style.transform = 'translate(-50%, -50%) scale(' + s + ')';
   }
   function show(n) {
     i = Math.max(0, Math.min(slides.length - 1, n));

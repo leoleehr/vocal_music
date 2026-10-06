@@ -1,0 +1,121 @@
+/* ===== Pixel Studio 響應式設計：依螢幕尺寸調整版面 =====
+ * 斷點：< 600 手機｜600–899 大手機、小平板｜900–1279 平板橫向、筆電｜1280–1599 桌機｜≥ 1600 大螢幕
+ * 另外處理：手機橫向（高度 ≤ 500）、觸控裝置、減少動態效果
+ */
+
+/* ---------- 網站頁面（首頁、問卷、講義） ---------- */
+.hero h1{font-size:clamp(24px,1.6vw + 16px,48px)}
+.hero p.sub{font-size:clamp(15px,.35vw + 13.5px,19px)}
+.sec-head h2{font-size:clamp(21px,1vw + 14px,32px)}
+.sv-head h1{font-size:clamp(22px,1vw + 15px,30px)}
+
+@media (min-width:1600px){
+  .wrap{max-width:1240px}
+  .lessons{gap:18px}
+  .lesson{padding:24px}
+  .hero{padding-top:84px}
+}
+/* 平板、小筆電：三欄太擠，改兩欄 */
+@media (min-width:600px) and (max-width:1099px){
+  .lessons{grid-template-columns:1fr 1fr!important;gap:12px}
+  .features{grid-template-columns:1fr 1fr!important}
+  .sv-list{grid-template-columns:1fr 1fr!important}
+  .about{grid-template-columns:1fr auto!important}
+  .since-block{justify-self:end!important;grid-row:auto!important}
+  .cta{flex-direction:row!important;justify-content:center}
+  .cta .btn{width:auto!important}
+  .stats{display:flex!important}
+  .stat{min-width:140px}
+}
+@media (min-width:600px) and (max-width:860px){
+  .wrap{padding:0 28px}
+  .rhythm{flex-direction:row!important;flex-wrap:wrap}
+  .rhythm div{flex:1 1 30%!important;display:block!important}
+  .rhythm br{display:inline!important}
+}
+/* 手機：表格卡片的欄位名稱放在內容上方，避免長內容被擠出畫面 */
+@media (max-width:860px){
+  .md td{display:block!important}
+  .md td[data-label]::before{display:block;width:auto!important;margin-bottom:1px;font-size:12px;letter-spacing:.04em}
+  .md td .yt-chip,.md .yt-chip{max-width:100%;white-space:normal}
+  .md pre{max-width:100%}
+  body{overflow-x:hidden}
+}
+@media (max-width:380px){
+  .wrap{padding:0 14px}
+  .stats{gap:6px!important}
+  .stat b{font-size:19px!important}
+  .tabbar a{font-size:10px}
+  .lesson .links a,.lesson .links span{font-size:13px}
+}
+/* 手機橫向：高度很矮，縮小上下留白 */
+@media (orientation:landscape) and (max-height:500px){
+  .hero{padding:20px 0 12px!important}
+  .hero .pixel-logo{width:min(200px,30%)!important;margin-bottom:12px!important}
+  .hero-cn{margin:-6px 0 12px!important}
+  section.block{padding:20px 0!important}
+  .stats{margin-top:16px!important}
+}
+/* 講義：大螢幕把章節目錄固定在左側 */
+@media (min-width:1280px){
+  .toc{position:fixed;top:84px;left:max(24px,calc(50% - 640px));width:180px;background:none;border:0;backdrop-filter:none;-webkit-backdrop-filter:none;z-index:5}
+  .toc .wrap{flex-direction:column;gap:4px;padding:0;overflow:visible;max-width:none}
+  .toc a{border:0;border-radius:10px;padding:7px 12px;font-size:14px}
+  .toc a:not(.cur):hover{background:rgba(255,255,255,.05);color:var(--ink)}
+  .toc .wrap::before{content:"目錄";display:block;font-family:var(--display);font-size:12px;letter-spacing:.2em;color:var(--faint);padding:0 12px 6px}
+  .md,.dl-bar{margin-left:auto;margin-right:auto}
+  body:has(.toc) .md, body:has(.toc) .wrap > .dl-bar{transform:translateX(70px)}
+}
+@media (min-width:1600px){
+  .toc{left:calc(50% - 720px);width:200px}
+  body:has(.toc) .md, body:has(.toc) .wrap > .dl-bar{transform:none}
+}
+
+/* ---------- 投影片：簡報模式 ---------- */
+.stage{position:absolute;left:50%;top:calc(50% - 26px)}
+@media (min-width:2200px){
+  .ui{bottom:18px;transform:translateX(-50%) scale(1.15)}
+}
+
+/* ---------- 投影片：閱讀模式（手機、直立平板） ---------- */
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){
+  .stage{position:static;left:auto;top:auto}
+}
+/* 直立平板與大手機：內容維持舒適閱讀寬度，卡片改多欄 */
+@media (min-width:600px) and (max-width:1100px) and (orientation:portrait),(min-width:600px) and (max-width:900px){
+  .deck{padding-left:max(24px,calc((100% - 760px) / 2))!important;padding-right:max(24px,calc((100% - 760px) / 2))!important}
+  .slide{padding-left:8px!important;padding-right:8px!important}
+  .grid3,.cards-mini,.cards-mini[style]{grid-template-columns:repeat(3,1fr)!important}
+  .grid2{grid-template-columns:1fr 1fr!important}
+  .steps{grid-template-columns:repeat(3,1fr)!important}
+  .quiz-opts{grid-template-columns:1fr 1fr!important}
+  .score-grid{grid-template-columns:repeat(4,1fr)!important}
+  .score.compact .score-grid{grid-template-columns:repeat(4,1fr)!important}
+  .flips,.flips.cols3{grid-template-columns:repeat(3,1fr)!important}
+  .order-tiles{grid-template-columns:repeat(3,1fr)!important}
+  .split.song-split{grid-template-columns:1fr!important}
+  h1,.cover h1{font-size:40px!important}
+  h2{font-size:27px!important}
+  p,li,.card p{font-size:17px}
+  .timeline>div{padding:12px 16px!important}
+  .yt-dock{left:auto!important;right:20px!important;width:380px!important}
+}
+/* 手機橫向：閱讀模式，App 列縮矮 */
+@media (orientation:landscape) and (max-height:500px) and (max-width:900px){
+  .appbar{height:48px}
+  .deck{padding-top:56px!important}
+  .slide{padding-top:18px!important;padding-bottom:22px!important}
+  .grid3,.cards-mini,.cards-mini[style]{grid-template-columns:repeat(3,1fr)!important}
+  .grid2,.split,.split.wide,.split.narrow{grid-template-columns:1fr 1fr!important}
+  .quiz-opts{grid-template-columns:1fr 1fr!important}
+  .toc-fab{height:42px;bottom:12px}
+}
+
+/* ---------- 觸控與動態偏好 ---------- */
+@media (hover:none){
+  .ytp-big:hover{transform:none}
+  .btn:hover,.yt-chip:hover{filter:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}

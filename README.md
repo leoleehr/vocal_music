@@ -27,6 +27,7 @@
 | --- | --- |
 | `deck.css`、`deck.js` | 投影片版面、換頁、手機課程 App 模式 |
 | `site.css` | 首頁與講義頁 |
+| `responsive.css` | 響應式版面：手機、手機橫向、平板、筆電、大螢幕各自的排版調整 |
 | `ui.js` | 表格轉卡片、目錄抽屜 |
 | `interact.css`、`interact.js` | 課堂互動元件 |
 | `songs.js`、`youtube.js`、`youtube.css` | 課程歌曲清單與 YouTube 播放（先顯示縮圖，點擊後在大視窗播放） |

@@ -17,7 +17,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;
 a{color:var(--amber)}
 
 /* ---- stage (desktop presentation) ---- */
-.deck{position:fixed;inset:0;display:grid;place-items:center;padding-bottom:52px}
+.deck{position:fixed;inset:0}
 .stage{width:1280px;height:720px;position:relative;transform-origin:center center}
 .slide{position:absolute;inset:0;border-radius:var(--r-lg);overflow:hidden;
   background:radial-gradient(110% 80% at 90% -10%,rgba(244,166,42,.08),transparent 55%),linear-gradient(180deg,#141418,#0f0f13);

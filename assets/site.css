@@ -74,10 +74,10 @@ section.block{padding:44px 0}
 .lesson .songs{font-size:13.5px;color:var(--ink);opacity:.85;display:flex;gap:6px;align-items:baseline}
 .lesson .songs::before{content:"♪";color:var(--c)}
 .lesson .links{display:flex;gap:8px}
-.lesson .links a,.survey-link{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700;color:var(--amber);text-decoration:none;margin-top:2px}
+.survey-link{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700;color:var(--amber);text-decoration:none;margin-top:2px}
 .survey-link:hover{text-decoration:underline}
 .md .survey-link{margin:0 0 12px}
-.lesson .links span{flex:1;display:flex;align-items:center;justify-content:center;min-height:42px;font-size:14px;font-weight:700;border-radius:var(--r-sm);border:1px solid var(--line-2);text-decoration:none;color:var(--ink);background:var(--card-2)}
+.lesson .links a,.lesson .links span{flex:1;display:flex;align-items:center;justify-content:center;min-height:42px;font-size:14px;font-weight:700;border-radius:var(--r-sm);border:1px solid var(--line-2);text-decoration:none;color:var(--ink);background:var(--card-2)}
 .lesson .links a.main{background:var(--c);border-color:transparent;color:#0b0b0b}
 .lesson .links span{color:var(--faint);border-style:dashed;background:transparent;font-weight:500}
 
