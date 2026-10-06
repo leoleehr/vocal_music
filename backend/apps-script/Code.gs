@@ -12,7 +12,8 @@ var TABS = {
   interactions: { name: '互動紀錄', head: ['時間', '姓名', '科系', '堂次', '投影片', '互動類型', '項目', '結果', '數值', '詳細資料'] },
   exit: { name: '出場券', head: ['時間', '姓名', '科系', '堂次', '今天學到的', '想多練習的', '想問老師的'] },
   log: { name: '練習紀錄', head: ['時間', '姓名', '科系', '堂次', '天數', '欄位一', '欄位二', '欄位三'] },
-  rec: { name: '錄音', head: ['時間', '姓名', '科系', '堂次', '名稱', '長度（秒）', '檔案連結'] }
+  rec: { name: '錄音', head: ['時間', '姓名', '科系', '堂次', '名稱', '長度（秒）', '檔案連結'] },
+  lyrics: { name: '歌詞', head: ['代碼', '歌名', '歌詞（一行一句、空行分段；字後加 ∨ 大換氣、ˇ 小換氣為老師版）'] }
 };
 var DEFAULT_CODE = 'PIXEL2026';
 var TYPE_LABEL = { quiz: '選擇題', order: '排序遊戲', poll: '舉手計票', score: '分組計分', pitch: '音準挑戰', breath: '吐氣測量', lyric: '歌詞換氣標記', homework: '作業勾選' };
@@ -35,6 +36,8 @@ function setup() {
   if (first.getName() === '工作表1' || first.getName() === 'Sheet1') {
     if (first.getLastRow() === 0 && ss.getSheets().length > 1) ss.deleteSheet(first);
   }
+  var ly = sheetOf(TABS.lyrics);
+  if (ly.getLastRow() < 2) { ly.appendRow(['l2-name', '刻在我心底的名字', '']); ly.setColumnWidth(3, 520); }
   folder();
   var props = PropertiesService.getScriptProperties();
   if (!props.getProperty('CLASS_CODE')) props.setProperty('CLASS_CODE', DEFAULT_CODE);
@@ -62,6 +65,13 @@ function openFolder() {
 /* ---------- 網頁端點 ---------- */
 function doGet(e) {
   var p = (e && e.parameter) || {};
+  if (p.lyrics !== undefined) {
+    if (p.code !== classCode()) return json({ ok: false, error: 'code' });
+    var sh = SpreadsheetApp.getActive().getSheetByName(TABS.lyrics.name);
+    var rows = sh && sh.getLastRow() > 1 ? sh.getRange(2, 1, sh.getLastRow() - 1, 3).getValues() : [];
+    for (var i = 0; i < rows.length; i++) if (String(rows[i][0]).trim() === p.lyrics && String(rows[i][2]).trim()) return json({ ok: true, title: rows[i][1], text: String(rows[i][2]) });
+    return json({ ok: true, text: '' });
+  }
   if (p.code !== undefined) return json({ ok: true, valid: p.code === classCode() });
   return json({ ok: true, service: '流行歌唱班課程資料後台' });
 }

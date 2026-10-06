@@ -82,6 +82,13 @@
     return fetch(URL_ + '?code=' + encodeURIComponent(code)).then(function (r) { return r.json(); })
       .then(function (j) { return j && j.valid; }).catch(function () { return null; });
   }
+  // 從後台「歌詞」分頁取得歌詞（需課程代碼；歌詞不放在公開網站中）
+  function fetchLyrics(id) {
+    var p = profile();
+    if (!URL_ || !complete(p)) return Promise.resolve(null);
+    return fetch(URL_ + '?lyrics=' + encodeURIComponent(id) + '&code=' + encodeURIComponent(p.code)).then(function (r) { return r.json(); })
+      .then(function (j) { return j && j.ok && j.text ? j.text : null; }).catch(function () { return null; });
+  }
   function saveProfile(p) { p.device = device; set(K.profile, p); refreshChips(); }
   function ensureProfile(reason) { var p = profile(); return complete(p) ? Promise.resolve(p) : openProfile(reason); }
 
@@ -173,5 +180,5 @@
     if (document.querySelector('.ui')) document.body.appendChild(chip('corner'));
     setTimeout(flush, 1500);
   }
-  window.PixelBackend = { configured: !!URL_, profile: profile, saveProfile: saveProfile, checkCode: checkCode, ensureProfile: ensureProfile, openProfile: openProfile, send: send, log: log, upload: upload, flush: flush, toast: toast, chip: chip };
+  window.PixelBackend = { configured: !!URL_, fetchLyrics: fetchLyrics, profile: profile, saveProfile: saveProfile, checkCode: checkCode, ensureProfile: ensureProfile, openProfile: openProfile, send: send, log: log, upload: upload, flush: flush, toast: toast, chip: chip };
 })();
