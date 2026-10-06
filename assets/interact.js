@@ -1,5 +1,5 @@
 /* ===== Pixel Studio 課堂互動元件 =====
- * 所有資料只存在這台裝置的瀏覽器（localStorage），不會上傳。
+ * 互動狀態存在這台裝置的瀏覽器（localStorage）；作答與成果經 backend.js 送到課程試算表。
  * 元件以 class 宣告在投影片中，載入時自動建立：
  *   .quiz .poll .reveal .picker .score .wavelab .pitch .breath .recorder
  *   .order .flips .phase .lyricmark .exit .log7 .qr   以及 .checks[data-id]
@@ -462,7 +462,7 @@
       ta.oninput = function () { st[k] = ta.value; LS.set(key, st); };
       x.appendChild(f);
     });
-    var foot = el('div', 'btn-row'), cp = btn('複製全部，貼到群組'), msg = el('span', 'muted'), sd = btn('送出給老師', 'primary');
+    var foot = el('div', 'btn-row'), cp = btn('複製文字'), msg = el('span', 'muted'), sd = btn('送出給老師', 'primary');
     foot.appendChild(sd);
     sd.onclick = function () {
       if (!prompts.some(function (p, k) { return st[k] && st[k].trim(); })) { say('請先填寫出場券', 'warn'); return; }
