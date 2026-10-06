@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>流行歌唱班｜講義與教案（列印版）</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1c1c21;--muted:#6f6b64;--faint:#a5a19a;--line:#e6e2da;--soft:#f6f4ef;--amber:#d98a12;--display:"Space Grotesk","Noto Sans TC",sans-serif;
+  --rainbow:linear-gradient(90deg,#e8412b,#e2407f,#8a4fc0,#2f5fc4,#45b3e6,#6cbb4b,#d6e03a,#f4a62a)}
+@page{size:A4;margin:20mm 17mm 18mm 17mm;
+  @bottom-left{content:"亞東吉他社 流行歌唱班｜講義與教案";font:500 7.5pt "Noto Sans TC",sans-serif;color:#a5a19a;letter-spacing:.06em}
+  @bottom-right{content:counter(page);font:700 8pt "Space Grotesk",sans-serif;color:#a5a19a}
+  @top-right{content:"PIXEL STUDIO";font:700 7pt "Space Grotesk",sans-serif;color:#c9c5bd;letter-spacing:.3em}}
+@page:first{margin:0;@bottom-left{content:none}@bottom-right{content:none}@top-right{content:none}}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{font-family:"Noto Sans TC",sans-serif;color:var(--ink);font-size:10.2pt;line-height:1.78;background:#fff}
+a{color:inherit;text-decoration:none}
+/* 螢幕預覽 */
+@media screen{body{background:#e9e6e0;padding:24px 0}.sheet{width:210mm;margin:0 auto 24px;background:#fff;box-shadow:0 10px 40px rgba(0,0,0,.12);padding:20mm 17mm}.cover{padding:0!important}.toolbar{position:sticky;top:0;z-index:5;display:flex;gap:10px;justify-content:center;padding:10px;margin:-24px 0 24px;background:rgba(28,28,33,.9)}.toolbar a,.toolbar button{font:700 13px "Noto Sans TC";color:#1a1200;background:#f4a62a;border:0;border-radius:10px;padding:8px 16px;cursor:pointer}.toolbar a.ghost{background:#33333b;color:#fff}}
+@media print{.toolbar{display:none}.sheet{width:auto;margin:0;padding:0;box-shadow:none}}
+
+/* 封面 */
+.cover{position:relative;height:297mm;background:#09090b;color:#f3f0e9;overflow:hidden;break-after:page;display:flex;flex-direction:column;justify-content:space-between;padding:28mm 22mm 22mm!important}
+.cover::before{content:"";position:absolute;left:0;right:0;top:0;height:3mm;background:var(--rainbow)}
+.cover::after{content:"";position:absolute;right:-30mm;bottom:-30mm;width:150mm;height:150mm;opacity:.22;background:linear-gradient(135deg,#e8412b,#e2407f 18%,#8a4fc0 34%,#2f5fc4 50%,#45b3e6 62%,#6cbb4b 76%,#d6e03a 90%,#f4a62a);
+  -webkit-mask:repeating-linear-gradient(90deg,#000 0 9mm,transparent 9mm 10.4mm),repeating-linear-gradient(#000 0 9mm,transparent 9mm 10.4mm),radial-gradient(circle at 70% 70%,#000 0 25%,transparent 70%);-webkit-mask-composite:source-in,source-in}
+.cover .logo{width:31mm}
+.cover .tag{font-family:var(--display);font-size:7pt;letter-spacing:.34em;text-transform:uppercase;color:#9d998f;margin-top:4mm}
+.cover .mid{position:relative;z-index:1}
+.cover .eyebrow{font-family:var(--display);font-size:9pt;letter-spacing:.3em;color:#f4a62a;margin-bottom:6mm}
+.cover h1{font-size:34pt;line-height:1.25;font-weight:700;letter-spacing:.04em}
+.cover .sub{font-size:12pt;color:#c9c5bd;margin-top:5mm;letter-spacing:.06em}
+.cover .foot{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:flex-end;font-size:9pt;color:#9d998f;line-height:1.7}
+.cover .foot b{color:#f3f0e9;font-weight:500}
+
+/* 目錄 */
+.toc h2{font-size:20pt;font-weight:700;letter-spacing:.06em;margin-bottom:2mm}
+.toc .lead{color:var(--muted);font-size:9.5pt;margin-bottom:8mm}
+.toc ol{list-style:none;border-top:1px solid var(--line)}
+.toc li{display:grid;grid-template-columns:16mm 1fr;gap:4mm;padding:4.2mm 0;border-bottom:1px solid var(--line);break-inside:avoid}
+.toc .no{font-family:var(--display);font-weight:700;font-size:16pt;line-height:1.1}
+.toc .t{font-size:12pt;font-weight:700}
+.toc .t small{font-family:var(--display);font-weight:500;font-size:8.5pt;color:var(--muted);margin-left:2mm;letter-spacing:.04em}
+.toc .d{font-size:9pt;color:var(--muted);line-height:1.6}
+.toc .s{font-size:8.5pt;color:var(--ink);margin-top:1mm}
+.toc .s::before{content:"♪ ";color:var(--amber)}
+.toc .note{margin-top:8mm;font-size:8.5pt;color:var(--muted);background:var(--soft);border-radius:3mm;padding:4mm 5mm}
+
+/* 內文 */
+.md section{break-before:page}
+.lh{position:relative;padding:7mm 0 6mm;margin-bottom:6mm;border-bottom:1px solid var(--line)}
+.lh::before{content:"";position:absolute;left:0;top:0;width:28mm;height:1.6mm;border-radius:1mm;background:var(--c,var(--amber))}
+.lh .no{font-family:var(--display);font-weight:700;font-size:9pt;letter-spacing:.3em;color:var(--c,var(--amber))}
+.lh h2{font-size:21pt;font-weight:700;letter-spacing:.04em;line-height:1.3;margin-top:1mm}
+.lh h2 small{display:block;font-family:var(--display);font-weight:500;font-size:10pt;color:var(--muted);letter-spacing:.06em;margin-top:.5mm}
+.md h3{display:flex;align-items:center;gap:2.6mm;font-size:12pt;font-weight:700;margin:7mm 0 2.5mm;break-after:avoid}
+.md h3::before{content:"";width:1.3mm;height:4.6mm;border-radius:.7mm;background:var(--amber)}
+.md p{margin:2mm 0}
+.md ul,.md ol{padding-left:5mm;margin:2mm 0}
+.md li{margin:1mm 0}
+.md li::marker{color:var(--faint)}
+.md strong{font-weight:700}
+.md ul:has(input[type=checkbox]){list-style:none;padding-left:0}
+.md li:has(>input[type=checkbox]){position:relative;padding-left:7mm}
+.md li input[type=checkbox]{appearance:none;-webkit-appearance:none;position:absolute;left:0;top:1.3mm;width:3.6mm;height:3.6mm;border:1.2px solid var(--amber);border-radius:1mm}
+.md table{width:100%;border-collapse:collapse;margin:3mm 0 4mm;font-size:8.8pt;line-height:1.6}
+.md th{background:var(--soft);color:var(--ink);font-weight:700;text-align:left;padding:2mm 2.4mm;border-bottom:1.2px solid #d8d3c9;white-space:nowrap}
+.md td{padding:2mm 2.4mm;border-bottom:1px solid var(--line);vertical-align:top}
+.md tr{break-inside:avoid}
+.md thead{display:table-header-group}
+.md pre{background:var(--soft);border-radius:2mm;padding:3mm 4mm;font-size:9pt;white-space:pre-wrap}
+.md code{font-family:ui-monospace,Consolas,monospace;font-size:8.8pt}
+.songs{margin:0 0 6mm;padding:4mm 4.5mm;border:1px solid var(--line);border-radius:3mm;background:var(--soft);break-inside:avoid}
+.songs .h{font-size:9.5pt;font-weight:700;margin-bottom:2.5mm;display:flex;justify-content:space-between}
+.songs .h span{font-weight:400;color:var(--muted);font-size:8pt}
+.songs .g{display:grid;grid-template-columns:1fr 1fr;gap:2.5mm 5mm}
+.song{display:grid;grid-template-columns:15mm 1fr;gap:3mm;align-items:center;break-inside:avoid}
+.song .qr{width:15mm;height:15mm;background:#fff;padding:.8mm;border-radius:1mm}
+.song .qr img,.song .qr canvas{width:100%!important;height:100%!important;display:block}
+.song b{display:block;font-size:9.5pt}
+.song span{display:block;font-size:7.8pt;color:var(--muted);line-height:1.5}
+.song a{font-family:var(--display);font-size:7.8pt;color:#c0392b}
+.end{break-before:page;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;height:240mm;color:var(--muted)}
+.end img{width:23mm;margin-bottom:6mm;filter:none}
+</style>
+</head>
+<body>
+<div class="toolbar"><button type="button" onclick="window.print()">列印／另存 PDF</button><a class="ghost" href="docs/vocal-class-handbook.pdf" download="流行歌唱班_講義與教案.pdf">下載 PDF</a><a class="ghost" href="handbook.html">回網頁版</a></div>
+
+<div class="sheet cover">
+  <div><img class="logo" src="assets/logo-dark-notag.png" alt="PIXEL STUDIO"><div class="tag">We Perform the Pixel of Music</div></div>
+  <div class="mid">
+    <div class="eyebrow">VOCAL CLASS HANDBOOK</div>
+    <h1>流行歌唱班<br>講義與教案</h1>
+    <div class="sub">亞東科技大學吉他社・六堂課程</div>
+  </div>
+  <div class="foot">
+    <div>主講　<b>畫素音樂工作坊　李奕勳</b><br>musicallanding@gmail.com</div>
+    <div style="text-align:right">課程網站<br><b>leoleehr.github.io/vocal_music</b></div>
+  </div>
+</div>
+
+<div class="sheet toc">
+  <h2>目錄</h2>
+  <p class="lead">六堂課、每堂 120 分鐘：課前問卷、起承轉合的課程綱要、擴充講義、課堂互動與課後練習。</p>
+  <ol id="toc"></ol>
+  <p class="note">歌曲影片：每一堂開頭列有本堂歌曲，掃描 QR Code 或點擊連結即可在 YouTube 觀看。互動投影片請至課程網站開啟。</p>
+</div>
+
+<main class="sheet md" id="content"></main>
+
+<div class="sheet end"><img src="assets/logo-light.png" alt="PIXEL STUDIO"><p>畫素音樂工作坊 Pixel Studio・Established Since 2008</p></div>
+
+<script src="assets/songs.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(function () {
+  var NUM = { '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6 };
+  var COLOR = ['', '#e8412b', '#e2407f', '#8a4fc0', '#2f8fc4', '#4f9e3a', '#b5a400'];
+  var DESC = ['', '聲音如何形成、如何擴大？怎樣才算一個好主唱？', '歌唱的氣從哪裡來？如何讓氣息穩定又持久？', '聲音如何變亮、變厚、變遠？', '每個字如何唱得清楚又圓潤？', '如何將技巧轉化成表情？', '哪些歌適合我？該用什麼調演唱？'];
+  var main = document.getElementById('content'), toc = document.getElementById('toc');
+  fetch('docs/course-handbook.md').then(function (r) { return r.text(); }).then(function (md) {
+    var tmp = document.createElement('div'); tmp.innerHTML = marked.parse(md, { gfm: true });
+    // 拿掉文件標題與署名行，改用封面
+    var h1 = tmp.querySelector('h1'); if (h1) { var nx = h1.nextElementSibling; h1.remove(); if (nx && nx.tagName === 'P') nx.remove(); }
+    // 依 h2 切成章節
+    var sec = null;
+    [].slice.call(tmp.childNodes).forEach(function (nd) {
+      if (nd.nodeType === 1 && nd.tagName === 'H2') {
+        sec = document.createElement('section'); main.appendChild(sec);
+        var m = nd.textContent.match(/第([一二三四五六])堂/), n = m ? NUM[m[1]] : 0;
+        var parts = nd.textContent.split(/\s(?=[A-Z])/), title = parts[0].replace(/^第.堂｜/, '').trim(), en = parts.slice(1).join(' ');
+        sec.id = n ? 'lesson-' + n : 'overview';
+        var lh = document.createElement('div'); lh.className = 'lh'; if (n) lh.style.setProperty('--c', COLOR[n]);
+        lh.innerHTML = '<div class="no">' + (n ? 'LESSON ' + String(n).padStart(2, '0') : 'OVERVIEW') + '</div><h2></h2>';
+        lh.querySelector('h2').textContent = title;
+        if (en) { var s = document.createElement('small'); s.textContent = en; lh.querySelector('h2').appendChild(s); }
+        sec.appendChild(lh);
+        var li = document.createElement('li');
+        li.innerHTML = '<div class="no" style="color:' + (n ? COLOR[n] : '#6f6b64') + '">' + (n ? String(n).padStart(2, '0') : '00') + '</div><div><a href="#' + sec.id + '" class="t"></a><div class="d">' + (n ? DESC[n] : '六堂進度、每堂節奏、互動設計原則與評量方式') + '</div></div>';
+        li.querySelector('.t').textContent = title; if (en) li.querySelector('.t').insertAdjacentHTML('beforeend', '<small>' + en + '</small>');
+        var list = n && (window.PIXEL_LESSON_SONGS || {})[n];
+        if (list) {
+          li.lastChild.insertAdjacentHTML('beforeend', '<div class="s">' + list.join('、') + '</div>');
+          var box = document.createElement('div'); box.className = 'songs';
+          box.innerHTML = '<div class="h">本堂歌曲<span>掃描 QR Code 或點擊連結，在 YouTube 觀看</span></div><div class="g"></div>';
+          list.forEach(function (name) {
+            var sg = PIXEL_SONGS[name], url = 'https://youtu.be/' + sg.id, el = document.createElement('div'); el.className = 'song';
+            el.innerHTML = '<div class="qr"></div><div><b>' + name + '</b><span>' + sg.artist + '・' + sg.kind + '</span><a href="' + url + '">youtu.be/' + sg.id + '</a></div>';
+            box.lastChild.appendChild(el);
+            new QRCode(el.querySelector('.qr'), { text: url, width: 160, height: 160, correctLevel: QRCode.CorrectLevel.M });
+          });
+          sec.appendChild(box);
+        }
+        toc.appendChild(li);
+        return;
+      }
+      if (sec) sec.appendChild(nd);
+    });
+    // 表格補上 thead，讓跨頁時表頭重複
+    main.querySelectorAll('table').forEach(function (t) {
+      var first = t.querySelector('tr'); if (first && first.querySelector('th') && !t.querySelector('thead')) { var th = document.createElement('thead'); th.appendChild(first); t.insertBefore(th, t.firstChild); }
+    });
+    document.body.setAttribute('data-ready', '1');
+  });
+})();
+</script>
+</body>
+</html>

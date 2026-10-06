@@ -224,3 +224,4 @@
   .qr-mobile.here{background:rgba(108,187,75,.12);color:var(--green);border:1px solid rgba(108,187,75,.35)}
   .qr-mobile.go{background:var(--amber);color:#1a1200}
 }
+.pt-clock{display:block;font-family:var(--display);font-size:13px;color:var(--amber);margin-top:2px;font-variant-numeric:tabular-nums}

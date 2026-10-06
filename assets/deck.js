@@ -84,7 +84,7 @@
     else { document.exitFullscreen && document.exitFullscreen(); }
   };
   addEventListener('keydown', function (e) {
-    if (mq.matches) return;
+    if (mq.matches || document.documentElement.classList.contains('yt-open')) return;
     var tgt = e.target;
     if (tgt.closest && tgt.closest('input,textarea,select,[contenteditable]')) return;
     if (tgt.closest && tgt.closest('button,a,.flip,.checks li') && (e.key === ' ' || e.key === 'Enter')) return;

@@ -1,0 +1,37 @@
+/* ===== YouTube 歌曲卡片與播放視窗 ===== */
+.yt{display:block}
+.yt.chip{display:inline-block;vertical-align:middle}
+.yt-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.yt-card{display:flex;align-items:center;gap:14px;width:100%;text-align:left;font:inherit;color:var(--ink);background:var(--card,#18181e);border:1px solid var(--line,rgba(255,255,255,.08));border-radius:14px;padding:8px;cursor:pointer;transition:border-color .15s,transform .15s}
+.yt-card:hover{border-color:var(--amber,#f4a62a)}
+.yt-card:active{transform:scale(.99)}
+.yt-thumb{position:relative;flex:none;width:128px;aspect-ratio:16/9;border-radius:10px;background:#000 center/cover no-repeat;overflow:hidden}
+.yt-thumb::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.45))}
+.yt-thumb i{position:absolute;left:50%;top:50%;z-index:1;width:36px;height:36px;margin:-18px 0 0 -18px;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.6);color:#fff;font-style:normal;font-size:13px;padding-left:2px;border:1px solid rgba(255,255,255,.4)}
+.yt-meta{min-width:0;display:flex;flex-direction:column;gap:2px;line-height:1.35}
+.yt-meta b{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.yt-meta span{font-size:13px;color:var(--muted,#9d998f)}
+.yt-chip{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:14px;font-weight:700;color:#fff;background:rgba(255,0,0,.12);border:1px solid rgba(255,64,64,.45);border-radius:999px;padding:3px 12px 3px 4px;margin:0 2px;cursor:pointer;vertical-align:middle;line-height:1.5}
+.yt-chip i{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#ff3333;color:#fff;font-style:normal;font-size:9px;padding-left:1px}
+.yt-chip:hover{background:rgba(255,0,0,.2)}
+
+.yt-modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.yt-modal.on{display:flex}
+.yt-modal-box{width:min(1100px,100%);background:#111115;border:1px solid rgba(255,255,255,.12);border-radius:18px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.6)}
+.yt-modal-head{display:flex;align-items:center;gap:14px;padding:12px 14px 12px 18px;color:#f3f0e9}
+.yt-modal-head b{flex:1;min-width:0;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.yt-modal-head a{font-size:13px;color:#9d998f;text-decoration:none;white-space:nowrap}
+.yt-modal-head a:hover{color:#f4a62a}
+.yt-modal-head button{flex:none;width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:#f3f0e9;font-size:16px;cursor:pointer}
+.yt-frame{position:relative;aspect-ratio:16/9;background:#000}
+.yt-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.yt-open,.yt-open body{overflow:hidden}
+
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){
+  .yt-list{grid-template-columns:1fr;gap:8px}
+  .yt-thumb{width:112px}
+  .yt-meta b{font-size:15px}
+  .yt-modal{padding:0;align-items:center}
+  .yt-modal-box{border-radius:0;border-left:0;border-right:0}
+}
+@media print{.yt-modal{display:none!important}}

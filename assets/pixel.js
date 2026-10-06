@@ -4,8 +4,8 @@
   var BASE = me ? me.replace(/pixel\.js(\?.*)?$/, '') : 'assets/';
 
   // 只有 PIXEL 字樣的小標（頂欄、頁尾標記）
-  function pixelWord() {
-    return '<img class="pixel-word" src="' + BASE + 'logo-mark.png" alt="PIXEL STUDIO" width="560" height="111">';
+  function pixelWord(white) {
+    return '<img class="pixel-word" src="' + BASE + (white ? 'logo-mark-white.png' : 'logo-mark.png') + '" alt="PIXEL STUDIO" width="560" height="111">';
   }
   // 完整 Logo：PIXEL STUDIO + We Perform the Pixel of Music
   // 小尺寸使用不含標語的圖檔，標語改以文字呈現，維持清晰
@@ -15,7 +15,7 @@
   }
   function mount(root) {
     (root || document).querySelectorAll('[data-pixel-logo]').forEach(function (el) { el.innerHTML = logo(el.getAttribute('data-pixel-logo') === 'tagline'); });
-    (root || document).querySelectorAll('[data-pixel-word]').forEach(function (el) { el.innerHTML = pixelWord(); });
+    (root || document).querySelectorAll('[data-pixel-word]').forEach(function (el) { el.innerHTML = pixelWord(el.getAttribute('data-pixel-word') === 'white'); });
   }
 
   global.PixelStudio = { pixelWord: pixelWord, logo: logo, mount: mount, base: BASE };

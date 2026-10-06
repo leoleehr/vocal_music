@@ -10,25 +10,42 @@
 
 | 路徑 | 說明 |
 | --- | --- |
-| `index.html` | 課程首頁：六堂課總覽、每堂 120 分鐘節奏、工作坊介紹 |
-| `handbook.html` | 講義與教案的網頁版，讀取 `docs/course-handbook.md` 並轉成網頁，附各堂快速跳轉 |
-| `docs/course-handbook.md` | 六堂課的講義與教案：課前問卷、120 分鐘課程綱要、擴充講義、課後練習 |
-| `slides/lesson-01/index.html` | 第一堂「歌唱序論」課堂投影片（單一 HTML 檔，可直接用瀏覽器開啟） |
+| `index.html` | 課程首頁：六堂課總覽、手機練唱工具、每堂 120 分鐘節奏、工作坊介紹 |
+| `handbook.html` | 講義與教案的網頁版：讀取 `docs/course-handbook.md`，每堂開頭附「本堂歌曲」影片，內文的《歌名》後面有播放鈕 |
+| `handbook-print.html` | 講義的 A4 列印排版頁，用來產生 PDF |
+| `docs/course-handbook.md` | 六堂課的講義與教案原稿：課前問卷、課程綱要、擴充講義、課堂互動、課後練習 |
+| `docs/vocal-class-handbook.pdf` | 已排版的 PDF 講義（封面、目錄、各堂歌曲 QR Code、頁碼） |
+| `slides/lesson-01/index.html` | 第一堂「歌唱序論」課堂投影片 |
 | `slides/lesson-02/index.html` | 第二堂「歌唱基本條件與呼吸」課堂投影片 |
+| `assets/` | 共用樣式、腳本與圖檔（見下方） |
 
-| `assets/` | 共用樣式與腳本：`deck.css`／`deck.js`（投影片）、`site.css`（首頁與講義）、`ui.js`（表格轉卡片、目錄抽屜）、`interact.css`／`interact.js`（課堂互動）、`pixel.js`（插入 Logo）、`logo-dark-notag.png`（網站使用的主 Logo，標語以文字呈現）、`logo-dark.png`（深色底完整版，含白色標語）、`logo-light.png`（淺色底用）、`logo-mark.png`（PIXEL 小標）、`favicon.png`、`og-image.png` |
+### assets
+
+| 檔案 | 用途 |
+| --- | --- |
+| `deck.css`、`deck.js` | 投影片版面、換頁、手機課程 App 模式 |
+| `site.css` | 首頁與講義頁 |
+| `ui.js` | 表格轉卡片、目錄抽屜 |
+| `interact.css`、`interact.js` | 課堂互動元件 |
+| `songs.js`、`youtube.js`、`youtube.css` | 課程歌曲清單與 YouTube 播放（先顯示縮圖，點擊後在大視窗播放） |
+| `pixel.js` | 插入 Logo |
+| `logo-dark-notag.png` | 網站主 Logo（標語以文字呈現） |
+| `logo-mark-white.png`、`logo-mark.png` | 頂欄白色小標、彩色小標 |
+| `logo-dark.png`、`logo-light.png` | 含標語的完整 Logo（深色底、淺色底） |
+| `favicon.png`、`og-image.png` | 瀏覽器分頁圖示、分享預覽圖 |
 
 ## 投影片操作
 
-- 換頁：← → 方向鍵、空白鍵、手機左右滑動，或點下方按鈕
-- `F`：全螢幕；`Home`／`End`：回到第一張／跳到最後一張
+- 換頁：← → 方向鍵、空白鍵，或點下方按鈕；`F` 全螢幕，`Home`／`End` 跳到第一張／最後一張
 - 網址加上 `#頁碼` 可直接開啟指定頁，例如 `index.html#14`
-- 每份投影片的休息頁都有十分鐘倒數計時器
 - 每三張投影片至少一個互動，右上角的「互動」標籤寫著使用的教學技巧
+- 歌曲出現的地方有影片卡片或 ▶ 播放鈕，點擊後在投影片上直接播放 YouTube
+- 手機或直立平板會自動改成課程 App 模式：上方顯示目前張數與閱讀進度，右下角「目錄」可跳到任一張；表格轉成卡片，QR Code 改為按鈕
+- 列印時每張投影片各佔一頁
 
 ## 課堂互動元件
 
-`assets/interact.js` 與 `assets/interact.css` 提供以下元件，在投影片中以 class 宣告即可使用：
+在投影片中以 class 宣告即可使用：
 
 | 元件 | 用途 |
 | --- | --- |
@@ -41,18 +58,31 @@
 | `.order` | 排序遊戲：點兩張牌交換位置 |
 | `.flips` | 翻牌：提取練習、迷思破解 |
 | `.wavelab` | 聲波實驗室：調整頻率與振幅，邊聽邊看 |
-| `.pitch` | 音準挑戰：麥克風即時辨識音高 |
-| `.breath` | 吐氣測量：/s/ 的秒數與穩定度，可做前測與後測 |
-| `.recorder` | 錄音：錄下後可播放與下載 |
+| `.pitch` | 音準挑戰：按「開始練習」即計時，麥克風即時辨識音高，命中時顯示用時 |
+| `.breath` | 吐氣測量：按「開始計時」立即計時，吐完自動停止並計算穩定度，可做前測與後測 |
+| `.recorder` | 錄音：開始錄音即倒數計時，錄完可播放與下載 |
 | `.lyricmark` | 歌詞換氣標記：對照老師版 |
 | `.exit` | 出場券 3-2-1：可複製貼到群組 |
 | `.log7`、`.checks[data-id]` | 七天紀錄表、作業勾選 |
 | `.qr` | QR Code：手機同步、課前問卷 |
+| `.yt[data-song]` | 歌曲影片卡片；加上 `chip` 為行內播放鈕 |
 
 網站沒有後台：計票、分數、名單、出場券與錄音都只存在操作的那台裝置。麥克風功能需以 https 開啟並允許瀏覽器使用麥克風。
-- 手機或直立平板會自動改成課程 App 模式：上方 App 列顯示目前張數與閱讀進度，右下角「目錄」可跳到任一張，每張標出編號、起承轉合段落與互動類型；表格自動轉成卡片，QR Code 改為按鈕
-- 列印時每張投影片各佔一頁
 
-新增一堂投影片時，複製 `slides/lesson-02/index.html`，保留 `<head>` 與底部的兩個 `<script>`，替換 `<section class="slide">` 內容即可沿用同一套設計。
+## 更新講義 PDF
+
+修改 `docs/course-handbook.md` 後，以本機伺服器開啟 `handbook-print.html`，再用 Chrome 輸出 PDF：
+
+```bash
+python -m http.server 8765
+chrome --headless=new --no-pdf-header-footer --generate-pdf-document-outline --virtual-time-budget=20000 \
+  --print-to-pdf=docs/vocal-class-handbook.pdf http://localhost:8765/handbook-print.html
+```
+
+也可以直接在瀏覽器開啟 `handbook-print.html`，按「列印／另存 PDF」。
+
+## 新增一堂投影片
+
+複製 `slides/lesson-02/index.html`，保留 `<head>` 與底部的 `<script>`，替換 `<section class="slide">` 內容即可沿用同一套設計。新的歌曲請先加進 `assets/songs.js`。
 
 原始 PDF 講義與歌曲和弦譜涉及第三方著作權，所以沒有放進這個 repo。

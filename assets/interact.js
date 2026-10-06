@@ -203,13 +203,17 @@
   /* ---------- 7. 音準挑戰：麥克風辨識音高 ---------- */
   $$('.pitch').forEach(function (p) {
     var ranges = { male: [48, 67], female: [55, 72] }, range = 'male';
-    p.innerHTML = '<div class="pt-top"><div class="pt-note">--</div><div class="pt-sub"><span class="pt-hz">開啟麥克風後開始辨識</span><span class="pt-target"></span></div><div class="pt-score">命中 <b>0</b></div></div><div class="pt-needle"><span class="pt-zone"></span><i></i></div><canvas></canvas><div class="btn-row"><button type="button" class="btn primary mic">🎤 開啟麥克風</button><button type="button" class="btn male on">男聲</button><button type="button" class="btn female">女聲</button><button type="button" class="btn ask">出題並播放</button><button type="button" class="btn again">再聽一次</button></div>';
+    p.innerHTML = '<div class="pt-top"><div class="pt-note">--</div><div class="pt-sub"><span class="pt-hz">按「開始練習」立刻計時並辨識音高</span><span class="pt-target"></span></div><div class="pt-score">命中 <b>0</b><small class="pt-clock">00:00</small></div></div><div class="pt-needle"><span class="pt-zone"></span><i></i></div><canvas></canvas><div class="btn-row"><button type="button" class="btn primary mic">● 開始練習</button><button type="button" class="btn male on">男聲</button><button type="button" class="btn female">女聲</button><button type="button" class="btn ask">出題並播放</button><button type="button" class="btn again">再聽一次</button></div>';
     var cv = p.querySelector('canvas'), noteEl = p.querySelector('.pt-note'), hz = p.querySelector('.pt-hz'), tg = p.querySelector('.pt-target'), needle = p.querySelector('.pt-needle i'), sc = p.querySelector('.pt-score b');
-    var an = null, buf = new Float32Array(2048), raf = 0, hist = [], target = null, holdStart = 0, score = 0, frame = 0;
-    function pickTarget() { var r = ranges[range]; target = r[0] + Math.floor(Math.random() * (r[1] - r[0] + 1)); var n = nameOf(target); tg.textContent = '目標：' + n.name + '（' + n.solf + '）'; tone(freqOf(target), 1.2, 0.3, 'triangle'); }
+    var an = null, buf = new Float32Array(2048), raf = 0, hist = [], target = null, holdStart = 0, score = 0, frame = 0, micT0 = 0, askT0 = 0, muteUntil = 0, clock = p.querySelector('.pt-clock');
+    function playTarget() { tone(freqOf(target), 1.2, 0.3, 'triangle'); muteUntil = performance.now() + 1500; askT0 = muteUntil; }
+    function pickTarget() { var r = ranges[range]; target = r[0] + Math.floor(Math.random() * (r[1] - r[0] + 1)); var n = nameOf(target); tg.textContent = '目標：' + n.name + '（' + n.solf + '）'; playTarget(); }
     function loop() {
       raf = requestAnimationFrame(loop);
+      var now = performance.now(), el2 = Math.floor((now - micT0) / 1000);
+      clock.textContent = String(Math.floor(el2 / 60)).padStart(2, '0') + ':' + String(el2 % 60).padStart(2, '0');
       if (++frame % 2) return;
+      if (now < muteUntil) { p.classList.remove('hit'); holdStart = 0; return; }
       an.getFloatTimeDomainData(buf);
       var f = detectPitch(buf, ac().sampleRate), m = f > 0 ? midiOf(f) : null;
       hist.push(m); if (hist.length > 160) hist.shift();
@@ -219,7 +223,7 @@
         var off = target !== null ? (m - target) * 100 : cents;
         needle.style.left = (50 + Math.max(-50, Math.min(50, off / 2))) + '%';
         var ok = Math.abs(off) <= 30; p.classList.toggle('hit', ok);
-        if (target !== null && ok) { if (!holdStart) holdStart = performance.now(); if (performance.now() - holdStart > 700) { score++; sc.textContent = score; chime(); target = null; tg.textContent = '命中！按「出題並播放」繼續'; holdStart = 0; } }
+        if (target !== null && ok) { if (!holdStart) holdStart = performance.now(); if (performance.now() - holdStart > 700) { score++; sc.textContent = score; chime(); muteUntil = performance.now() + 700; target = null; tg.textContent = '命中！用時 ' + Math.max(0, (holdStart - askT0) / 1000).toFixed(1) + ' 秒，按「出題並播放」繼續'; holdStart = 0; } }
         else holdStart = 0;
       } else { p.classList.remove('hit'); holdStart = 0; }
       draw();
@@ -232,49 +236,59 @@
       hist.forEach(function (m, i) { var X = i / 159 * c.w; if (m === null || m < lo || m > hi) { on = false; return; } on ? x.lineTo(X, Y(m)) : x.moveTo(X, Y(m)); on = true; });
       x.stroke();
     }
-    function stop() { cancelAnimationFrame(raf); if (an) { an = null; micStop(); } p.querySelector('.mic').textContent = '🎤 開啟麥克風'; }
+    function stop() { cancelAnimationFrame(raf); if (an) { an = null; micStop(); } p.querySelector('.mic').textContent = '● 開始練習'; }
     p.querySelector('.mic').onclick = function () {
       if (an) return stop();
-      micStart().then(function (a) { an = a; p.querySelector('.mic').textContent = '■ 關閉麥克風'; loop(); })
+      micT0 = performance.now(); clock.textContent = '00:00';
+      micStart().then(function (a) { an = a; micT0 = performance.now(); p.querySelector('.mic').textContent = '■ 停止'; hz.textContent = '計時中，對著麥克風唱出聲音'; loop(); })
         .catch(function () { hz.textContent = '無法使用麥克風：請允許瀏覽器使用麥克風，並以 https 網址開啟'; });
     };
     p.querySelector('.ask').onclick = pickTarget;
-    p.querySelector('.again').onclick = function () { if (target !== null) tone(freqOf(target), 1.2, 0.3, 'triangle'); };
+    p.querySelector('.again').onclick = function () { if (target !== null) playTarget(); };
     ['male', 'female'].forEach(function (k) { p.querySelector('.' + k).onclick = function () { range = k; p.querySelector('.male').classList.toggle('on', k === 'male'); p.querySelector('.female').classList.toggle('on', k === 'female'); draw(); }; });
     draw(); onLeave(p, stop);
   });
 
-  /* ---------- 8. 吐氣測量：/s/ 的長度與穩定度 ---------- */
+  /* ---------- 8. 吐氣測量：按下開始即計時，吐完自動停止 ---------- */
   $$('.breath').forEach(function (b) {
     var key = 'breath-' + b.getAttribute('data-key'), cmpKey = b.getAttribute('data-compare');
-    b.innerHTML = '<div class="br-top"><div><div class="br-sec">0.0</div><div class="muted br-unit">秒</div></div><div class="br-info"><div class="br-state">按「開始測量」，聽到提示後以 /s/ 平穩吐氣</div><div class="br-stab"></div><div class="br-cmp"></div></div></div><canvas></canvas><div class="btn-row"><button type="button" class="btn primary go">🎤 開始測量</button><button type="button" class="btn manual">改用碼表</button><button type="button" class="btn reset">重設</button></div>';
+    var IDLE = '按「開始」後立刻計時，請以 /s/ 平穩吐氣，吐完會自動停止';
+    b.innerHTML = '<div class="br-top"><div><div class="br-sec">0.0</div><div class="muted br-unit">秒</div></div><div class="br-info"><div class="br-state">' + IDLE + '</div><div class="br-stab"></div><div class="br-cmp"></div></div></div><canvas></canvas><div class="btn-row"><button type="button" class="btn primary go">● 開始計時</button><button type="button" class="btn manual">不用麥克風</button><button type="button" class="btn reset">重設</button></div>';
     var cv = b.querySelector('canvas'), sec = b.querySelector('.br-sec'), state = b.querySelector('.br-state'), stab = b.querySelector('.br-stab'), cmp = b.querySelector('.br-cmp'), go = b.querySelector('.go'), man = b.querySelector('.manual');
-    var an = null, buf = new Float32Array(2048), raf = 0, levels = [], floor = 0, th = 0, phase = 'idle', t0 = 0, lastLoud = 0, vals = [], manualT = 0, manualId = 0;
+    var an = null, buf = new Float32Array(2048), raf = 0, tick = 0, levels = [], peak = 0, th = 0, t0 = 0, lastLoud = 0, heard = false, vals = [], running = false, useMic = true;
     function compare() {
       var mine = LS.get(key, null), base = cmpKey ? LS.get('breath-' + cmpKey, null) : null;
       cmp.textContent = base && mine && cmpKey ? '開場 ' + base.toFixed(1) + ' 秒 → 現在 ' + mine.toFixed(1) + ' 秒（' + (mine >= base ? '+' : '') + (mine - base).toFixed(1) + '）' : (mine ? '上次紀錄：' + mine.toFixed(1) + ' 秒' : '');
     }
-    function finish(s, steady) {
+    function steadiness() {
+      if (vals.length < 10) return null;
+      var mean = vals.reduce(function (a, c) { return a + c; }, 0) / vals.length;
+      var sd = Math.sqrt(vals.reduce(function (a, c) { return a + (c - mean) * (c - mean); }, 0) / vals.length);
+      return Math.max(0, Math.round(100 - sd / mean * 100));
+    }
+    function finish(s) {
+      running = false; clearInterval(tick); cancelAnimationFrame(raf);
+      if (an) { an = null; micStop(); }
       sec.textContent = s.toFixed(1); LS.set(key, s); compare();
-      state.textContent = '完成！可以再測一次，系統會保留最新的秒數';
-      if (steady != null) stab.textContent = '穩定度 ' + steady + '%（越高代表吐氣越平穩）';
-      chime();
+      var st = useMic ? steadiness() : null;
+      stab.textContent = st != null ? '穩定度 ' + st + '%（越高代表吐氣越平穩）' : '';
+      state.textContent = '完成！可以再測一次，會保留最新的秒數';
+      go.textContent = '● 開始計時'; chime();
+    }
+    function start() {
+      levels = []; vals = []; peak = 0; th = 0; heard = false; stab.textContent = '';
+      t0 = performance.now(); lastLoud = t0; running = true; go.textContent = '■ 停止';
+      sec.textContent = '0.0';
+      tick = setInterval(function () { if (running) sec.textContent = ((performance.now() - t0) / 1000).toFixed(1); }, 100);
     }
     function loop() {
       raf = requestAnimationFrame(loop);
       var r = rmsOf(an, buf), now = performance.now();
       levels.push(r); if (levels.length > 300) levels.shift();
-      if (phase === 'calib') { floor = Math.max(floor, r); if (now - t0 > 700) { th = Math.max(floor * 2.5, 0.012); phase = 'ready'; state.textContent = '請吸飽氣，以 /s/ 開始吐氣'; tone(660, 0.15, 0.2); } }
-      else if (phase === 'ready' && r > th) { phase = 'run'; t0 = now; lastLoud = now; vals = []; state.textContent = '吐氣中…保持聲音大小不變'; }
-      else if (phase === 'run') {
-        if (r > th) { lastLoud = now; vals.push(r); }
-        sec.textContent = ((lastLoud - t0) / 1000).toFixed(1);
-        if (now - lastLoud > 450) {
-          var mean = vals.reduce(function (a, c) { return a + c; }, 0) / Math.max(1, vals.length);
-          var sd = Math.sqrt(vals.reduce(function (a, c) { return a + (c - mean) * (c - mean); }, 0) / Math.max(1, vals.length));
-          phase = 'done'; finish((lastLoud - t0) / 1000, Math.max(0, Math.round(100 - sd / mean * 100))); stopMic();
-        }
-      }
+      peak = Math.max(peak * 0.999, r); th = Math.max(0.01, peak * 0.2);
+      if (r > th && r > 0.012) { heard = true; lastLoud = now; vals.push(r); state.textContent = '吐氣中…保持聲音大小不變'; }
+      // 已聽到吐氣、且安靜超過 0.6 秒，就以最後有聲音的時間點結束
+      if (heard && now - t0 > 1000 && now - lastLoud > 600) finish((lastLoud - t0) / 1000);
       draw();
     }
     function draw() {
@@ -284,19 +298,24 @@
       x.fillStyle = css('--navy');
       levels.forEach(function (v, i) { var h = v / mx * c.h; x.fillRect(i / 300 * c.w, c.h - h, c.w / 300 + 0.5, h); });
     }
-    function stopMic() { cancelAnimationFrame(raf); if (an) { an = null; micStop(); } go.textContent = '🎤 開始測量'; }
-    function stopAll() { stopMic(); if (manualId) { clearInterval(manualId); manualId = 0; man.textContent = '改用碼表'; } if (phase !== 'done') phase = 'idle'; }
+    function stopAll() { if (running) finish((performance.now() - t0) / 1000); }
     go.onclick = function () {
-      if (an) { stopMic(); phase = 'idle'; state.textContent = '已停止'; return; }
-      micStart().then(function (a) { an = a; levels = []; floor = 0; th = 0; phase = 'calib'; t0 = performance.now(); sec.textContent = '0.0'; stab.textContent = ''; state.textContent = '偵測環境音量中，請保持安靜…'; go.textContent = '■ 停止'; loop(); })
-        .catch(function () { state.textContent = '無法使用麥克風，請改用碼表'; });
+      if (running) { var end = useMic && heard ? lastLoud : performance.now(); return finish(Math.max(0, end - t0) / 1000); }
+      if (!useMic) { start(); state.textContent = '計時中，吐完氣請按「停止」'; return; }
+      // 先開始計時，再接上麥克風；麥克風無法使用時自動改為手動碼表
+      start(); state.textContent = '計時中，請以 /s/ 吐氣';
+      micStart().then(function (a) { if (!running) { micStop(); return; } an = a; loop(); })
+        .catch(function () { useMic = false; man.textContent = '使用麥克風'; state.textContent = '無法使用麥克風，已改為手動計時：吐完氣請按「停止」'; });
     };
     man.onclick = function () {
-      if (manualId) { clearInterval(manualId); manualId = 0; man.textContent = '改用碼表'; finish((performance.now() - manualT) / 1000, null); return; }
-      stopMic(); manualT = performance.now(); man.textContent = '■ 停止計時'; state.textContent = '碼表計時中，吐完氣按停止';
-      manualId = setInterval(function () { sec.textContent = ((performance.now() - manualT) / 1000).toFixed(1); }, 100);
+      if (running) return;
+      useMic = !useMic; man.textContent = useMic ? '不用麥克風' : '使用麥克風';
+      state.textContent = useMic ? IDLE : '手動計時：按「開始」立刻計時，吐完氣按「停止」';
     };
-    b.querySelector('.reset').onclick = function () { stopAll(); phase = 'idle'; sec.textContent = '0.0'; stab.textContent = ''; levels = []; draw(); state.textContent = '按「開始測量」，聽到提示後以 /s/ 平穩吐氣'; };
+    b.querySelector('.reset').onclick = function () {
+      running = false; clearInterval(tick); cancelAnimationFrame(raf); if (an) { an = null; micStop(); }
+      go.textContent = '● 開始計時'; sec.textContent = '0.0'; stab.textContent = ''; levels = []; th = 0; draw(); state.textContent = useMic ? IDLE : '手動計時：按「開始」立刻計時，吐完氣按「停止」';
+    };
     compare(); draw(); onLeave(b, stopAll);
   });
 
