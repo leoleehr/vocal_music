@@ -12,6 +12,8 @@
 | --- | --- |
 | `index.html` | 課程首頁：六堂課總覽、手機練唱工具、每堂 120 分鐘節奏、工作坊介紹 |
 | `handbook.html` | 講義與教案的網頁版：讀取 `docs/course-handbook.md`，每堂開頭附「本堂歌曲」影片，內文的《歌名》後面有播放鈕 |
+| `survey.html` | 課程問卷：六份課前問卷與課程回饋，學員在網站上填寫姓名、科系與問卷內容，直接送到老師的試算表 |
+| `backend/` | Google 試算表後台：Apps Script 程式與安裝步驟（見 `backend/README.md`） |
 | `handbook-print.html` | 講義的 A4 列印排版頁，用來產生 PDF |
 | `docs/course-handbook.md` | 六堂課的講義與教案原稿：課前問卷、課程綱要、擴充講義、課堂互動、課後練習 |
 | `docs/vocal-class-handbook.pdf` | 已排版的 PDF 講義（封面、目錄、各堂歌曲 QR Code、頁碼） |
@@ -28,6 +30,9 @@
 | `ui.js` | 表格轉卡片、目錄抽屜 |
 | `interact.css`、`interact.js` | 課堂互動元件 |
 | `songs.js`、`youtube.js`、`youtube.css` | 課程歌曲清單與 YouTube 播放（先顯示縮圖，點擊後在大視窗播放） |
+| `config.js` | 後台網址設定（Apps Script 部署後填入） |
+| `backend.js`、`backend.css` | 學員資料、送出佇列、上傳錄音、送出提示 |
+| `surveys.js` | 問卷題目 |
 | `pixel.js` | 插入 Logo |
 | `logo-dark-notag.png` | 網站主 Logo（標語以文字呈現） |
 | `logo-mark-white.png`、`logo-mark.png` | 頂欄白色小標、彩色小標 |
@@ -67,7 +72,7 @@
 | `.qr` | QR Code：手機同步、課前問卷 |
 | `.yt[data-song]` | 歌曲影片卡片；加上 `chip` 為行內播放鈕 |
 
-網站沒有後台：計票、分數、名單、出場券與錄音都只存在操作的那台裝置。麥克風功能需以 https 開啟並允許瀏覽器使用麥克風。
+互動結果會連同學員的姓名與科系，送到 Google 試算表後台（設定方式見 `backend/README.md`）。出場券、七天紀錄、換氣標記與錄音由學員按「送出」或「上傳給老師」；選擇題、排序、音準挑戰、吐氣測量與作業勾選會自動記錄。麥克風功能需以 https 開啟並允許瀏覽器使用麥克風。
 
 ## 更新講義 PDF
 

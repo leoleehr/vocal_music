@@ -16,6 +16,10 @@
   function btn(label, cls) { var b = el('button', 'btn' + (cls ? ' ' + cls : ''), label); b.type = 'button'; return b; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   var stoppers = [];
+  // 送到後台：PixelBackend 由 backend.js 提供；沒有載入時略過
+  function slideNo(root) { var s = root && root.closest && root.closest('.slide'); return s && s.id ? s.id.replace(/\D/g, '') : ''; }
+  function report(root, type, data) { if (window.PixelBackend) window.PixelBackend.log(type, data, { slide: slideNo(root) }); }
+  function say(msg, kind) { if (window.PixelBackend) window.PixelBackend.toast(msg, kind); }
   function onLeave(root, fn) { stoppers.push({ slide: root.closest('.slide'), fn: fn }); }
 
   /* ---------- 音訊 ---------- */
@@ -80,7 +84,7 @@
     var list = el('div', 'quiz-opts'), why = q.querySelector('.why');
     items.forEach(function (li, k) {
       var b = btn('<b>' + letters[k] + '</b>' + li.innerHTML, 'quiz-opt');
-      b.onclick = function () { q.classList.add('done'); b.classList.add(k + 1 === ans ? 'right' : 'wrong'); show(); };
+      b.onclick = function () { if (!q.classList.contains('done')) report(q, 'quiz', { item: (q.querySelector('.q') || {}).textContent, result: k + 1 === ans ? '答對' : '答錯', value: k + 1, detail: { answer: li.textContent.trim() } }); q.classList.add('done'); b.classList.add(k + 1 === ans ? 'right' : 'wrong'); show(); };
       list.appendChild(b);
     });
     var ol = q.querySelector('ol'); ol.parentNode.replaceChild(list, ol);
@@ -101,6 +105,8 @@
     });
     var foot = el('div', 'poll-foot'), tot = el('span', 'muted'), rs = btn('清除');
     rs.onclick = function () { cnt = opts.map(function () { return 0; }); save(); };
+    var pv = btn('儲存到後台'); pv.onclick = function () { var sum = cnt.reduce(function (a, b) { return a + b; }, 0); report(p, 'poll', { item: opts.join('／'), result: opts.map(function (o, k) { return o + ' ' + cnt[k]; }).join('、'), value: sum, detail: { options: opts, counts: cnt } }); say('已記錄投票結果', 'ok'); };
+    foot.appendChild(pv);
     foot.appendChild(tot); foot.appendChild(rs); p.appendChild(foot);
     function save() { LS.set(id, cnt); draw(); }
     function draw() {
@@ -153,7 +159,8 @@
     });
     var rs = btn('分數歸零', 'score-reset');
     rs.onclick = function () { st.pts = st.pts.map(function () { return 0; }); save(); };
-    s.appendChild(grid); s.appendChild(rs);
+    var sv = btn('儲存分數到後台', 'score-reset'); sv.onclick = function () { report(s, 'score', { item: st.names.join('／'), result: st.names.map(function (n, k) { return n + ' ' + st.pts[k]; }).join('、'), value: Math.max.apply(null, st.pts), detail: st }); say('已記錄分數', 'ok'); };
+    s.appendChild(grid); s.appendChild(rs); s.appendChild(sv);
     function save() { LS.set(id, st); draw(); }
     function draw() {
       var top = Math.max.apply(null, st.pts);
@@ -223,7 +230,7 @@
         var off = target !== null ? (m - target) * 100 : cents;
         needle.style.left = (50 + Math.max(-50, Math.min(50, off / 2))) + '%';
         var ok = Math.abs(off) <= 30; p.classList.toggle('hit', ok);
-        if (target !== null && ok) { if (!holdStart) holdStart = performance.now(); if (performance.now() - holdStart > 700) { score++; sc.textContent = score; chime(); muteUntil = performance.now() + 700; target = null; tg.textContent = '命中！用時 ' + Math.max(0, (holdStart - askT0) / 1000).toFixed(1) + ' 秒，按「出題並播放」繼續'; holdStart = 0; } }
+        if (target !== null && ok) { if (!holdStart) holdStart = performance.now(); if (performance.now() - holdStart > 700) { score++; sc.textContent = score; report(p, 'pitch', { item: nameOf(target).name + '（' + nameOf(target).solf + '）', result: '命中', value: +Math.max(0, (holdStart - askT0) / 1000).toFixed(1) }); chime(); muteUntil = performance.now() + 700; target = null; tg.textContent = '命中！用時 ' + Math.max(0, (holdStart - askT0) / 1000).toFixed(1) + ' 秒，按「出題並播放」繼續'; holdStart = 0; } }
         else holdStart = 0;
       } else { p.classList.remove('hit'); holdStart = 0; }
       draw();
@@ -272,6 +279,7 @@
       sec.textContent = s.toFixed(1); LS.set(key, s); compare();
       var st = useMic ? steadiness() : null;
       stab.textContent = st != null ? '穩定度 ' + st + '%（越高代表吐氣越平穩）' : '';
+      report(b, 'breath', { item: /after/.test(b.getAttribute('data-key')) ? '吐氣後測' : /before/.test(b.getAttribute('data-key')) ? '吐氣前測' : '吐氣測量', result: s.toFixed(1) + ' 秒', value: +s.toFixed(1), detail: { steadiness: st, mode: useMic ? '麥克風' : '手動' } });
       state.textContent = '完成！可以再測一次，會保留最新的秒數';
       go.textContent = '● 開始計時'; chime();
     }
@@ -322,9 +330,9 @@
   /* ---------- 9. 錄音 ---------- */
   $$('.recorder').forEach(function (r) {
     var max = parseInt(r.getAttribute('data-max'), 10) || 30, label = r.getAttribute('data-name') || '錄音';
-    r.innerHTML = '<div class="rec-time">00:' + String(max).padStart(2, '0') + '</div><div class="btn-row"><button type="button" class="btn primary go">● 開始錄音</button></div><audio controls></audio><a class="btn dl" download>下載檔案</a><p class="muted rec-note">錄音只存在這台裝置，下載後請自行保存。</p>';
+    r.innerHTML = '<div class="rec-time">00:' + String(max).padStart(2, '0') + '</div><div class="btn-row"><button type="button" class="btn primary go">● 開始錄音</button></div><audio controls></audio><a class="btn dl" download>下載檔案</a><p class="muted rec-note">可下載保存，或按「上傳給老師」送到課程的雲端資料夾。</p>';
     var tm = r.querySelector('.rec-time'), go = r.querySelector('.go'), au = r.querySelector('audio'), dl = r.querySelector('.dl');
-    var rec = null, chunks = [], left = max, tid = 0, usingMic = false;
+    var rec = null, chunks = [], left = max, tid = 0, usingMic = false, up = null;
     function fmt(s) { return '00:' + String(Math.max(0, s)).padStart(2, '0'); }
     function stop() { if (rec && rec.state !== 'inactive') rec.stop(); clearInterval(tid); }
     go.onclick = function () {
@@ -339,6 +347,14 @@
           var blob = new Blob(chunks, { type: type }), url = URL.createObjectURL(blob), d = new Date();
           au.src = url; dl.href = url; dl.download = label + '_' + d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') + (type === 'audio/webm' ? '.webm' : '.m4a');
           r.classList.add('has'); go.textContent = '● 重新錄音'; tm.textContent = '完成'; if (usingMic) { usingMic = false; micStop(); }
+          if (!up) { up = btn('上傳給老師', 'primary rec-up'); r.insertBefore(up, r.querySelector('.rec-note')); }
+          var secs = max - Math.max(0, left), fname = dl.download;
+          up.disabled = false; up.textContent = '上傳給老師';
+          up.onclick = function () {
+            if (!window.PixelBackend) return;
+            up.disabled = true; up.textContent = '上傳中…';
+            window.PixelBackend.upload(blob, { label: label, seconds: secs, filename: fname, slide: slideNo(r) }).then(function (res) { up.textContent = res && res.ok ? '✓ 已上傳給老師' : '上傳給老師'; up.disabled = !!(res && res.ok); });
+          };
         };
         rec.start(); go.textContent = '■ 停止'; tm.textContent = fmt(left);
         tid = setInterval(function () { left--; tm.textContent = fmt(left); if (left <= 0) stop(); }, 1000);
@@ -363,7 +379,7 @@
         box.appendChild(t);
       });
     }
-    ck.onclick = function () { var n = cur.filter(function (v, k) { return v === k; }).length; render(true); msg.textContent = n === items.length ? '全部正確！' : '對了 ' + n + ' / ' + items.length + ' 張'; if (n === items.length) chime(); };
+    ck.onclick = function () { var n = cur.filter(function (v, k) { return v === k; }).length; report(o, 'order', { item: items[0] + ' …（' + items.length + ' 張）', result: n + '/' + items.length, value: n }); render(true); msg.textContent = n === items.length ? '全部正確！' : '對了 ' + n + ' / ' + items.length + ' 張'; if (n === items.length) chime(); };
     sh.onclick = shuffle;
     an.onclick = function () { cur = items.map(function (_, k) { return k; }); render(true); msg.textContent = '這是正確順序'; };
     shuffle();
@@ -412,8 +428,14 @@
       });
       box.appendChild(row);
     });
-    var foot = el('div', 'btn-row'), tv = btn('對照老師版'), cl = btn('清除我的標記');
-    foot.appendChild(tv); foot.appendChild(cl);
+    var foot = el('div', 'btn-row'), tv = btn('對照老師版'), cl = btn('清除我的標記'), sd = btn('送出我的標記', 'primary');
+    foot.appendChild(sd); foot.appendChild(tv); foot.appendChild(cl);
+    sd.onclick = function () {
+      if (!Object.keys(marks).length) { say('請先在歌詞上點出換氣點', 'warn'); return; }
+      var text = $$('.lm-line', l).map(function (row) { return $$('.lm-ch', row).map(function (s) { return s.textContent + (marks[s.getAttribute('data-id')] || ''); }).join(''); }).join(' / ');
+      var hit = Object.keys(teacher).filter(function (k) { return marks[k] === teacher[k]; }).length;
+      if (window.PixelBackend) window.PixelBackend.send('lyric', { item: l.getAttribute('data-id') || '歌詞', result: text, value: hit, detail: { teacherMarks: Object.keys(teacher).length } }, { slide: slideNo(l), okMsg: '換氣點已送出' });
+    };
     var msg = el('p', 'muted lm-msg', '點字的後面加上換氣記號：點一次 ∨ 大換氣，再點一次 ˇ 小換氣，再點一次取消');
     l.appendChild(box); l.appendChild(foot); l.appendChild(msg);
     tv.onclick = function () { l.classList.toggle('show-t'); tv.textContent = l.classList.contains('show-t') ? '隱藏老師版' : '對照老師版'; paint(); };
@@ -440,7 +462,12 @@
       ta.oninput = function () { st[k] = ta.value; LS.set(key, st); };
       x.appendChild(f);
     });
-    var foot = el('div', 'btn-row'), cp = btn('複製全部，貼到群組'), msg = el('span', 'muted');
+    var foot = el('div', 'btn-row'), cp = btn('複製全部，貼到群組'), msg = el('span', 'muted'), sd = btn('送出給老師', 'primary');
+    foot.appendChild(sd);
+    sd.onclick = function () {
+      if (!prompts.some(function (p, k) { return st[k] && st[k].trim(); })) { say('請先填寫出場券', 'warn'); return; }
+      if (window.PixelBackend) window.PixelBackend.send('exit', { answers: prompts.map(function (p, k) { return st[k] || ''; }) }, { slide: slideNo(x), okMsg: '出場券已送出' });
+    };
     cp.onclick = function () {
       var title = document.body.getAttribute('data-title') || document.title;
       var text = title + ' 出場券\n' + prompts.map(function (p, k) { return '■ ' + p + '\n' + (st[k] || ''); }).join('\n');
@@ -456,7 +483,13 @@
     for (var d = 0; d < 7; d++) { h += '<tr><td>第 ' + (d + 1) + ' 天</td>' + cols.map(function (_, c) { return '<td><input type="text" data-k="' + d + '-' + c + '"></td>'; }).join('') + '</tr>'; }
     tb.innerHTML = h; t.appendChild(tb);
     $$('input', tb).forEach(function (i) { i.value = st[i.getAttribute('data-k')] || ''; i.oninput = function () { st[i.getAttribute('data-k')] = i.value; LS.set(key, st); }; });
-    t.appendChild(el('p', 'muted log7-note', '填在自己的手機上，資料只存在這支手機。'));
+    var lf = el('div', 'btn-row pb-send'), ls = btn('送出紀錄給老師', 'primary'); lf.appendChild(ls); t.appendChild(lf);
+    ls.onclick = function () {
+      var rows = []; for (var d = 0; d < 7; d++) rows.push([d + 1].concat(cols.map(function (_, c) { return st[d + '-' + c] || ''; })));
+      if (!rows.some(function (r) { return r.slice(1).some(function (v) { return String(v).trim(); }); })) { say('請先填寫紀錄', 'warn'); return; }
+      if (window.PixelBackend) window.PixelBackend.send('log7', { rows: rows, columns: cols }, { slide: slideNo(t), okMsg: '練習紀錄已送出' });
+    };
+    t.appendChild(el('p', 'muted log7-note', '填在自己的手機上，按「送出紀錄給老師」就會存進課程試算表。'));
   });
 
   /* ---------- 16. 作業勾選 ---------- */
@@ -464,7 +497,7 @@
     var key = 'checks-' + u.getAttribute('data-id'), st = LS.get(key, []);
     $$('li', u).forEach(function (li, k) {
       li.classList.toggle('done', !!st[k]); li.tabIndex = 0; li.setAttribute('role', 'checkbox');
-      var tg = function () { st[k] = !st[k]; li.classList.toggle('done', !!st[k]); li.setAttribute('aria-checked', !!st[k]); LS.set(key, st); };
+      var tg = function () { st[k] = !st[k]; li.classList.toggle('done', !!st[k]); li.setAttribute('aria-checked', !!st[k]); LS.set(key, st); report(u, 'homework', { item: li.textContent.replace(/▶/g, '').trim(), result: st[k] ? '完成' : '取消', value: st[k] ? 1 : 0 }); };
       li.onclick = tg; li.onkeydown = function (e) { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); tg(); } };
     });
   });

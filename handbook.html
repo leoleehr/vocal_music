@@ -10,8 +10,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Parisienne&text=We%20Perform%20the%20Pixel%20of%20Music&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
 <link rel="stylesheet" href="assets/youtube.css">
+<link rel="stylesheet" href="assets/backend.css">
 </head>
 <body id="top">
 <header class="topbar">
@@ -19,9 +21,9 @@
     <a class="brand" href="index.html" aria-label="Pixel Studio 首頁"><span class="brand-en">We Perform the Pixel of Music</span></a>
     <nav>
       <a href="index.html#lessons">課程</a>
-      <a href="index.html#tools">課堂互動</a>
+      <a href="survey.html">問卷</a>
       <a href="handbook.html" class="cur">講義與教案</a>
-      <a href="index.html#about">關於</a>
+      <a href="survey.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1z"/><path d="M8 5H6a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-2"/><path d="M9 12l2 2 4-4"/></svg>問卷</a>
     </nav>
   </div>
   <span class="bar-progress" id="progress"></span>
@@ -44,6 +46,8 @@
 <script src="assets/ui.js"></script>
 <script src="assets/songs.js"></script>
 <script src="assets/youtube.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/backend.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
 <script>
 (function () {
@@ -80,10 +84,11 @@
       heads.forEach(function (h) {
         var n = parseInt((h.id.match(/lesson-(\d)/) || [])[1], 10), list = (window.PIXEL_LESSON_SONGS || {})[n];
         if (!list) return;
+        var sl = document.createElement('a'); sl.className = 'survey-link'; sl.href = 'survey.html?id=pre-' + n; sl.textContent = '填寫第 ' + n + ' 堂課前問卷 →'; h.parentNode.insertBefore(sl, h.nextSibling);
         var box = document.createElement('div'); box.className = 'lesson-songs';
         box.innerHTML = '<div class="ls-title">本堂歌曲<span>點縮圖即可播放</span></div><div class="yt-list"></div>';
         list.forEach(function (s) { box.lastChild.appendChild(PixelYT.card(s)); });
-        h.parentNode.insertBefore(box, h.nextSibling);
+        h.parentNode.insertBefore(box, sl.nextSibling);
       });
       var names = Object.keys(PixelYT.songs).sort(function (a, b) { return b.length - a.length; });
       var re = new RegExp('《(' + names.join('|') + ')》', 'g'), walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT), nodes = [];
