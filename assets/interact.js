@@ -1,7 +1,7 @@
 /* ===== Pixel Studio 課堂互動元件 =====
  * 互動狀態存在這台裝置的瀏覽器（localStorage）；作答與成果經 backend.js 送到課程試算表。
  * 元件以 class 宣告在投影片中，載入時自動建立：
- *   .quiz .poll .reveal .picker .score .wavelab .pitch .breath .recorder
+ *   .quiz .poll .reveal .picker .score .wavelab .pitch .rhythm-game .breath .recorder
  *   .order .flips .phase .lyricmark .exit .log7 .qr   以及 .checks[data-id]
  */
 (function () {
@@ -254,6 +254,152 @@
     p.querySelector('.again').onclick = function () { if (target !== null) playTarget(); };
     ['male', 'female'].forEach(function (k) { p.querySelector('.' + k).onclick = function () { range = k; p.querySelector('.male').classList.toggle('on', k === 'male'); p.querySelector('.female').classList.toggle('on', k === 'female'); draw(); }; });
     draw(); onLeave(p, stop);
+  });
+
+  /* ---------- 節奏挑戰：聽節奏 → 唱出 Ta → 比對拍點 ---------- */
+  var RHYTHMS = [
+    { name: '四分音符', tip: '一拍一個音，最穩定的基礎', on: [0, 1, 2, 3] },
+    { name: '八分音符', tip: '一拍兩個音，平均分配', on: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5] },
+    { name: '附點節奏', tip: '長—短，像心跳的「咚—噠」', on: [0, 1.5, 2, 3.5] },
+    { name: '切分音', tip: '重音落在拍子中間，流行歌最常見', on: [0, 0.5, 1.5, 2, 3] },
+    { name: '前八後十六', tip: '一個長音接兩個短音', on: [0, 0.5, 0.75, 1, 1.5, 1.75, 2, 3] },
+    { name: '反拍', tip: '全部落在「拍子之間」，最考驗穩定度', on: [0.5, 1.5, 2.5, 3.5] }
+  ];
+  $$('.rhythm-game').forEach(function (g) {
+    var idx = 0, bpm = parseInt(g.getAttribute('data-bpm'), 10) || 80, running = false, mode = 'mic';
+    var LAT = 0.04; // 麥克風輸入延遲補償（秒）
+    g.innerHTML =
+      '<div class="rg-pats"></div>' +
+      '<div class="rg-head"><div><b class="rg-name"></b><span class="rg-tip"></span></div><div class="rg-tempo"><button type="button" class="btn rg-dn" aria-label="減速">−</button><span class="rg-bpm"></span><button type="button" class="btn rg-up" aria-label="加速">＋</button></div></div>' +
+      '<canvas class="rg-cv"></canvas>' +
+      '<div class="rg-status"><span class="rg-state">先按「示範播放」聽一次，再按「開始挑戰」用 Ta 唱出節奏</span><span class="rg-score"></span></div>' +
+      '<div class="btn-row"><button type="button" class="btn rg-demo">▶ 示範播放</button><button type="button" class="btn primary rg-go">● 開始挑戰</button><button type="button" class="btn rg-tap" disabled>拍點（J 鍵）</button><button type="button" class="btn rg-mode">改用拍點鍵</button></div>';
+    var pats = g.querySelector('.rg-pats'), cv = g.querySelector('.rg-cv'), state = g.querySelector('.rg-state'), scoreEl = g.querySelector('.rg-score');
+    var go = g.querySelector('.rg-go'), demo = g.querySelector('.rg-demo'), tapB = g.querySelector('.rg-tap'), modeB = g.querySelector('.rg-mode');
+    RHYTHMS.forEach(function (r, k) {
+      var b = btn(r.name, 'rg-pat'); b.onclick = function () { if (running) return; idx = k; result = null; paintPats(); draw(); };
+      pats.appendChild(b);
+    });
+    var result = null, an = null, buf = new Float32Array(1024), raf = 0, onsets = [], start = 0, end = 0, nowBeat = -1;
+    function spb() { return 60 / bpm; }
+    function paintPats() {
+      $$('.rg-pat', pats).forEach(function (b, k) { b.classList.toggle('on', k === idx); });
+      g.querySelector('.rg-name').textContent = RHYTHMS[idx].name;
+      g.querySelector('.rg-tip').textContent = RHYTHMS[idx].tip;
+      g.querySelector('.rg-bpm').textContent = bpm + ' BPM';
+    }
+    function click(at, accent, vol) {
+      var c = ac(), o = c.createOscillator(), gn = c.createGain();
+      o.frequency.value = accent ? 1600 : 1100;
+      gn.gain.setValueAtTime(0, at); gn.gain.linearRampToValueAtTime(vol || 0.3, at + 0.004); gn.gain.exponentialRampToValueAtTime(0.001, at + 0.06);
+      o.connect(gn); gn.connect(c.destination); o.start(at); o.stop(at + 0.08);
+    }
+    function note(at, dur) {
+      var c = ac(), o = c.createOscillator(), gn = c.createGain();
+      o.type = 'triangle'; o.frequency.value = 523.25;
+      gn.gain.setValueAtTime(0, at); gn.gain.linearRampToValueAtTime(0.32, at + 0.01); gn.gain.setValueAtTime(0.32, at + dur * 0.6); gn.gain.linearRampToValueAtTime(0, at + dur);
+      o.connect(gn); gn.connect(c.destination); o.start(at); o.stop(at + dur + 0.02);
+    }
+    function countIn(t0) { for (var i = 0; i < 4; i++) click(t0 + i * spb(), i === 0, 0.35); return t0 + 4 * spb(); }
+    function draw() {
+      var c = canvasFit(cv), x = c.x, W = c.w, H = c.h, padL = 10, padR = 10, w = W - padL - padR;
+      var X = function (b) { return padL + b / 4 * w; };
+      x.clearRect(0, 0, W, H);
+      for (var s = 0; s <= 16; s++) {
+        x.strokeStyle = s % 4 === 0 ? 'rgba(255,255,255,.28)' : 'rgba(255,255,255,.07)'; x.lineWidth = s % 4 === 0 ? 1.5 : 1;
+        x.beginPath(); x.moveTo(X(s / 4), 6); x.lineTo(X(s / 4), H - 6); x.stroke();
+      }
+      x.fillStyle = 'rgba(255,255,255,.45)'; x.font = '12px "Space Grotesk",sans-serif';
+      for (var b = 0; b < 4; b++) x.fillText(String(b + 1), X(b) + 4, 18);
+      if (nowBeat >= 0) { x.fillStyle = 'rgba(244,166,42,.12)'; x.fillRect(X(Math.floor(nowBeat)), 4, w / 4, H - 8); }
+      var on = RHYTHMS[idx].on, mid = H * 0.42;
+      on.forEach(function (b, k) {
+        var st = result ? (result.hit[k] ? css('--green') : 'rgba(236,74,54,.85)') : css('--amber');
+        x.fillStyle = st; x.beginPath(); x.roundRect ? x.roundRect(X(b) - 2, mid - 14, 14, 28, 4) : x.rect(X(b) - 2, mid - 14, 14, 28); x.fill();
+      });
+      (result ? result.det : onsets).forEach(function (d) {
+        var b = typeof d === 'number' ? d : d.b; if (b < -0.5 || b > 4.5) return;
+        x.fillStyle = d.ok === undefined ? css('--navy') : (d.ok ? css('--green') : 'rgba(255,255,255,.5)');
+        x.beginPath(); x.moveTo(X(b), H - 12); x.lineTo(X(b) - 7, H - 26); x.lineTo(X(b) + 7, H - 26); x.closePath(); x.fill();
+      });
+      x.fillStyle = 'rgba(255,255,255,.4)'; x.font = '11px "Noto Sans TC",sans-serif';
+      x.fillText('目標拍點', W - 64, mid - 20); x.fillText('你的拍點 ▼', W - 72, H - 30);
+    }
+    function score() {
+      var tg = RHYTHMS[idx].on, det = onsets.map(function (b) { return { b: b, ok: false } }), hit = tg.map(function () { return null; });
+      var tol = Math.min(0.13, spb() * 0.25) / spb(); // 以拍為單位的容許範圍
+      tg.forEach(function (t, k) {
+        var best = null;
+        det.forEach(function (d) { if (!d.ok && Math.abs(d.b - t) <= tol && (!best || Math.abs(d.b - t) < Math.abs(best.b - t))) best = d; });
+        if (best) { best.ok = true; hit[k] = (best.b - t) * spb() * 1000; }
+      });
+      var n = hit.filter(function (h) { return h !== null; }).length, extra = det.filter(function (d) { return !d.ok; }).length;
+      var offs = hit.filter(function (h) { return h !== null; }), avg = offs.length ? offs.reduce(function (a, b) { return a + b; }, 0) / offs.length : 0;
+      var pct = Math.max(0, Math.round((n - extra * 0.5) / tg.length * 100));
+      result = { hit: hit.map(function (h) { return h !== null; }), det: det, n: n, extra: extra, avg: avg, pct: pct };
+      var lean = Math.abs(avg) < 25 ? '時間點很準' : avg < 0 ? '整體偏快約 ' + Math.round(-avg) + ' 毫秒（搶拍）' : '整體偏慢約 ' + Math.round(avg) + ' 毫秒（拖拍）';
+      scoreEl.textContent = pct + ' 分';
+      state.textContent = '命中 ' + n + ' / ' + tg.length + (extra ? '，多唱 ' + extra + ' 個' : '') + '。' + (n ? lean : '再聽一次示範，跟著節拍器唱唱看');
+      if (n === tg.length && !extra) chime();
+      report(g, 'rhythm', { item: RHYTHMS[idx].name + '（' + bpm + ' BPM）', result: n + '/' + tg.length, value: pct, detail: { extra: extra, avgOffsetMs: Math.round(avg), mode: mode } });
+      draw();
+    }
+    function finish() {
+      running = false; cancelAnimationFrame(raf); nowBeat = -1;
+      if (an) { an = null; micStop(); }
+      tapB.disabled = true; go.textContent = '● 再挑戰一次'; demo.disabled = false;
+      score();
+    }
+    function tick() {
+      raf = requestAnimationFrame(tick);
+      var t = ac().currentTime, b = (t - start) / spb();
+      nowBeat = b >= 0 && b < 4 ? b : -1;
+      if (an && t >= start - 0.15) {
+        an.getFloatTimeDomainData(buf);
+        var s = 0; for (var i = 0; i < buf.length; i++) s += buf[i] * buf[i];
+        var r = Math.sqrt(s / buf.length);
+        if (env.armed && r > env.th && r > env.low * 2.2 && t - env.last > 0.11) { onsets.push((t - LAT - start) / spb()); env.last = t; env.armed = false; env.peak = r; }
+        if (!env.armed) { env.peak = Math.max(env.peak, r); if (r < env.peak * 0.55 || t - env.last > 0.3) { env.armed = true; env.low = r; } }
+        else env.low = Math.min(env.low * 1.02 + 0.0005, Math.max(r, 0.002));
+      } else if (an) {
+        an.getFloatTimeDomainData(buf); var s2 = 0; for (var j = 0; j < buf.length; j++) s2 += buf[j] * buf[j];
+        env.floor = Math.max(env.floor, Math.sqrt(s2 / buf.length)); env.th = Math.max(0.02, env.floor * 3); env.low = env.floor || 0.005;
+      }
+      if (t > end) return finish();
+      draw();
+    }
+    var env = {};
+    function begin(withMic) {
+      result = null; onsets = []; scoreEl.textContent = '';
+      env = { armed: true, last: -1, peak: 0, low: 0.005, floor: 0, th: 0.02 };
+      var c = ac(); start = countIn(c.currentTime + 0.15); end = start + 4 * spb() + 0.35;
+      running = true; go.textContent = '■ 停止'; demo.disabled = true;
+      tapB.disabled = withMic; state.textContent = withMic ? '數四拍後開始，用 Ta 唱出節奏（不要跟著拍手）' : '數四拍後開始，在每個拍點按「拍點」或 J 鍵';
+      cancelAnimationFrame(raf); tick();
+    }
+    go.onclick = function () {
+      if (running) { running = false; cancelAnimationFrame(raf); nowBeat = -1; if (an) { an = null; micStop(); } tapB.disabled = true; demo.disabled = false; go.textContent = '● 開始挑戰'; state.textContent = '已停止'; draw(); return; }
+      if (mode === 'tap') return begin(false);
+      state.textContent = '開啟麥克風中…';
+      micStart().then(function (a) { an = a; begin(true); })
+        .catch(function () { mode = 'tap'; modeB.textContent = '改用麥克風'; state.textContent = '無法使用麥克風，已改為拍點鍵模式'; begin(false); });
+    };
+    demo.onclick = function () {
+      if (running) return;
+      var c = ac(), t0 = countIn(c.currentTime + 0.1), on = RHYTHMS[idx].on;
+      on.forEach(function (b, k) { var nx = k + 1 < on.length ? on[k + 1] : 4; note(t0 + b * spb(), Math.min(0.35, (nx - b) * spb() * 0.8)); });
+      result = null; onsets = []; scoreEl.textContent = ''; state.textContent = '示範播放中：前四下是預備拍';
+      start = t0; end = t0 + 4 * spb() + 0.2; demo.disabled = true;
+      (function anim() { var t = ac().currentTime, b = (t - start) / spb(); nowBeat = b >= 0 && b < 4 ? b : -1; draw(); if (t < end) requestAnimationFrame(anim); else { nowBeat = -1; demo.disabled = false; state.textContent = '換你了：按「開始挑戰」，數四拍後用 Ta 唱出同樣的節奏'; draw(); } })();
+    };
+    function tap() { if (!running || mode !== 'tap') return; onsets.push((ac().currentTime - start) / spb()); draw(); }
+    tapB.onclick = tap;
+    document.addEventListener('keydown', function (e) { if (running && mode === 'tap' && (e.key === 'j' || e.key === 'J')) { e.preventDefault(); e.stopPropagation(); tap(); } }, true);
+    modeB.onclick = function () { if (running) return; mode = mode === 'mic' ? 'tap' : 'mic'; modeB.textContent = mode === 'mic' ? '改用拍點鍵' : '改用麥克風'; state.textContent = mode === 'mic' ? '麥克風模式：用 Ta 唱出節奏' : '拍點鍵模式：在每個拍點按「拍點」或 J 鍵'; };
+    g.querySelector('.rg-up').onclick = function () { if (!running) { bpm = Math.min(132, bpm + 4); result = null; paintPats(); draw(); } };
+    g.querySelector('.rg-dn').onclick = function () { if (!running) { bpm = Math.max(56, bpm - 4); result = null; paintPats(); draw(); } };
+    paintPats(); draw(); window.addEventListener('resize', draw);
+    onLeave(g, function () { if (running) go.onclick(); });
   });
 
   /* ---------- 8. 吐氣測量：按下開始即計時，吐完自動停止 ---------- */

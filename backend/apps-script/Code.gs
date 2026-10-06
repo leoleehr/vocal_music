@@ -16,7 +16,7 @@ var TABS = {
   lyrics: { name: '歌詞', head: ['代碼', '歌名', '歌詞（一行一句、空行分段；字後加 ∨ 大換氣、ˇ 小換氣為老師版）'] }
 };
 var DEFAULT_CODE = 'PIXEL2026';
-var TYPE_LABEL = { quiz: '選擇題', order: '排序遊戲', poll: '舉手計票', score: '分組計分', pitch: '音準挑戰', breath: '吐氣測量', lyric: '歌詞換氣標記', homework: '作業勾選' };
+var TYPE_LABEL = { quiz: '選擇題', order: '排序遊戲', poll: '舉手計票', score: '分組計分', pitch: '音準挑戰', rhythm: '節奏挑戰', breath: '吐氣測量', lyric: '歌詞換氣標記', homework: '作業勾選' };
 var FOLDER_NAME = '流行歌唱班_學員錄音';
 
 /* ---------- 選單 ---------- */
