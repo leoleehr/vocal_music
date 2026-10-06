@@ -6,7 +6,7 @@
 <title>流行歌唱班｜Pixel Studio</title>
 <meta name="description" content="亞東科技大學吉他社流行歌唱班：六堂課的講義、教案與互動課堂投影片。主講：畫素音樂工作坊 李奕勳。">
 <link rel="icon" type="image/png" href="assets/favicon.png">
-<meta name="theme-color" content="#09090b">
+<meta name="theme-color" content="#101210">
 <meta property="og:title" content="流行歌唱班｜畫素音樂工作坊 Pixel Studio">
 <meta property="og:description" content="六堂課，找到屬於自己的聲音。">
 <meta property="og:image" content="https://leoleehr.github.io/vocal_music/assets/og-image.png">
@@ -17,11 +17,13 @@
 <link rel="stylesheet" href="assets/site.css">
 <link rel="stylesheet" href="assets/backend.css">
 <link rel="stylesheet" href="assets/responsive.css">
+<link rel="stylesheet" href="assets/studio.css">
 </head>
-<body id="top">
+<body id="top" class="home">
+<a class="skip-link" href="#main">跳至主要內容</a>
 <header class="topbar">
   <div class="wrap">
-    <a class="brand" href="index.html" aria-label="Pixel Studio 首頁"><span class="brand-en">We Perform the Pixel of Music</span></a>
+    <a class="brand" href="index.html" aria-label="Pixel Studio 首頁"><span class="brand-en">pixel studio</span><span class="brand-caption">畫素音樂工作坊<br>VOCAL LAB</span></a>
     <nav>
       <a href="#lessons">課程</a>
       <a href="survey.html">問卷</a>
@@ -31,31 +33,35 @@
   </div>
 </header>
 
-<section class="hero">
+<main id="main">
+<section class="home-hero" aria-labelledby="hero-title">
   <div class="wrap">
-    <div data-pixel-logo></div>
-    <div class="hero-cn">畫素音樂工作坊</div>
-    <div class="eyebrow">亞東科技大學吉他社・流行歌唱班</div>
-    <h1>六堂課，<br class="br-m">找到屬於自己的聲音</h1>
-    <p class="sub">呼吸、共鳴、發聲三大要素，搭配吉他社最熟悉的自彈自唱。課前問卷直接在網站填寫，課堂互動用手機就能參與，練習成果會自動回到老師手上。</p>
-    <div class="cta">
-      <a class="btn primary" href="slides/lesson-01/index.html">從第一堂開始</a>
-      <a class="btn" href="handbook.html">講義與教案</a>
-      <a class="btn" href="docs/vocal-class-handbook.pdf" download="流行歌唱班_講義與教案.pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>下載 PDF 講義</a>
+    <div class="hero-meta"><span><i class="live-dot" aria-hidden="true"></i>PIXEL STUDIO / VOCAL LAB</span><span>亞東科技大學吉他社 · 流行歌唱班</span></div>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <div class="hero-kicker">每一個聲音，都有自己的形狀。</div>
+        <h1 id="hero-title">找到屬於<br>自己的<em>聲音。</em></h1>
+        <div class="english" aria-hidden="true">Find your voice.</div>
+        <p>從第一口呼吸，到唱出一首自己的歌。<br>六堂課，拆解聲音的畫素，讓技巧成為表達，<br>讓你的聲音，成為你。</p>
+        <div class="hero-actions"><a class="btn primary" href="slides/lesson-01/index.html">開始探索第一堂 <span class="arrow" aria-hidden="true">↗</span></a><a class="text-link" href="#lessons">瀏覽六堂課程 ↓</a></div>
+      </div>
+      <div class="voice-art">
+        <span class="art-label">FIG. 01 — THE SHAPE OF SOUND</span><span class="art-cross" aria-hidden="true">+</span>
+        <svg viewBox="0 0 500 500" role="img" aria-label="由多條聲波構成的聲音雕塑"><defs><linearGradient id="voice-gradient" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#edf5c1"/><stop offset=".5" stop-color="#d3ed89"/><stop offset="1" stop-color="#536d38"/></linearGradient></defs><g stroke="#d3ed8920" stroke-width=".7"><path d="M20 250H480M250 30V470"/><circle cx="250" cy="250" r="210" fill="none"/></g><g class="voice-lines" fill="none" stroke="url(#voice-gradient)" stroke-width="1.2" id="voice-lines"></g></svg>
+        <span class="art-caption" aria-hidden="true">BREATH → RESONANCE → VOICE</span>
+        <div class="voice-controls"><button type="button" id="voice-play" aria-pressed="false">▶ 聆聽聲音</button><label for="voice-frequency">頻率 <span id="voice-value">220 Hz</span><input id="voice-frequency" type="range" min="110" max="440" value="220" step="1" aria-label="聲波頻率（Hz）"></label></div>
+      </div>
     </div>
-    <div class="stats">
-      <div class="stat"><b>6</b><span>堂課</span></div>
-      <div class="stat"><b>120</b><span>分鐘／堂</span></div>
-      <div class="stat"><b>3:1</b><span>每三張一個互動</span></div>
-    </div>
+    <div class="hero-bottom"><div><b>06</b><span>堂聲音探索</span></div><div><b>120</b><span>分鐘 / 堂</span></div><div><b>01</b><span>獨一無二的你</span></div><a href="docs/vocal-class-handbook.pdf" download="流行歌唱班_講義與教案.pdf">完整 PDF 講義 ↗</a></div>
   </div>
 </section>
-
+<div class="studio-band" aria-hidden="true"><div class="wrap"><span>BREATH 呼吸</span><i>✳</i><span>RESONANCE 共鳴</span><i>✳</i><span>PHONATION 發聲</span><i>✳</i><span>EXPRESSION 表達</span></div></div>
 <section class="block" id="lessons">
   <div class="wrap">
+    <div class="section-index">01 / THE LEARNING JOURNEY</div>
     <div class="sec-head">
-      <h2>六堂課程</h2>
-      <p>投影片在電腦上是簡報模式，在手機上會自動變成可捲動的課程頁。</p>
+      <h2>一步一步，<br>把聲音唱成自己。</h2>
+      <p>從理解聲音到自彈自唱，每一堂都是下一步的起點。選擇課程，開啟投影片、閱讀講義，或先完成課前問卷。</p>
     </div>
     <div class="lessons">
       <article class="lesson" style="--c:#e8412b">
@@ -104,27 +110,31 @@
   </div>
 </section>
 
-<section class="block" id="tools">
+<section class="block tools-section" id="tools">
   <div class="wrap">
+    <div class="section-index">02 / YOUR POCKET STUDIO</div>
     <div class="sec-head">
-      <h2>手機就是你的練唱工具</h2>
-      <p>上課時掃投影片上的 QR Code，下課後也能自己練。填寫一次學員資料，你的測驗、錄音與練習紀錄就會送給老師，作為課堂回饋。</p>
+      <h2>你的口袋裡，<br>就有一間練唱室。</h2>
+      <p>上課時掃描 QR Code，下課後繼續練習。用音準、氣息與錄音對照，把每一次練習，變成看得見的進步。</p>
     </div>
-    <div class="features">
-      <div class="feature"><i>♪</i><b>音準挑戰</b><span>播放目標音，對著麥克風唱，即時看見音高偏差，命中紀錄自動回傳。</span></div>
-      <div class="feature"><i>〰</i><b>吐氣測量</b><span>按下開始立即計時，自動算出穩定度，前測後測一比就知道進步多少。</span></div>
-      <div class="feature"><i>●</i><b>錄音對照</b><span>錄下第零號錄音並上傳給老師，結業時和自己的進步並排聆聽。</span></div>
-      <div class="feature"><i>✓</i><b>練習紀錄</b><span>出場券、七天紀錄表、作業勾選一鍵送出，老師依大家的回覆調整下一堂。</span></div>
+    <div class="practice-layout"><div class="practice-display" aria-hidden="true"><div class="practice-top"><span>PITCH EXPLORER</span><span>練習示意 / DEMO</span></div><div class="practice-note">A3<small>220 Hz</small></div><div class="meter"><i style="--h:12px"></i><i style="--h:18px"></i><i style="--h:25px"></i><i style="--h:31px"></i><i style="--h:35px"></i><i style="--h:39px"></i><i style="--h:41px"></i><i style="--h:41px"></i><i style="--h:40px"></i><i style="--h:38px"></i><i style="--h:34px"></i><i style="--h:29px"></i><i style="--h:23px"></i><i style="--h:16px"></i><i style="--h:14px"></i><i style="--h:21px"></i><i style="--h:27px"></i><i style="--h:32px"></i><i style="--h:37px"></i><i style="--h:40px"></i><i style="--h:41px"></i><i style="--h:41px"></i><i style="--h:40px"></i><i style="--h:37px"></i><i style="--h:32px"></i><i style="--h:27px"></i><i style="--h:20px"></i><i style="--h:14px"></i><i style="--h:16px"></i><i style="--h:23px"></i><i style="--h:29px"></i><i style="--h:34px"></i><i style="--h:38px"></i><i style="--h:40px"></i><i style="--h:41px"></i><i style="--h:41px"></i></div><div class="practice-caption">聽見目標音。看見自己的聲音。</div></div><div class="features">
+      <div class="feature"><i>01 / PITCH</i><b>音準挑戰</b><span>播放目標音，對著麥克風唱，即時看見音高偏差，留下每一次命中的紀錄。</span><a class="feature-link" href="slides/lesson-02/index.html#s6">開始音準挑戰 ↗</a></div>
+      <div class="feature"><i>02 / BREATH</i><b>吐氣測量</b><span>按下開始立即計時，自動算出穩定度，前測後測一比就知道進步多少。</span><a class="feature-link" href="slides/lesson-02/index.html#s3">進入呼吸課程 ↗</a></div>
+      <div class="feature"><i>03 / RECORD</i><b>錄音對照</b><span>錄下第零號錄音並保存，結業時和自己的進步並排聆聽。</span><a class="feature-link" href="slides/lesson-01/index.html#s18">留下第一段錄音 ↗</a></div>
+      <div class="feature"><i>04 / PRACTICE</i><b>練習紀錄</b><span>出場券、七天紀錄表與作業勾選，讓練習延續到下一堂。後台連線前，文字紀錄會暫存在此瀏覽器。</span><a class="feature-link" href="handbook.html">閱讀課後練習 ↗</a></div>
     </div>
+  </div>
   </div>
 </section>
 
 <section class="block">
   <div class="wrap">
+    <div class="section-index">03 / THE SESSION FLOW</div>
     <div class="sec-head">
-      <h2>每堂 120 分鐘的節奏</h2>
+      <h2>讓學習，<br>有自己的節奏。</h2>
       <p>課前三天在網站填寫問卷，課堂依起承轉合推進，課後練習延續到下一堂。</p>
     </div>
+    <div class="session-head"><span class="eyebrow">LEARN. PLAY. REPEAT.</span><div class="session-total">120 <small>MIN / SESSION</small></div></div>
     <div class="rhythm">
       <div style="flex:20;background:#2f5fc4"><b>起</b>暖身・回饋・引題<br><small>20 分</small></div>
       <div style="flex:35;background:#d6cf2c;color:#1a1800"><b>承</b>原理講解・示範<br><small>35 分</small></div>
@@ -137,24 +147,11 @@
 
 <section class="block" id="about">
   <div class="wrap">
-    <div class="about">
-      <div>
-        <div class="eyebrow">About</div>
-        <h2 style="font-size:24px;font-weight:700;margin:6px 0 10px;letter-spacing:.02em">畫素音樂工作坊</h2>
-        <p>Pixel Studio 成立於 2008 年，結合音樂製作、音樂教學與展演藝術。</p>
-        <p style="margin-top:10px">關於聲音藝術，我們認為每一個人都具備最獨特的聲音。而找到架構起獨特聲音的「畫素」，是我們最擅長與熱愛的事情。</p>
-        <p class="since">We Perform the Pixel of Music.</p>
-        <p style="margin-top:12px">主講：李奕勳　<a href="mailto:musicallanding@gmail.com">musicallanding@gmail.com</a></p>
-      </div>
-      <div class="since-block">
-        <div class="since-cap">Established</div>
-        <div class="since-year">2008</div>
-      </div>
-    </div>
+    <div class="about"><div><div class="section-index">04 / ABOUT PIXEL STUDIO</div><h2 class="about-statement">每個人都具備<br>最獨特的聲音。<br><em>我們陪你找到它。</em></h2></div><div><img class="about-logo" src="assets/logo-color-dark-notag.png" width="1200" height="372" alt="Pixel Studio 彩色標誌" loading="lazy"><p>畫素音樂工作坊成立於 2008 年，結合音樂製作、音樂教學與展演藝術。</p><p style="margin-top:16px">關於聲音藝術，我們相信，每個人都有自己的聲音。找到架構起獨特聲音的「畫素」，是我們最擅長，也最熱愛的事情。</p><p class="since">We Perform the Pixel of Music.</p><div class="about-credit"><b>主講 / 李奕勳</b><span>EST. 2008</span><a href="mailto:musicallanding@gmail.com">聯絡工作坊 ↗</a></div></div></div>
   </div>
 </section>
-
-<footer>© 畫素音樂工作坊 Pixel Studio・亞東科技大學吉他社 流行歌唱班</footer>
+</main>
+<footer><div class="wrap"><div class="footer-main"><div class="footer-word">pixel studio.</div><a href="#top">回到頂端 ↑</a></div><div class="footer-bottom"><span>© 畫素音樂工作坊 · 亞東科技大學吉他社 流行歌唱班</span><span>MADE OF MUSIC. MADE OF YOU.</span></div></div></footer>
 
 <nav class="tabbar" aria-label="主選單">
   <a href="#top" class="cur" data-sec="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>首頁</a>
@@ -164,6 +161,7 @@
 </nav>
 
 <script src="assets/pixel.js"></script>
+<script src="assets/studio.js"></script>
 <script src="assets/config.js"></script>
 <script src="assets/backend.js"></script>
 <script>

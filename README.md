@@ -23,6 +23,8 @@
 
 ### assets
 
+2026-10-06 視覺改版：首頁、講義及問卷由 `studio.css` 延伸既有設計，首頁聲波與聲音控制在 `studio.js`，投影片由 `deck-studio.css` 調整。設計方向、驗證結果與目前限制見 [設計檢查紀錄](docs/design-review.md)。
+
 | 檔案 | 用途 |
 | --- | --- |
 | `deck.css`、`deck.js` | 投影片版面、換頁、手機課程 App 模式 |
