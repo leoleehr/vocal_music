@@ -30,7 +30,7 @@ img.pixel-word{display:block;width:auto}
 .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px}
 .topbar .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--muted);font-size:13px;letter-spacing:.08em}
 .topbar .pixel-word{height:15px}
-.brand-en{font-family:"Parisienne",cursive;font-size:25px;font-weight:400;letter-spacing:.01em;line-height:1;color:#f3f0e9;white-space:nowrap}
+.brand-en{font-family:"Allura",cursive;font-size:28px;font-weight:400;letter-spacing:.01em;line-height:1;color:#f3f0e9;white-space:nowrap}
 .hero-cn{font-family:"Noto Sans TC",system-ui,sans-serif;font-weight:500;font-size:20px;letter-spacing:.28em;color:#f3f0e9;margin:-14px 0 26px;padding-left:.22em}
 .br-m{display:none}
 .topbar nav{display:flex;gap:4px}
@@ -170,7 +170,7 @@ footer{margin-top:24px;padding:28px 0 40px;color:var(--faint);font-size:13px;tex
   .topbar .wrap{height:56px}
   .topbar nav{display:none}
   .topbar .pixel-word{height:13px}
-  .brand-en{font-size:21px}
+  .brand-en{font-size:24px}
   .hero-cn{font-size:16px;margin:-8px 0 20px}
   .br-m{display:inline}
   .hero{padding:28px 0 20px}

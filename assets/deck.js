@@ -13,7 +13,7 @@
     if (s.classList.contains('cover')) return;
     var b = document.createElement('div');
     b.className = 'slide-brand';
-    b.innerHTML = '<span>畫素音樂工作坊</span>' + PixelStudio.pixelWord('PIXEL');
+    b.innerHTML = '<span>畫素音樂工作坊</span>';
     s.appendChild(b);
   });
 
