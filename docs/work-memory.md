@@ -37,7 +37,11 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 首頁 `01 / THE LEARNING JOURNEY` 標題更新為「一步一步，聽見與唱出自己的聲音。」；主標文案更新為「讓你的聲音，成為你的樣貌。」
 - `Find your voice.` 改用粉紫、電藍與青綠的霓虹刷染漸層，柔光與流動效果支援減少動態設定。
 - Chrome 檢視 1440px、390px、320px 首頁及課堂投影片；藍青色對深底對比 7.65:1、深色按鈕字對藍青底 7.13:1。`git diff --check` 與兩支 JavaScript 語法檢查通過。
-## 2026-10-07 關於文案與字標裁切- 主介面配色與標題 commit `6679bb2f380b8f542b383cce9d419b449dfb85d5` 已推送並部署；GitHub Pages workflow `37628951636` 成功。線上首頁 HTTP 200 且包含新標題與文案，樣式載入藍青色；講義 PDF HTTP 200，大小 4,897,117 bytes。
+## 2026-10-07 主介面配色與標題部署
+
+- 主介面配色與標題 commit `6679bb2f380b8f542b383cce9d419b449dfb85d5` 已推送並部署；GitHub Pages workflow `37628951636` 成功。線上首頁 HTTP 200 且包含新標題與文案，樣式載入藍青色；講義 PDF HTTP 200，大小 4,897,117 bytes。
+
+## 2026-10-07 關於文案與字標裁切
 
 
 - 首頁「關於」欄位更新為 `About Pixel Studio：`、核心 slogan `We Perform the Pixel of Music` 與使用者指定的工作坊介紹文字。
@@ -55,6 +59,12 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 頁尾右下 slogan 固定為核心理念原文 `We Perform the Pixel of Music`，保留原拼法與大小寫。
 - 已以本機 Chrome 畫面檢視首頁頂端與整頁；字標漸層兼顧白字辨識度，且靜態降級仍可讀。
 - 本次字標與 slogan 調整 commit c7180f9611bae11549819d91dab43b2dd26111a9 已推送至 main；GitHub Pages workflow 37611465456 成功。部署後線上首頁 HTTP 200，頁面含指定 slogan。
+
+## 2026-10-07 黃色強調色微調
+
+- 依使用者要求，將主介面、按鈕、強調字、問卷、互動教材、課堂投影片與列印講義的藍青強調色改為較沉穩的暖金黃 `#C7AF4A`；按鈕底色文字保持深色。彩虹聲紋與霓虹字標維持原設計。
+- 黃色對深底對比為 8.65:1，深色按鈕字對黃色底為 8.08:1；`node --check assets/interact.js`、`node --check assets/studio.js` 與 `git diff --check` 通過。
+- 尚未提交、推送或部署。列印講義 HTML 的強調色已更新；PDF 重新產生遇到瀏覽器非同步載入失敗，已保留原有 33 頁 PDF，待後續重新產生。
 
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 

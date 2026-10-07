@@ -3,7 +3,7 @@
   --bg:#09090b; --paper:#111115; --card:#18181e; --card-2:#202028;
   --ink:#f3f0e9; --muted:#9d998f; --faint:#6d6a64;
   --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.14); --frame:rgba(255,255,255,.16);
-  --navy:#45b3e6; --gold:#e3d83a; --red:#ec4a36; --green:#6cbb4b; --amber:#6FAFBC; --pink:#e2407f; --purple:#9a5fd0;
+  --navy:#45b3e6; --gold:#e3d83a; --red:#ec4a36; --green:#6cbb4b; --amber:#C7AF4A; --pink:#e2407f; --purple:#9a5fd0;
   --navy-t:rgba(69,179,230,.14); --gold-t:rgba(227,216,58,.13); --red-t:rgba(236,74,54,.14); --green-t:rgba(108,187,75,.14);
   --rainbow:linear-gradient(90deg,#e8412b,#e2407f,#8a4fc0,#2f5fc4,#45b3e6,#6cbb4b,#d6e03a,#f4a62a);
   --r-lg:20px; --r:14px; --r-sm:10px;
@@ -13,14 +13,14 @@
 html,body{height:100%}
 body{background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
 body::before{content:"";position:fixed;inset:0;pointer-events:none;
-  background:radial-gradient(60% 50% at 80% 0%,rgba(111,174,187,.07),transparent 70%),radial-gradient(50% 40% at 0% 100%,rgba(69,179,230,.06),transparent 70%)}
+  background:radial-gradient(60% 50% at 80% 0%,rgba(199,175,74,.07),transparent 70%),radial-gradient(50% 40% at 0% 100%,rgba(69,179,230,.06),transparent 70%)}
 a{color:var(--amber)}
 
 /* ---- stage (desktop presentation) ---- */
 .deck{position:fixed;inset:0}
 .stage{width:1280px;height:720px;position:relative;transform-origin:center center}
 .slide{position:absolute;inset:0;border-radius:var(--r-lg);overflow:hidden;
-  background:radial-gradient(110% 80% at 90% -10%,rgba(111,174,187,.08),transparent 55%),linear-gradient(180deg,#141418,#0f0f13);
+  background:radial-gradient(110% 80% at 90% -10%,rgba(199,175,74,.08),transparent 55%),linear-gradient(180deg,#141418,#0f0f13);
   padding:64px 84px 70px;display:flex;flex-direction:column;opacity:0;pointer-events:none;transform:translateY(10px) scale(.995);
   transition:opacity .35s ease,transform .35s ease;box-shadow:0 0 0 1px var(--frame),0 40px 100px rgba(0,0,0,.65)}
 .slide.active{opacity:1;pointer-events:auto;transform:none}
@@ -108,7 +108,7 @@ img.pixel-word{display:block;width:auto}
 .fbox{border:1px solid var(--line-2);border-radius:var(--r-sm);padding:8px 18px;text-align:center;min-width:190px;background:var(--card)}
 .fbox b{display:block;font-size:19px}.fbox span{font-size:16px;color:var(--muted)}
 .fbox.dash{border-style:dashed}
-.fbox.hl{border-color:var(--amber);background:rgba(111,174,187,.12)}
+.fbox.hl{border-color:var(--amber);background:rgba(199,175,74,.12)}
 .arrow{width:2px;height:22px;background:var(--faint);position:relative}
 .arrow::after{content:"";position:absolute;left:-5px;bottom:-2px;border:6px solid transparent;border-top:8px solid var(--faint)}
 .chain{display:flex;align-items:center;margin-top:20px}
@@ -173,7 +173,7 @@ img.pixel-word{display:block;width:auto}
   .slide-meta .sm-no{font-family:var(--display);font-size:13px;font-weight:700;color:var(--faint);letter-spacing:.06em}
   .slide-meta .sm-seg{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
   .slide-meta .sm-seg i{width:8px;height:8px;border-radius:50%;display:inline-block}
-  .slide-meta .sm-ix{margin-left:auto;font-size:12px;color:var(--amber);border:1px solid rgba(111,174,187,.4);background:rgba(111,174,187,.08);border-radius:999px;padding:2px 10px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62%}
+  .slide-meta .sm-ix{margin-left:auto;font-size:12px;color:var(--amber);border:1px solid rgba(199,175,74,.4);background:rgba(199,175,74,.08);border-radius:999px;padding:2px 10px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62%}
   .kicker{font-size:12px;letter-spacing:.08em;margin-bottom:6px;gap:8px}
   .kicker .tag{display:none}
   h1,.cover h1{font-size:30px;line-height:1.25}
@@ -194,7 +194,7 @@ img.pixel-word{display:block;width:auto}
   .pill-row{gap:8px}
 
   /* cover */
-  .slide.cover{padding:32px 20px 36px;background:radial-gradient(90% 60% at 100% 0%,rgba(111,174,187,.12),transparent 70%)}
+  .slide.cover{padding:32px 20px 36px;background:radial-gradient(90% 60% at 100% 0%,rgba(199,175,74,.12),transparent 70%)}
   .cover .pixel-logo{width:220px;max-width:220px;margin-bottom:22px}
   .pixel-tagline{font-size:10px;letter-spacing:.24em;margin-top:10px}
   .cover .meta{font-size:14px;margin-top:20px}
