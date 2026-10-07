@@ -6,6 +6,13 @@
   var value = document.getElementById('voice-value');
   var button = document.getElementById('voice-play');
   var context, oscillator, gain, timer, playing = false;
+  var gradient = document.getElementById('voice-gradient');
+  if (gradient && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+    var ns = 'http://www.w3.org/2000/svg', flow = document.createElementNS(ns, 'animateTransform');
+    flow.setAttribute('attributeName', 'gradientTransform'); flow.setAttribute('type', 'translate');
+    flow.setAttribute('from', '0 0'); flow.setAttribute('to', '500 0'); flow.setAttribute('dur', '12s');
+    flow.setAttribute('repeatCount', 'indefinite'); gradient.appendChild(flow);
+  }
   function draw() {
     var frequency = Number(slider.value), markup = '';
     for (var line = 0; line < 54; line++) {
