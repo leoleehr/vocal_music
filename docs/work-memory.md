@@ -30,7 +30,7 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 使用者指定 PIXEL STUDIO 的彩虹字標仍作為品牌主視覺，但網站、課程編號、進度條、投影片與互動圖表改用紅色系作為整體介面配色。
 - 新字標 `assets/pixel-studio-67-black-bg.png` 用於深色頁面與列印封面；`assets/pixel-studio-67-white-bg.png` 用於白底列印尾頁。首頁導覽、關於區、講義頁與問卷頁，以及共用字標載入器皆已更新。
 - `handbook-print.html` 與下載用 `docs/vocal-class-handbook.pdf` 已更新；以 Chrome 透過本機網站輸出 PDF，確認共 33 頁，並目視檢查封面、目錄與尾頁，新字標與紅色課程目錄均正常。封面舊紫色陰影已移除。另目視確認首頁首屏；`git diff --check` 通過。
-- 本次變更尚未 commit 或部署；GitHub Pages 線上狀態未重新查證。原始圖檔仍留在 assets 作為來源備份，網站與文件的使用引用已換成兩張新圖。
+- 視覺修訂 commit `50745919f3712024651d96c39e536016bcf91cb8` 已推送並部署成功；GitHub Actions run `37591145482` 結果為 success。已重新確認線上首頁 HTTP 200 並引用新版黑底字標，黑底字標與講義 PDF 皆 HTTP 200，PDF 為 6,023,292 bytes。原始圖檔仍留在 assets 作為來源備份，網站與文件的使用引用已換成兩張新圖。
 - 既有待辦仍為 Apps Script 後台設定、第三至第六堂投影片，以及真實裝置與麥克風驗證。
 
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
