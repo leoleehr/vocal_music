@@ -31,6 +31,11 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 回復 commit `8a61cc24e6fba0d849ff58587c0a94154b7f2310` 已推送並部署成功；GitHub Actions run `37592297268` 結果為 success。線上首頁 HTTP 200，已恢復舊 LOGO 引用與原配色；舊 LOGO HTTP 200、新 LOGO 引用已移除，下載 PDF HTTP 200 且為 4,980,496 bytes。
 - 保留專案 `AGENTS.md` 與本工作記憶，並記錄這次回復決策。
 
+## 2026-10-07 字標效果
+
+- 首頁左上角與頁尾的 PIXEL STUDIO 字樣加入白字上的低飽和彩色漸層筆刷效果；瀏覽器不支援文字漸層時保留白字，並遵守減少動態效果設定。
+- 已以本機 Chrome 畫面檢視首頁頂端與整頁；字標漸層兼顧白字辨識度，且靜態降級仍可讀。
+
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
 ## 驗證與部署

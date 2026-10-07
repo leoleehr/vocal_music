@@ -24,5 +24,17 @@ body::before{display:none}a{color:var(--amber)}
 .home .lesson .q{font-size:14px}.home .lesson .songs{font-size:12px}.home .lesson .links a{font-size:13px}.home .survey-link{font-size:12px;min-height:44px}.home .feature span{font-size:13px}.home .feature-link{font-size:12px;min-height:44px;padding-top:10px}.home .sec-head p{font-size:14px}.text-link{min-height:44px;display:inline-flex;align-items:center}.footer-main a{min-height:44px;display:inline-flex;align-items:center}
 .pb-box{background:#181c17;border-color:var(--line-2);border-radius:6px}.pb-box input{background:#101210;border-radius:3px}.pb-box input:focus{border-color:var(--amber)}.pb-box button{border-radius:3px}.pb-save{background:var(--amber);color:#17200f}.pb-chip.icon.empty svg{box-shadow:0 0 0 2px #d3ed8970}.pb-box .pb-note{color:var(--muted)}.pb-reason{color:var(--muted)}
 @keyframes voice-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+
+/* 白色品牌字內帶一層淡彩筆刷，呼應原有彩色字標 */
+.brand-en,.footer-word{color:#fff}
+@supports (-webkit-background-clip:text){
+  .brand-en,.footer-word{
+    background-image:linear-gradient(90deg,rgba(255,255,255,.78),rgba(255,255,255,.62) 42%,rgba(255,255,255,.48) 54%,rgba(255,255,255,.7) 68%,rgba(255,255,255,.82)),linear-gradient(100deg,#e8412b,#e2407f,#9a5fd0,#2f5fc4,#45b3e6,#6cbb4b,#e3d83a,#e8412b);
+    background-size:100% 100%,260% 100%;background-position:0 0,0% 50%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    animation:pixel-type-wash 14s ease-in-out infinite alternate
+  }
+}
+@keyframes pixel-type-wash{to{background-position:0 0,100% 50%}}
+@media(prefers-reduced-motion:reduce){.brand-en,.footer-word{animation:none!important}}
 @media(max-width:599px){.voice-controls button{min-height:44px}.voice-controls input{height:32px}.topbar .pb-chip{min-width:40px;min-height:40px;justify-content:center}.sv-card{padding:18px}.sv-item{min-height:80px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
