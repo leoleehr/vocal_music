@@ -91,6 +91,14 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 驗證：22 張 1440px 截圖檢查；iframe 稽核 320／390／768／1440px 無橫向溢出；`node --check assets/interact.js`、`git diff --check` 通過。真實麥克風下的警笛滑音尚未實測。
 - 部署：commit `6e6131c`（連同先前未推送的 `81e29fb` About 文案、`b9aabef`）已推送至 `main`；GitHub Pages workflow `37646114337` 成功。線上第三堂投影片、首頁與 `assets/interact.js` HTTP 200，首頁含第三堂投影片連結，線上腳本含 `.siren`。
 
+## 2026-10-08 講義錯字與三份同步
+
+- 查證 2020 年原始講義（OneDrive `02.畫素音樂工作坊/2020 亞東吉他流行歌唱班` 的 PDF 與 .doc）：「嗉嘴」「圓攟」「茶子蛋」「摧耳」都不在原文，是 2026-10-05 擴寫時產生；原文為「喉腔舒服自然的打開，儼如打呵欠的動作」。
+- 依使用者確認改為「打哈欠時喉腔打開」「嘴張很大但喉腔沒有打開」「嘴唇圓攏往前」。
+- Claude Doc 原稿（rev 56）、`docs/course-handbook.md`、`docs/vocal-class-handbook.pdf`（33 頁，含暖金黃配色）三份同步：補上先前只改 md 的茄子蛋、摀耳、三大要素用詞、第一到三堂投影片編號說明、第零號錄音「下載保存」、第三堂互動表（新增第 15 張共鳴地圖、角色輪替改第 16 張）。
+- 第一堂第 18 張提示改為「錄完請下載保存，也可以按『上傳給老師』」。
+- 第四到六堂規劃已獲同意：第零號錄音同時支援手機選檔與老師 Drive；第五堂保留三句話頁；先做第四堂。
+
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
 ## 驗證與部署
