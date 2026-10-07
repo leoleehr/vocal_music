@@ -340,3 +340,72 @@ table.mini-scale th{width:5.5em;text-align:left}
 @media (max-width:900px),(orientation:portrait) and (max-width:1100px){
   .score.five .score-grid{grid-template-columns:1fr 1fr}
 }
+
+/* ===== 情緒地圖、音域測量、自定調、第零號對照（第五、六堂） ===== */
+.dm-grid{display:grid;gap:6px;margin-bottom:10px}
+.dm-head{font-size:14px;color:var(--muted);padding:4px 8px}
+.dm-lv{text-align:center;font-family:var(--display);font-weight:700;color:var(--ink);font-size:18px}
+.dm-sec{display:flex;align-items:center;font-weight:700;font-size:17px;padding:0 8px}
+.dm-cell{font:inherit;font-family:var(--display);font-size:24px;font-weight:700;min-height:52px;border:1px solid var(--line-2);background:var(--card);color:var(--ink);border-radius:var(--r-sm);cursor:pointer}
+.dm-cell:hover{border-color:var(--amber)}
+.dm-cell.win{background:var(--amber);color:#17150f;border-color:var(--amber)}
+.dm-res{font-size:16px;color:var(--amber);margin-bottom:8px;min-height:1.5em}
+.rg-read{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.rg-read>div{background:var(--card-2);border-radius:var(--r-sm);padding:8px 12px}
+.rg-read small,.rg-note small{display:block;font-size:13px;color:var(--muted)}
+.rg-read b{font-family:var(--display);font-size:26px;font-variant-numeric:tabular-nums}
+.rg-ref{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.rg-ref .btn{font-size:24px;min-width:64px;min-height:64px}
+.rg-note{flex:1;text-align:center}
+.rg-note b{display:block;font-family:var(--display);font-size:44px;line-height:1.1}
+.range.hit .rg-note b{color:var(--green)}
+.rg-sung{font-size:15px;color:var(--muted)}
+.rg-state{font-size:15px;margin-top:10px}
+.tp-form{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.tp-form label{display:flex;flex-direction:column;gap:6px;font-size:15px;color:var(--muted)}
+.tp-form select{font:inherit;font-size:18px;background:#0d0d10;color:var(--ink);border:1px solid var(--line-2);border-radius:var(--r-sm);padding:10px 12px}
+.tp-out table{width:100%}
+.tp-out tr.main td{color:var(--amber)}
+.tp-note{font-size:14px;margin:8px 0}
+.zero{display:flex;flex-direction:column;gap:10px}
+.zr-pick{position:relative;overflow:hidden;align-self:flex-start}
+.zr-pick input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.zero audio{width:100%;display:none}
+.zero.has audio{display:block}
+.zr-note{font-size:14px}
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){
+  .dm-cell{min-height:44px;font-size:18px}
+  .dm-sec{font-size:14px}
+  .rg-read b{font-size:18px}
+  .rg-note b{font-size:32px}
+  .tp-form{grid-template-columns:1fr}
+  .tp-out table{font-size:13px}
+  .range .btn-row .btn{flex:1 1 auto}
+}
+.exit.notes{grid-template-columns:1fr 1fr;gap:10px 18px}
+.exit.notes .btn-row{grid-column:1/-1}
+.exit.notes textarea{min-height:52px}
+.clean-ol{margin:0;padding-left:1.4em;display:grid;gap:10px}
+.clean-ol li{font-size:20px;line-height:1.5}
+.formula{font-size:22px;font-weight:700;text-align:center;color:var(--amber)}
+.song-chips{display:flex;flex-wrap:wrap;gap:10px;align-content:flex-start}
+.kbd-map{margin:0;display:flex;justify-content:center}
+.kbd-map svg{width:100%;max-width:820px;height:auto}
+.kbd-map .wk{fill:#f3f0e9;stroke:#09090b;stroke-width:2}
+.kbd-map .wk.hl{fill:#e9d98a}
+.kbd-map .bk{fill:#18181e}
+.kbd-map .n{font:700 16px var(--display);fill:#17150f;text-anchor:middle}
+.kbd-map .lbl{font:700 18px var(--display);fill:var(--ink);text-anchor:middle}
+.kbd-map .br{stroke:var(--amber);stroke-width:4;stroke-linecap:round}
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){
+  .exit.notes{grid-template-columns:1fr}
+  .clean-ol li{font-size:16px}
+  .formula{font-size:17px}
+}
+.poll.cols2{display:grid;grid-template-columns:1fr 1fr;column-gap:18px}
+.poll.cols2 .poll-foot{grid-column:1/-1}
+.poll.wide-label .poll-hit{grid-template-columns:230px 1fr 40px}
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){
+  .poll.cols2{grid-template-columns:1fr}
+  .poll.wide-label .poll-hit{grid-template-columns:10em 1fr 26px}
+}
