@@ -409,3 +409,46 @@ table.mini-scale th{width:5.5em;text-align:left}
   .poll.cols2{grid-template-columns:1fr}
   .poll.wide-label .poll-hit{grid-template-columns:10em 1fr 26px}
 }
+
+/* ===== 共鳴觀測站（第三堂） ===== */
+.rl-read{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
+.rl-read>div{background:var(--card-2);border-radius:var(--r-sm);padding:8px 12px}
+.rl-read small{display:block;font-size:13px;color:var(--muted)}
+.rl-read b{font-family:var(--display);font-size:28px;line-height:1.15;font-variant-numeric:tabular-nums;margin-right:6px}
+.rl-hz{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.rl-bar{display:block;height:6px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;margin-top:4px}
+.rl-bar i{display:block;height:100%;width:0;background:var(--navy);transition:width .06s}
+.rl-cv{width:100%;height:210px;display:block;background:#0b0b0e;border:1px solid var(--line);border-radius:var(--r);touch-action:none;cursor:crosshair}
+.rl-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;margin:6px 0 10px}
+.rl-legend .lg-pitch{color:var(--amber);font-weight:700}
+.rl-legend .lg-vol{color:var(--navy);font-weight:700}
+.rl-tag{margin-top:8px}
+.rl-main .tag{border-color:var(--zc)}
+.rl-main .tag:not(:disabled){color:var(--zc);font-weight:700}
+.rl-main .tag:disabled{opacity:.45;cursor:default}
+.rl-marks{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:4px;font-size:14px;font-variant-numeric:tabular-nums}
+.rl-marks li{border-left:4px solid var(--zc);padding:3px 8px;background:var(--card-2);border-radius:0 6px 6px 0}
+.rl-marks li b{color:var(--zc)}
+.rl-del{font:inherit;background:none;border:0;color:var(--muted);cursor:pointer;float:right}
+.rl-sum{font-size:15px;color:var(--ink);margin:8px 0 0;min-height:1.4em}
+.rl-sum b{color:var(--amber)}
+.rl-out{margin-top:10px}
+.resolab .wav{display:none;text-decoration:none}
+.resolab.has .wav{display:inline-block}
+.resolab .rl-audio{display:none}
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){
+  .rl-read b{font-size:20px}
+  .rl-cv{height:170px}
+  .resolab .btn-row .btn{flex:1 1 auto}
+}
+.resolab .rl-read b{font-size:22px}
+.resolab .rl-read>div{padding:6px 10px}
+.resolab .rl-cv{height:180px}
+.resolab .rl-marks li{font-size:13px;line-height:1.45;margin:0}
+.resolab .rl-sum{font-size:14px}
+.resolab .btn-row{gap:6px}
+.resolab .rl-main,.resolab .rl-tag,.resolab .rl-out{margin-top:6px}
+.resolab .btn{padding:6px 12px;font-size:14px}
+.resolab .rl-cv{height:165px}
+.rl-sep{width:1px;align-self:stretch;background:var(--line-2);margin:0 4px}
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){.rl-sep{display:none}}

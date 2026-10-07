@@ -1,7 +1,7 @@
 /* ===== Pixel Studio 課堂互動元件 =====
  * 互動狀態存在這台裝置的瀏覽器（localStorage）；作答與成果經 backend.js 送到課程試算表。
  * 元件以 class 宣告在投影片中，載入時自動建立：
- *   .quiz .poll .reveal .picker .score .wavelab .pitch .siren .stopwatch .mirror .dynmap .range .transpose .zero
+ *   .quiz .poll .reveal .picker .score .wavelab .pitch .siren .resolab .stopwatch .mirror .dynmap .range .transpose .zero
  *   .rhythm-game .breath .recorder
  *   .order .flips .phase .lyricmark .exit .log7 .qr   以及 .checks[data-id]
  */
@@ -328,6 +328,162 @@
     p.querySelector('.clear').onclick = function () { hist = []; marks = []; last = null; lo = hi = brk = null; LS.set(key, null); show(); draw(); st.textContent = '已清除，按「開始滑音」再試一次'; };
     if (saved) { lo = saved.lo; hi = saved.hi; brk = saved.brk; st.textContent = '上次紀錄：' + nm(lo) + ' 到 ' + nm(hi) + (brk !== null ? '，換聲點 ' + nm(brk) : ''); }
     show(); draw(); window.addEventListener('resize', draw); onLeave(p, stop);
+  });
+
+  /* ---------- 共鳴觀測站：音高與音量即時曲線，錄下後標記共鳴腔體 ---------- */
+  $$('.resolab').forEach(function (p) {
+    var MAXS = parseInt(p.getAttribute('data-max'), 10) || 20, LO = 40, HI = 84, DBLO = -60, DBHI = 0, FPS_MS = 33;
+    var ZONES = [{ k: 'chest', name: '胸腔', col: '#45b3e6' }, { k: 'mouth', name: '口腔', col: '#C7AF4A' }, { k: 'head', name: '頭腔', col: '#ec4a36' }];
+    var key = 'resolab-' + LESSON, saved = LS.get(key, null);
+    var data = saved ? saved.data : [], marks = saved ? saved.marks : [], sel = null, drag = null;
+    var an = null, raf = 0, t0 = 0, last = 0, rec = null, chunks = [], blob = null, url = '', recent = [], playing = false;
+    p.innerHTML = '<div class="rl-read"><div><small>音高</small><b class="rl-note">--</b><span class="rl-hz"></span></div><div><small>音量</small><b class="rl-db">--</b><span class="rl-bar"><i></i></span></div><div><small>錄製</small><b class="rl-time">0.0 秒</b></div></div>' +
+      '<canvas class="rl-cv"></canvas><div class="rl-legend"><span class="lg-pitch">— 音高</span><span class="lg-vol">▇ 音量</span><span class="muted">錄完後在圖上拖曳選一段，再按腔體按鈕標記</span></div>' +
+      '<div class="btn-row rl-main"><button type="button" class="btn primary go">● 開始錄製</button><button type="button" class="btn play" disabled>▶ 播放</button><button type="button" class="btn clear">清除</button><span class="rl-sep"></span>' + ZONES.map(function (z) { return '<button type="button" class="btn tag" data-z="' + z.k + '" disabled style="--zc:' + z.col + '">標記為' + z.name + '</button>'; }).join('') + '</div>' +
+      '<ul class="rl-marks"></ul><p class="rl-sum"></p>' +
+      '<div class="btn-row rl-out"><button type="button" class="btn png">下載觀測圖</button><a class="btn wav" download>下載錄音</a><button type="button" class="btn primary up">上傳給老師</button></div><audio class="rl-audio"></audio>';
+    var cv = p.querySelector('canvas'), go = p.querySelector('.go'), play = p.querySelector('.play'), au = p.querySelector('audio'), wav = p.querySelector('.wav');
+    var noteEl = p.querySelector('.rl-note'), hzEl = p.querySelector('.rl-hz'), dbEl = p.querySelector('.rl-db'), barEl = p.querySelector('.rl-bar i'), timeEl = p.querySelector('.rl-time');
+    var buf = new Float32Array(2048);
+    function zoneOf(k) { return ZONES.filter(function (z) { return z.k === k; })[0]; }
+    function dur() { return Math.max(MAXS, data.length ? data[data.length - 1].t / 1000 : 0); }
+    function geo() {
+      var c = canvasFit(cv), L = 42, R = 40, T = 10, B = 22, w = c.w - L - R, h = c.h - T - B;
+      return { c: c, L: L, T: T, w: w, h: h, X: function (t) { return L + t / dur() * w; }, Tm: function (x) { return Math.max(0, Math.min(dur(), (x - L) / w * dur())); }, Yp: function (m) { return T + h - (m - LO) / (HI - LO) * h; }, Yv: function (d) { return T + h - (d - DBLO) / (DBHI - DBLO) * h; } };
+    }
+    function stats(a, b) {
+      var s = data.filter(function (d) { return d.t / 1000 >= a && d.t / 1000 <= b; });
+      var ps = s.filter(function (d) { return d.m !== null; }).map(function (d) { return d.m; }).sort(function (x, y) { return x - y; });
+      var vs = s.filter(function (d) { return d.m !== null; }).map(function (d) { return d.db; });
+      if (!ps.length) return null;
+      var q = function (r) { return ps[Math.min(ps.length - 1, Math.floor(r * (ps.length - 1)))]; };
+      return { lo: q(0.1), hi: q(0.9), mid: q(0.5), db: vs.reduce(function (x, y) { return x + y; }, 0) / vs.length };
+    }
+    function draw(head) {
+      var g = geo(), x = g.c.x;
+      x.clearRect(0, 0, g.c.w, g.c.h);
+      x.font = '11px ' + css('--display'); x.textBaseline = 'middle';
+      for (var o = 48; o <= HI; o += 12) { x.strokeStyle = 'rgba(255,255,255,.07)'; x.beginPath(); x.moveTo(g.L, g.Yp(o)); x.lineTo(g.L + g.w, g.Yp(o)); x.stroke(); x.fillStyle = 'rgba(255,255,255,.45)'; x.textAlign = 'right'; x.fillText(nameOf(o).name, g.L - 6, g.Yp(o)); }
+      x.textAlign = 'left'; x.fillStyle = 'rgba(69,179,230,.7)';
+      [-60, -40, -20, 0].forEach(function (d) { x.fillText(d + ' dB', g.L + g.w + 4, Math.min(g.T + g.h - 4, Math.max(g.T + 6, g.Yv(d)))); });
+      x.textAlign = 'center'; x.fillStyle = 'rgba(255,255,255,.4)';
+      for (var s = 0; s <= dur(); s += 5) x.fillText(s + 's', g.X(s), g.T + g.h + 12);
+      marks.forEach(function (mk) { var z = zoneOf(mk.z); x.fillStyle = z.col + '2e'; x.fillRect(g.X(mk.a), g.T, g.X(mk.b) - g.X(mk.a), g.h); x.fillStyle = z.col; x.font = '700 13px "Noto Sans TC",sans-serif'; x.fillText(z.name, (g.X(mk.a) + g.X(mk.b)) / 2, g.T + 12); x.font = '11px ' + css('--display'); });
+      if (sel) { x.fillStyle = 'rgba(255,255,255,.12)'; x.fillRect(g.X(sel.a), g.T, g.X(sel.b) - g.X(sel.a), g.h); x.strokeStyle = 'rgba(255,255,255,.6)'; x.setLineDash([4, 4]); x.strokeRect(g.X(sel.a), g.T, g.X(sel.b) - g.X(sel.a), g.h); x.setLineDash([]); }
+      // 音量：底部的填色區
+      x.fillStyle = 'rgba(69,179,230,.28)'; x.beginPath(); x.moveTo(g.X(0), g.T + g.h);
+      data.forEach(function (d) { x.lineTo(g.X(d.t / 1000), g.Yv(Math.max(DBLO, d.db))); });
+      if (data.length) x.lineTo(g.X(data[data.length - 1].t / 1000), g.T + g.h);
+      x.closePath(); x.fill();
+      // 音高：線
+      x.strokeStyle = css('--amber'); x.lineWidth = 3; x.beginPath(); var on = false;
+      data.forEach(function (d) { if (d.m === null || d.m < LO || d.m > HI) { on = false; return; } var X = g.X(d.t / 1000), Y = g.Yp(d.m); on ? x.lineTo(X, Y) : x.moveTo(X, Y); on = true; });
+      x.stroke(); x.lineWidth = 1;
+      if (head !== undefined) { x.strokeStyle = '#fff'; x.beginPath(); x.moveTo(g.X(head), g.T); x.lineTo(g.X(head), g.T + g.h); x.stroke(); }
+    }
+    function listMarks() {
+      var ul = p.querySelector('.rl-marks');
+      ul.innerHTML = marks.map(function (mk, i) {
+        var z = zoneOf(mk.z), st = stats(mk.a, mk.b);
+        return '<li style="--zc:' + z.col + '"><b>' + z.name + '</b> ' + mk.a.toFixed(1) + '–' + mk.b.toFixed(1) + ' 秒　' + (st ? '音高 ' + nameOf(st.lo).name + '–' + nameOf(st.hi).name + '（中位 ' + nameOf(st.mid).name + '）　平均音量 ' + Math.round(st.db) + ' dB' : '這段沒有偵測到聲音') + ' <button type="button" class="rl-del" data-i="' + i + '" aria-label="刪除標記">×</button></li>';
+      }).join('');
+      $$('.rl-del', ul).forEach(function (b) { b.onclick = function () { marks.splice(+b.getAttribute('data-i'), 1); save(); refresh(); }; });
+      var ch = marks.filter(function (m) { return m.z === 'chest'; })[0], hd = marks.filter(function (m) { return m.z === 'head'; })[0], sum = p.querySelector('.rl-sum');
+      var a = ch && stats(ch.a, ch.b), b = hd && stats(hd.a, hd.b);
+      if (a && b) {
+        var dm = Math.round(b.mid - a.mid), dd = Math.round(b.db - a.db);
+        sum.innerHTML = '胸腔 → 頭腔：音高 <b>' + (dm >= 0 ? '+' : '') + dm + ' 半音</b>（' + nameOf(a.mid).name + ' → ' + nameOf(b.mid).name + '），音量 <b>' + (dd >= 0 ? '+' : '') + dd + ' dB</b>' + (dd < -2 ? '：音高往上，音量明顯變小。' : dd > 2 ? '：音量反而變大，可能還在用胸腔往上推。' : '：音量差不多，試著讓頭腔更放鬆。');
+      } else sum.textContent = marks.length ? '再標記一段胸腔與一段頭腔，就能比較音高與音量的變化。' : '';
+    }
+    function save() { LS.set(key, { data: data, marks: marks }); }
+    function refresh() { listMarks(); draw(); $$('.tag', p).forEach(function (b) { b.disabled = !sel || !data.length; }); }
+    function loop() {
+      raf = requestAnimationFrame(loop);
+      var now = performance.now(); if (now - last < FPS_MS) return; last = now;
+      an.getFloatTimeDomainData(buf);
+      var r = 0; for (var i = 0; i < buf.length; i++) r += buf[i] * buf[i]; r = Math.sqrt(r / buf.length);
+      var db = r > 0 ? Math.max(DBLO, 20 * Math.log10(r)) : DBLO;
+      var f = detectPitch(buf, ac().sampleRate), m = f > 0 ? midiOf(f) : null;
+      recent.push(m); if (recent.length > 3) recent.shift();
+      var ok = recent.filter(function (v) { return v !== null; }).sort(function (a, b) { return a - b; });
+      var mm = ok.length === 3 ? ok[1] : null, t = now - t0;
+      data.push({ t: Math.round(t), m: mm === null ? null : +mm.toFixed(2), db: +db.toFixed(1) });
+      noteEl.textContent = mm === null ? '--' : nameOf(mm).name; hzEl.textContent = mm === null ? '' : Math.round(freqOf(mm)) + ' Hz';
+      dbEl.textContent = Math.round(db) + ' dB'; barEl.style.width = Math.max(0, (db - DBLO) / (DBHI - DBLO) * 100) + '%';
+      timeEl.textContent = (t / 1000).toFixed(1) + ' 秒';
+      draw();
+      if (t >= MAXS * 1000) stop();
+    }
+    function stop() {
+      cancelAnimationFrame(raf); raf = 0;
+      if (rec && rec.state !== 'inactive') rec.stop();
+      if (an) { an = null; micStop(); }
+      go.textContent = '● 重新錄製'; save(); refresh();
+    }
+    go.onclick = function () {
+      if (raf) return stop();
+      micStart().then(function (a) {
+        an = a; data = []; marks = []; sel = null; recent = []; t0 = performance.now(); last = 0; blob = null;
+        p.classList.remove('has');
+        if (window.MediaRecorder) {
+          var type = MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
+          rec = new MediaRecorder(mic.stream, { mimeType: type }); chunks = [];
+          rec.ondataavailable = function (e) { if (e.data.size) chunks.push(e.data); };
+          rec.onstop = function () {
+            blob = new Blob(chunks, { type: type }); if (url) URL.revokeObjectURL(url); url = URL.createObjectURL(blob);
+            au.src = url; wav.href = url; wav.download = '共鳴轉換_' + stamp() + (type === 'audio/webm' ? '.webm' : '.m4a');
+            p.classList.add('has'); play.disabled = false;
+          };
+          rec.start();
+        }
+        go.textContent = '■ 停止'; refresh(); loop();
+      }).catch(function () { timeEl.textContent = '無法使用麥克風'; });
+    };
+    function stamp() { var d = new Date(); return d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') + '_' + String(d.getHours()).padStart(2, '0') + String(d.getMinutes()).padStart(2, '0'); }
+    play.onclick = function () {
+      if (playing) { au.pause(); return; }
+      au.currentTime = sel ? sel.a : 0; au.play(); playing = true; play.textContent = '■ 停止播放';
+      (function tick() { if (!playing) return; draw(au.currentTime); if (sel && au.currentTime >= sel.b) { au.pause(); return; } requestAnimationFrame(tick); })();
+    };
+    au.onpause = au.onended = function () { playing = false; play.textContent = '▶ 播放'; draw(); };
+    function px(e) { var r = cv.getBoundingClientRect(); return e.clientX - r.left; }
+    cv.addEventListener('pointerdown', function (e) { if (raf || !data.length) return; var g = geo(); drag = g.Tm(px(e)); sel = { a: drag, b: drag }; cv.setPointerCapture(e.pointerId); draw(); });
+    cv.addEventListener('pointermove', function (e) { if (drag === null) return; var t = geo().Tm(px(e)); sel = { a: Math.min(drag, t), b: Math.max(drag, t) }; draw(); });
+    cv.addEventListener('pointerup', function () { if (drag === null) return; drag = null; if (sel && sel.b - sel.a < 0.2) sel = null; refresh(); });
+    $$('.tag', p).forEach(function (b) {
+      b.onclick = function () { if (!sel) return; marks = marks.filter(function (m) { return m.b <= sel.a || m.a >= sel.b; }); marks.push({ z: b.getAttribute('data-z'), a: +sel.a.toFixed(2), b: +sel.b.toFixed(2) }); marks.sort(function (x, y) { return x.a - y.a; }); sel = null; save(); refresh(); };
+    });
+    p.querySelector('.clear').onclick = function () { if (raf) stop(); data = []; marks = []; sel = null; blob = null; p.classList.remove('has'); play.disabled = true; go.textContent = '● 開始錄製'; save(); refresh(); timeEl.textContent = '0.0 秒'; };
+    function snapshot() { // 觀測圖 PNG：標題、曲線、標記與比較結果
+      var g = geo(), out = document.createElement('canvas'), r = window.devicePixelRatio || 1, W = g.c.w, H = g.c.h + 90;
+      out.width = W * r; out.height = H * r; var x = out.getContext('2d'); x.scale(r, r);
+      x.fillStyle = '#101210'; x.fillRect(0, 0, W, H);
+      x.fillStyle = '#f3f0e9'; x.font = '700 16px "Noto Sans TC",sans-serif'; x.textBaseline = 'top';
+      var who = (window.PixelBackend && window.PixelBackend.profile && window.PixelBackend.profile()) || {};
+      x.fillText('共鳴轉換觀測圖　' + (who.name || '') + '　' + stamp().replace('_', ' '), 12, 10);
+      x.drawImage(cv, 0, 36, W, g.c.h);
+      x.font = '13px "Noto Sans TC",sans-serif'; x.fillStyle = '#C7AF4A';
+      var lines = $$('.rl-marks li', p).map(function (li) { return li.textContent.replace('×', '').trim(); }).concat([p.querySelector('.rl-sum').textContent]).filter(Boolean);
+      lines.slice(0, 3).forEach(function (l, i) { x.fillText(l, 12, 42 + g.c.h + i * 17); });
+      return out;
+    }
+    p.querySelector('.png').onclick = function () {
+      if (!data.length) { say('先錄一段共鳴轉換', 'warn'); return; }
+      var a = document.createElement('a'); a.href = snapshot().toDataURL('image/png'); a.download = '共鳴觀測圖_' + stamp() + '.png'; a.click();
+    };
+    p.querySelector('.up').onclick = function () {
+      if (!data.length) { say('先錄一段共鳴轉換', 'warn'); return; }
+      var summary = { marks: marks.map(function (mk) { var st = stats(mk.a, mk.b); return { zone: zoneOf(mk.z).name, from: mk.a, to: mk.b, low: st && nameOf(st.lo).name, high: st && nameOf(st.hi).name, db: st && Math.round(st.db) }; }), summary: p.querySelector('.rl-sum').textContent };
+      report(p, 'resonance', { item: '共鳴轉換', result: summary.marks.map(function (m) { return m.zone + ' ' + (m.low || '--') + '–' + (m.high || '--') + ' ' + (m.db === null ? '' : m.db + ' dB'); }).join('／') || '未標記', detail: summary });
+      if (!window.PixelBackend) return;
+      snapshot().toBlob(function (img) {
+        window.PixelBackend.upload(img, { label: '共鳴觀測圖', seconds: '', filename: '共鳴觀測圖_' + stamp() + '.png', slide: slideNo(p) }).then(function () {
+          if (blob) window.PixelBackend.upload(blob, { label: '共鳴轉換錄音', seconds: Math.round(dur()), filename: wav.download, slide: slideNo(p) });
+        });
+      }, 'image/png');
+    };
+    window.addEventListener('resize', function () { draw(); });
+    refresh(); onLeave(p, function () { if (raf) stop(); au.pause(); });
   });
 
   /* ---------- 碼表：繞口令計時，保留每一位的成績 ---------- */
