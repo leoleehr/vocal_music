@@ -22,19 +22,14 @@ body{font-family:"Noto Sans TC",sans-serif;color:var(--ink);font-size:10.2pt;lin
 a{color:inherit;text-decoration:none}
 /* 螢幕預覽 */
 @media screen{body{background:#e9e6e0;padding:24px 0}.sheet{width:210mm;margin:0 auto 24px;background:#fff;box-shadow:0 10px 40px rgba(0,0,0,.12);padding:20mm 17mm}.cover{padding:0!important}.toolbar{position:sticky;top:0;z-index:5;display:flex;gap:10px;justify-content:center;padding:10px;margin:-24px 0 24px;background:rgba(28,28,33,.9)}.toolbar a,.toolbar button{font:700 13px "Noto Sans TC";color:#102126;background:#C7AF4A;border:0;border-radius:10px;padding:8px 16px;cursor:pointer}.toolbar a.ghost{background:#33333b;color:#fff}}
-@media print{.toolbar{display:none}.sheet{width:auto;margin:0;padding:0;box-shadow:none}.logo-render::after{animation:none!important;background-position:50% 50%}}
+@media print{.toolbar{display:none}.sheet{width:auto;margin:0;padding:0;box-shadow:none}}
 
 /* 封面 */
-.cover{position:relative;height:297mm;background:#09090b;color:#f3f0e9;overflow:hidden;break-after:page;display:flex;flex-direction:column;justify-content:space-between;padding:28mm 22mm 22mm!important}
+.cover{position:relative;height:297mm;background:#000;color:#f3f0e9;overflow:hidden;break-after:page;display:flex;flex-direction:column;justify-content:space-between;padding:28mm 22mm 22mm!important}
 .cover::before{content:"";position:absolute;left:0;right:0;top:0;height:3mm;background:var(--rainbow)}
 .cover::after{content:"";position:absolute;right:-30mm;bottom:-30mm;width:150mm;height:150mm;opacity:.22;background:linear-gradient(135deg,#e8412b,#e2407f 18%,#8a4fc0 34%,#2f5fc4 50%,#45b3e6 62%,#6cbb4b 76%,#d6e03a 90%,#f4a62a);
   -webkit-mask:repeating-linear-gradient(90deg,#000 0 9mm,transparent 9mm 10.4mm),repeating-linear-gradient(#000 0 9mm,transparent 9mm 10.4mm),radial-gradient(circle at 70% 70%,#000 0 25%,transparent 70%);-webkit-mask-composite:source-in,source-in}
-.cover .logo{width:86mm}
-.logo-render{position:relative;display:block;isolation:isolate}
-.logo-render img{display:block;width:100%;height:auto;opacity:0}
-.logo-render::before{content:"";position:absolute;inset:0;z-index:1;background:var(--rainbow);background-size:100% 100%;-webkit-mask:var(--logo) center/contain no-repeat;mask:var(--logo) center/contain no-repeat}
-.logo-render::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.8) 47%,rgba(255,236,200,.55) 53%,transparent 62%);background-size:250% 100%;-webkit-mask:var(--logo) center/contain no-repeat;mask:var(--logo) center/contain no-repeat;mix-blend-mode:screen;opacity:.75;animation:logo-shine 5.5s linear infinite}
-@keyframes logo-shine{0%{background-position:120% 0}100%{background-position:-120% 0}}
+.logo-new{display:block;width:164mm;height:auto;flex:none}
 .cover .brandblock{display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:1}
 .cover .brandblock .cn{font-family:"Noto Sans TC",sans-serif;font-weight:500;font-size:13pt;letter-spacing:.3em;padding-left:.3em;color:#f3f0e9;margin-top:5mm}
 .cover .mid{position:relative;z-index:1}
@@ -92,7 +87,7 @@ a{color:inherit;text-decoration:none}
 .song span{display:block;font-size:7.8pt;color:var(--muted);line-height:1.5}
 .song a{font-family:var(--display);font-size:7.8pt;color:#c0392b}
 .end{break-before:page;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;height:240mm;color:var(--muted)}
-.end .endlogo{width:78mm;height:auto;margin-bottom:8mm}
+.end .endlogo{margin-bottom:8mm}
 .end .endcn{font-size:16pt;font-weight:700;letter-spacing:.3em;color:var(--ink);margin-bottom:2mm}
 </style>
 </head>
@@ -100,7 +95,7 @@ a{color:inherit;text-decoration:none}
 <div class="toolbar"><button type="button" onclick="window.print()">列印／另存 PDF</button><a class="ghost" href="docs/vocal-class-handbook.pdf" download="流行歌唱班_講義與教案.pdf">下載 PDF</a><a class="ghost" href="handbook.html">回網頁版</a></div>
 
 <div class="sheet cover">
-  <div class="brandblock"><span class="logo logo-render" style="--logo:url('assets/logo-color-dark-notag.png')"><img src="assets/logo-color-dark-notag.png" alt="PIXEL STUDIO"></span><div class="cn">畫素音樂工作坊</div></div>
+  <div class="brandblock"><img class="logo-new" src="assets/pixel-studio-67-dark.png" alt="pixel studio."><div class="cn">畫素音樂工作坊</div></div>
   <div class="mid">
     <div class="eyebrow">VOCAL CLASS HANDBOOK</div>
     <h1>流行歌唱班<br>講義與教案</h1>
@@ -121,7 +116,7 @@ a{color:inherit;text-decoration:none}
 
 <main class="sheet md" id="content"></main>
 
-<div class="sheet end"><span class="endlogo logo-render" style="--logo:url('assets/logo-color-dark-notag.png')"><img src="assets/logo-color-dark-notag.png" alt="PIXEL STUDIO"></span><p class="endcn">畫素音樂工作坊</p><p>Pixel Studio・Established Since 2008</p></div>
+<div class="sheet end"><img class="logo-new endlogo" src="assets/pixel-studio-67-light.png" alt="pixel studio."><p class="endcn">畫素音樂工作坊</p><p>Pixel Studio・Established Since 2008</p></div>
 
 <script src="assets/songs.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>

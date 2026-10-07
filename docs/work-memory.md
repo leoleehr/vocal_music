@@ -66,6 +66,17 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 黃色對深底對比為 8.65:1，深色按鈕字對黃色底為 8.08:1；`node --check assets/interact.js`、`node --check assets/studio.js` 與 `git diff --check` 通過。
 - commit `9ab95db2c31e873265b21208e20da05d68e5dc79` 已推送至 `main`。GitHub Pages deployment `6911555334`（workflow `37630670974`）狀態成功；線上首頁 HTTP 200，帶版本參數重新讀取的 `assets/studio.css` 已含 `#C7AF4A` 且不再含舊藍青色。列印講義 HTML 的強調色已更新；PDF 重新產生遇到瀏覽器非同步載入失敗，已保留原有 33 頁 PDF，待後續重新產生。
 
+## 2026-10-07 首頁關於文案
+
+- 首頁 About Pixel Studio 欄位改為使用者提供的完整文字，包含成立年份、業務範圍、聲音藝術理念與核心 slogan。尚未 commit 或部署。
+- `git diff --check` 通過；確認原本字標與頁尾 slogan 保持不變。
+
+## 2026-10-07 講義新版 Logo
+
+- 講義封面與末頁換成使用者提供的 `pixel-studio-67` 新字標；深色底、淺色底來源各自轉為透明背景版本，供兩種底色正常呈現。
+- `handbook-print.html` 與下載講義 PDF 同步更新；保留原有內容與 33 頁結構。已渲染檢查封面與末頁，舊的雙行方塊 Logo 已替換為新版小寫彩色字標。
+- 尚未 commit 或部署；首頁 About 文案修改也仍在工作目錄。
+
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
 ## 驗證與部署
