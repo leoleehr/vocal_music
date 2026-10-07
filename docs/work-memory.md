@@ -31,6 +31,17 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 回復 commit `8a61cc24e6fba0d849ff58587c0a94154b7f2310` 已推送並部署成功；GitHub Actions run `37592297268` 結果為 success。線上首頁 HTTP 200，已恢復舊 LOGO 引用與原配色；舊 LOGO HTTP 200、新 LOGO 引用已移除，下載 PDF HTTP 200 且為 4,980,496 bytes。
 - 保留專案 `AGENTS.md` 與本工作記憶，並記錄這次回復決策。
 
+## 2026-10-07 主介面配色與首頁標題
+
+- 主介面操作與強調色改為沉穩藍青 `#6FAFBC`，按鈕前景採深色；首頁、問卷、學員資料、歌曲播放器、課堂投影片與互動元件同步換色。彩虹 Logo 與聲紋保留原本彩虹配色；列印講義與 33 頁 PDF 一併更新。
+- 首頁 `01 / THE LEARNING JOURNEY` 標題更新為「一步一步，聽見與唱出自己的聲音。」；主標文案更新為「讓你的聲音，成為你的樣貌。」
+- `Find your voice.` 改用粉紫、電藍與青綠的霓虹刷染漸層，柔光與流動效果支援減少動態設定。
+- Chrome 檢視 1440px、390px、320px 首頁畫面；`git diff --check` 通過。尚未提交或部署。
+## 2026-10-07 關於文案與字標裁切
+
+- 首頁「關於」欄位更新為 `About Pixel Studio：`、核心 slogan `We Perform the Pixel of Music` 與使用者指定的工作坊介紹文字。
+- 左上及頁尾英文彩色字標降低負字距並增加右側留白，避免註冊標記與句點被裁切；桌面與 390px 手機版 Chrome 預覽已檢查。
+- `git diff --check` 與 `node --check assets/studio.js` 通過；尚未提交或部署。
 ## 2026-10-07 彩虹聲紋與彩色 Logo
 
 - 首頁 `THE SHAPE OF SOUND` 聲紋改為紅、粉、紫、藍、青、綠、黃的循環漸層，色帶持續流動；啟用系統「減少動態效果」時不建立 SVG 動畫。

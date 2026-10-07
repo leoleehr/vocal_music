@@ -311,7 +311,7 @@
       }
       x.fillStyle = 'rgba(255,255,255,.45)'; x.font = '12px "Space Grotesk",sans-serif';
       for (var b = 0; b < 4; b++) x.fillText(String(b + 1), X(b) + 4, 18);
-      if (nowBeat >= 0) { x.fillStyle = 'rgba(244,166,42,.12)'; x.fillRect(X(Math.floor(nowBeat)), 4, w / 4, H - 8); }
+      if (nowBeat >= 0) { x.fillStyle = 'rgba(111,174,187,.12)'; x.fillRect(X(Math.floor(nowBeat)), 4, w / 4, H - 8); }
       var on = RHYTHMS[idx].on, mid = H * 0.42;
       on.forEach(function (b, k) {
         var st = result ? (result.hit[k] ? css('--green') : 'rgba(236,74,54,.85)') : css('--amber');

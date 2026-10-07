@@ -21,7 +21,7 @@
 .sv-head h1{font-size:28px;font-weight:700;letter-spacing:.02em;line-height:1.35;margin-top:4px}
 .sv-head p{color:var(--muted);font-size:15px;margin-top:6px}
 .sv-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin-bottom:12px}
-.sv-card.who{border-color:rgba(244,166,42,.35);background:linear-gradient(120deg,rgba(244,166,42,.08),rgba(244,166,42,.02))}
+.sv-card.who{border-color:rgba(111,174,187,.35);background:linear-gradient(120deg,rgba(111,174,187,.08),rgba(111,174,187,.02))}
 .sv-card.who .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
 .sv-q{font-size:16px;font-weight:700;line-height:1.5;margin-bottom:4px;display:flex;gap:10px}
 .sv-q .n{font-family:var(--display);color:var(--amber);flex:none;min-width:22px}
@@ -68,7 +68,7 @@
 .sv-item small{display:block;font-size:13px;color:var(--muted)}
 .sv-item .st{margin-left:auto;font-size:12px;border-radius:999px;padding:3px 10px;white-space:nowrap;border:1px solid var(--line-2);color:var(--muted)}
 .sv-item .st.done{border-color:rgba(108,187,75,.5);color:var(--green)}
-.sv-notice{font-size:13.5px;color:var(--amber);background:rgba(244,166,42,.08);border:1px solid rgba(244,166,42,.35);border-radius:12px;padding:10px 14px;margin-bottom:14px}
+.sv-notice{font-size:13.5px;color:var(--amber);background:rgba(111,174,187,.08);border:1px solid rgba(111,174,187,.35);border-radius:12px;padding:10px 14px;margin-bottom:14px}
 @media (max-width:860px){
   .sv{padding-top:18px}
   .sv-head h1{font-size:22px}
@@ -123,7 +123,7 @@
     app.innerHTML = '<div class="sv-head"><div class="lh-no">SURVEYS</div><h1>課程問卷</h1><p>每堂課前三天填寫課前問卷，結業當天填寫課程回饋。填寫後會直接送到老師的課程試算表。</p></div>' + notice + '<div class="sv-list"></div>';
     list.forEach(function (s) {
       var d = doneAt(s.id), a = document.createElement('a'); a.className = 'sv-item'; a.href = 'survey.html?id=' + s.id;
-      a.style.setProperty('--c', s.id === 'feedback' ? '#f4a62a' : COLOR[s.lesson]);
+      a.style.setProperty('--c', s.id === 'feedback' ? '#6FAFBC' : COLOR[s.lesson]);
       a.innerHTML = '<div class="no">' + (s.id === 'feedback' ? '★' : String(s.lesson).padStart(2, '0')) + '</div><div><b>' + esc(s.title) + '</b><small>' + s.questions.length + ' 題・' + esc(s.intro) + '</small></div><span class="st' + (d ? ' done' : '') + '">' + (d ? '已填寫' : '未填寫') + '</span>';
       app.querySelector('.sv-list').appendChild(a);
     });
@@ -132,7 +132,7 @@
 
   document.title = sv.title + '｜流行歌唱班';
   var p = PixelBackend.profile() || {};
-  var html = '<div class="sv-head" style="--c:' + (sv.id === 'feedback' ? '#f4a62a' : COLOR[sv.lesson]) + '"><div class="lh-no">' + (sv.id === 'feedback' ? 'FEEDBACK' : 'LESSON ' + String(sv.lesson).padStart(2, '0') + '・PRE-CLASS') + '</div><h1>' + esc(sv.title) + '</h1><p>' + esc(sv.intro) + '</p></div>' + notice +
+  var html = '<div class="sv-head" style="--c:' + (sv.id === 'feedback' ? '#6FAFBC' : COLOR[sv.lesson]) + '"><div class="lh-no">' + (sv.id === 'feedback' ? 'FEEDBACK' : 'LESSON ' + String(sv.lesson).padStart(2, '0') + '・PRE-CLASS') + '</div><h1>' + esc(sv.title) + '</h1><p>' + esc(sv.intro) + '</p></div>' + notice +
     (doneAt(sv.id) ? '<div class="sv-notice" style="color:var(--green);border-color:rgba(108,187,75,.4);background:rgba(108,187,75,.06)">你已在 ' + esc(doneAt(sv.id)) + ' 填寫過這份問卷，再次送出會新增一筆回覆。</div>' : '') +
     '<form novalidate><div class="sv-card who"><div class="sv-q"><span class="n">✦</span>填寫者資料</div><div class="sv-body" style="margin-left:0"><div class="grid">' +
     '<label class="f"><span>姓名</span><input type="text" name="_name" autocomplete="name" maxlength="30" value="' + esc(p.name) + '"></label>' +

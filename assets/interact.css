@@ -3,7 +3,7 @@
 .ix-tag b{background:var(--amber);color:#1a1200;font-size:12px;padding:2px 9px;border-radius:999px;letter-spacing:.06em}
 .btn.primary{background:var(--amber);border-color:var(--amber);color:#1a1200;font-weight:700}
 .btn.primary:hover{filter:brightness(1.08)}
-.btn.on{border-color:var(--amber);color:var(--amber);background:rgba(244,166,42,.1)}
+.btn.on{border-color:var(--amber);color:var(--amber);background:rgba(111,174,187,.1)}
 .panel{border:1px solid var(--line);background:var(--card);border-radius:var(--r);padding:18px 20px}
 .panel h3{font-size:20px;margin-bottom:10px}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
@@ -58,7 +58,7 @@
 /* 計分板 */
 .score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .score-team{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:12px;text-align:center}
-.score-team.lead{border-color:var(--amber);background:rgba(244,166,42,.08)}
+.score-team.lead{border-color:var(--amber);background:rgba(111,174,187,.08)}
 .score-name{font-size:15px;font-weight:700;outline:none;border-bottom:1px dashed transparent;color:var(--muted)}
 .score-name:focus{border-bottom-color:var(--muted)}
 .score-pts{font-size:52px;font-weight:700;line-height:1.2;font-family:var(--display);font-variant-numeric:tabular-nums}
@@ -106,7 +106,7 @@
 .order-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
 .order-tile{display:flex;align-items:center;gap:10px;font-size:18px;padding:12px;min-height:58px;text-align:left;background:var(--card)}
 .order-tile small{flex:none;width:26px;height:26px;display:grid;place-items:center;font-size:13px;background:rgba(255,255,255,.07);border-radius:8px;font-family:var(--display)}
-.order-tile.sel{border-color:var(--amber);background:rgba(244,166,42,.14)}
+.order-tile.sel{border-color:var(--amber);background:rgba(111,174,187,.14)}
 .order-tile.ok{border-color:var(--green);background:rgba(108,187,75,.14)}
 .order-tile.no{border-color:var(--red)}
 .order-msg{font-size:14px;margin-top:8px}
@@ -118,7 +118,7 @@
 .flip>div{position:absolute;inset:0;border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;justify-content:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .45s ease;font-size:17px;line-height:1.5}
 .flip .f{background:var(--card);font-weight:700;font-size:18px}
 .flip .f::after{content:"點一下翻牌";position:absolute;right:12px;bottom:10px;font-size:11px;font-weight:400;color:var(--faint)}
-.flip .b{background:linear-gradient(160deg,#221d12,#17150f);transform:rotateY(180deg);border-color:rgba(244,166,42,.45)}
+.flip .b{background:linear-gradient(160deg,#221d12,#17150f);transform:rotateY(180deg);border-color:rgba(111,174,187,.45)}
 .flip.on .f{transform:rotateY(-180deg)}.flip.on .b{transform:rotateY(0)}
 .flip:focus-visible>div{border-color:var(--amber)}
 .flip .b strong{display:block;margin-bottom:4px;font-size:19px;color:var(--amber)}
