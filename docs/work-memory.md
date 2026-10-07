@@ -33,7 +33,8 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 
 ## 2026-10-07 字標效果
 
-- 首頁左上角與頁尾的 PIXEL STUDIO 字樣加入白字上的低飽和彩色漸層筆刷效果；瀏覽器不支援文字漸層時保留白字，並遵守減少動態效果設定。
+- 首頁左上角與頁尾的 PIXEL STUDIO 字樣使用白字上的低飽和彩色漸層筆刷效果；後續依使用者要求將筆刷顏色加深約 10%、頁尾字標尺寸縮為一半。瀏覽器不支援文字漸層時保留白字，並遵守減少動態效果設定。
+- 頁尾右下 slogan 固定為核心理念原文 `We Perform the Pixel of Music`，保留原拼法與大小寫。
 - 已以本機 Chrome 畫面檢視首頁頂端與整頁；字標漸層兼顧白字辨識度，且靜態降級仍可讀。
 
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
