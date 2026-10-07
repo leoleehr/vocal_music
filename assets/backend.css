@@ -1,14 +1,14 @@
 /* ===== 學員資料、送出提示 ===== */
 .pb-chip{display:inline-flex;align-items:center;gap:8px;font:inherit;font-size:13px;color:var(--ink,#f3f0e9);background:rgba(255,255,255,.05);border:1px solid var(--line-2,rgba(255,255,255,.14));border-radius:999px;padding:4px 12px 4px 6px;cursor:pointer;white-space:nowrap;line-height:1.25;flex:none}
-.pb-chip svg{width:22px;height:22px;padding:3px;border-radius:50%;background:rgba(244,166,42,.16);color:var(--amber,#f4a62a);flex:none}
+.pb-chip svg{width:22px;height:22px;padding:3px;border-radius:50%;background:rgba(229,72,66,.16);color:var(--amber,#e54842);flex:none}
 .pb-chip span{display:flex;flex-direction:column;text-align:left}
 .pb-chip small{font-size:11px;color:var(--muted,#9d998f)}
-.pb-chip.empty{border-color:rgba(244,166,42,.45);color:var(--amber,#f4a62a)}
-.pb-chip:hover{border-color:var(--amber,#f4a62a)}
+.pb-chip.empty{border-color:rgba(229,72,66,.45);color:var(--amber,#e54842)}
+.pb-chip:hover{border-color:var(--amber,#e54842)}
 .pb-chip.icon{padding:0;border:0;background:none;width:40px;height:40px;justify-content:center}
 .pb-chip.icon svg{width:30px;height:30px;padding:5px}
 .pb-chip.icon span{display:none}
-.pb-chip.icon.empty svg{box-shadow:0 0 0 2px rgba(244,166,42,.5)}
+.pb-chip.icon.empty svg{box-shadow:0 0 0 2px rgba(229,72,66,.5)}
 .pb-chip.corner{position:fixed;right:16px;bottom:14px;z-index:6;padding:6px 14px 6px 6px;background:rgba(20,20,25,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .topbar .wrap>.pb-chip{margin-left:4px}
 
@@ -22,11 +22,11 @@
 .pb-box label{display:block;margin-bottom:12px}
 .pb-box label span{display:block;font-size:13px;color:#c9c5bd;margin-bottom:5px}
 .pb-box input{width:100%;font:inherit;font-size:16px;color:#f3f0e9;background:#0d0d10;border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:11px 13px;outline:none}
-.pb-box input:focus{border-color:#f4a62a}
+.pb-box input:focus{border-color:#e54842}
 .pb-err{min-height:20px;font-size:13px;color:#ec4a36}
 .pb-actions{display:flex;gap:10px;justify-content:space-between;margin-top:4px}
 .pb-actions button{font:inherit;font-weight:700;font-size:15px;min-height:46px;border-radius:12px;cursor:pointer}
-.pb-save{flex:1;max-width:200px;margin-left:auto;background:#f4a62a;border:0;color:#1a1200}
+.pb-save{flex:1;max-width:200px;margin-left:auto;background:#e54842;border:0;color:#1a1200}
 .pb-save:disabled{opacity:.6}
 .pb-clear{background:none;border:1px solid rgba(255,255,255,.14);color:#9d998f;padding:0 14px}
 .pb-note{font-size:12px;color:#6d6a64;margin-top:12px;line-height:1.6}
@@ -37,7 +37,7 @@
 .pb-toast.on{opacity:1;transform:translate(-50%,0)}
 .pb-toast.ok{border-color:rgba(108,187,75,.6)}
 .pb-toast.ok::before{content:"✓ ";color:#6cbb4b}
-.pb-toast.warn{border-color:rgba(244,166,42,.6)}
+.pb-toast.warn{border-color:rgba(229,72,66,.6)}
 .pb-toast.err{border-color:rgba(236,74,54,.7)}
 
 /* 送出按鈕列（互動元件內） */
@@ -49,5 +49,5 @@
   .topbar .wrap>.pb-chip{padding:0;border:0;background:none;width:40px;height:40px;justify-content:center;margin-right:-8px}
   .topbar .wrap>.pb-chip span{display:none}
   .topbar .wrap>.pb-chip svg{width:30px;height:30px;padding:5px}
-  .topbar .wrap>.pb-chip.empty svg{box-shadow:0 0 0 2px rgba(244,166,42,.5)}
+  .topbar .wrap>.pb-chip.empty svg{box-shadow:0 0 0 2px rgba(229,72,66,.5)}
 }

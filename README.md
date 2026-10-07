@@ -23,7 +23,7 @@
 
 ### assets
 
-2026-10-06 視覺改版：首頁、講義及問卷由 `studio.css` 延伸既有設計，首頁聲波與聲音控制在 `studio.js`，投影片由 `deck-studio.css` 調整。設計方向、驗證結果與目前限制見 [設計檢查紀錄](docs/design-review.md)。
+2026-10-06 完成視覺改版；2026-10-07 將網站與投影片主視覺統一為紅色系，並全站改用新版 PIXEL STUDIO 字標。首頁聲波與聲音控制在 `studio.js`，投影片由 `deck-studio.css` 調整。設計方向、驗證結果與目前限制見 [設計檢查紀錄](docs/design-review.md)。
 
 | 檔案 | 用途 |
 | --- | --- |
@@ -37,9 +37,8 @@
 | `backend.js`、`backend.css` | 學員資料、送出佇列、上傳錄音、送出提示 |
 | `surveys.js` | 問卷題目 |
 | `pixel.js` | 插入 Logo |
-| `logo-color-dark-notag.png` | 首頁與講義封面使用的主 Logo（深色底、不含英文標語，下方接「畫素音樂工作坊」） |
-| `logo-color-dark.png`、`logo-color-light.png` | 含英文標語的彩色 Logo（深色底、淺色底用，透明背景） |
-| `logo-mono-white.png`、`logo-mono-black.png` | 單色 Logo（深色底用白色、淺色底用黑色，透明背景） |
+| `pixel-studio-67-black-bg.png` | 深色介面使用的新 PIXEL STUDIO 彩虹字標（黑底） |
+| `pixel-studio-67-white-bg.png` | 白底列印與淺色背景使用的新 PIXEL STUDIO 彩虹字標（白底） |
 | `favicon.png`、`og-image.png` | 瀏覽器分頁圖示、分享預覽圖 |
 
 ## 投影片操作

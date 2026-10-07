@@ -20,7 +20,7 @@
 <body id="top">
 <header class="topbar">
   <div class="wrap">
-    <a class="brand" href="index.html" aria-label="Pixel Studio 首頁"><span class="brand-en">pixel studio</span><span class="brand-caption">畫素音樂工作坊<br>VOCAL LAB</span></a>
+    <a class="brand" href="index.html" aria-label="Pixel Studio 首頁"><img class="pixel-word" src="assets/pixel-studio-67-black-bg.png" alt="Pixel Studio" width="2048" height="680"></a>
     <nav>
       <a href="index.html#lessons">課程</a>
       <a href="survey.html">問卷</a>
@@ -54,7 +54,7 @@
 <script>
 (function () {
   var NUM = { '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6 };
-  var COLOR = ['', '#e8412b', '#e2407f', '#9a5fd0', '#45b3e6', '#6cbb4b', '#e3d83a'];
+  var COLOR = ['', '#e54842', '#df4d48', '#c83b38', '#ec6259', '#d9443d', '#f2766d'];
   var main = document.getElementById('content'), toc = document.getElementById('toc'), prog = document.getElementById('progress');
   fetch('docs/course-handbook.md')
     .then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })

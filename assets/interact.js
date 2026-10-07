@@ -187,7 +187,7 @@
       x.clearRect(0, 0, c.w, c.h);
       x.strokeStyle = 'rgba(255,255,255,.12)'; x.beginPath(); x.moveTo(0, c.h / 2); x.lineTo(c.w, c.h / 2); x.stroke();
       var g = x.createLinearGradient(0, 0, c.w, 0);
-      ['#e8412b', '#e2407f', '#8a4fc0', '#2f5fc4', '#45b3e6', '#6cbb4b', '#d6e03a', '#f4a62a'].forEach(function (col, k) { g.addColorStop(k / 7, col); });
+      ['#e54842', '#df4d48', '#c83b38', '#a91e25', '#ec6259', '#d9443d', '#f2766d', '#e54842'].forEach(function (col, k) { g.addColorStop(k / 7, col); });
       x.strokeStyle = g; x.lineWidth = 3; x.beginPath();
       for (var i = 0; i <= c.w; i += 2) { var y = c.h / 2 - Math.sin(i / c.w * cyc * Math.PI * 2) * a * (c.h / 2 - 8); i ? x.lineTo(i, y) : x.moveTo(i, y); }
       x.stroke();
@@ -311,7 +311,7 @@
       }
       x.fillStyle = 'rgba(255,255,255,.45)'; x.font = '12px "Space Grotesk",sans-serif';
       for (var b = 0; b < 4; b++) x.fillText(String(b + 1), X(b) + 4, 18);
-      if (nowBeat >= 0) { x.fillStyle = 'rgba(244,166,42,.12)'; x.fillRect(X(Math.floor(nowBeat)), 4, w / 4, H - 8); }
+      if (nowBeat >= 0) { x.fillStyle = 'rgba(229,72,66,.12)'; x.fillRect(X(Math.floor(nowBeat)), 4, w / 4, H - 8); }
       var on = RHYTHMS[idx].on, mid = H * 0.42;
       on.forEach(function (b, k) {
         var st = result ? (result.hit[k] ? css('--green') : 'rgba(236,74,54,.85)') : css('--amber');
