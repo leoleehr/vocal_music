@@ -80,7 +80,7 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 ## 2026-10-07 首頁 About 文案調整
 
 - 首頁 About 區塊依使用者最新文案調整標題大小寫與冒號、保留三行主張但移除末句句點，核心 slogan 加上中文引號，並將介紹與聲音藝術理念拆成兩段；更新「最獨一無二」及「一件事情」措辭。
-- 已檢查原文案字串與 `git diff --check`。Commit `81e29fb` 已在本機建立；多次 push 遭 GitHub 回覆 `Internal Server Error`，GitHub 內容 API 備援也回覆內部錯誤，因此尚未推送或部署。遠端 `main` 仍在 `922e01c`。
+- 已檢查原文案字串與 `git diff --check`。Commit `81e29fb` 已在本機建立；當時 push 遭 GitHub 回覆 `Internal Server Error`；之後已隨第三堂投影片 commit `6e6131c` 一併推送並部署。
 
 ## 2026-10-07 第三堂投影片
 
@@ -88,7 +88,8 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - `assets/interact.js` 新增 `.siren` 警笛滑音元件（C2–C6 音高曲線、最低／最高音、自動與手動標記換聲點，存 localStorage 並送後台），`assets/interact.css` 加上 siren、雙／三錄音格與共鳴腔圖樣式；`Code.gs` 加 `siren` 類型名稱（Apps Script 需重新部署才生效）。
 - 首頁第三堂入口改連投影片；講義第三堂互動表依實作更新（共鳴地圖插入第 15 張，角色輪替改第 16 張），並修正「茶子蛋→茄子蛋」「摧耳→摀耳」；README 補上第三堂與 `.siren`。
 - 依使用者要求，第三堂第 4 張與講義第三堂開頭的三大要素統一為「呼吸、共鳴、發聲」（英文沿用第一堂的 Breath／Resonance／Pronunciation）。
-- 驗證：22 張 1440px 截圖檢查；iframe 稽核 320／390／768／1440px 無橫向溢出；`node --check assets/interact.js`、`git diff --check` 通過。真實麥克風下的警笛滑音尚未實測。尚未提交或部署；本機另有 `81e29fb`、`b9aabef` 兩個 commit 未推送。
+- 驗證：22 張 1440px 截圖檢查；iframe 稽核 320／390／768／1440px 無橫向溢出；`node --check assets/interact.js`、`git diff --check` 通過。真實麥克風下的警笛滑音尚未實測。
+- 部署：commit `6e6131c`（連同先前未推送的 `81e29fb` About 文案、`b9aabef`）已推送至 `main`；GitHub Pages workflow `37646114337` 成功。線上第三堂投影片、首頁與 `assets/interact.js` HTTP 200，首頁含第三堂投影片連結，線上腳本含 `.siren`。
 
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
@@ -107,7 +108,7 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 ## 目前限制與待辦
 
 - `assets/config.js` 的 Apps Script endpoint 原本仍是空白。問卷在連線前暫存於學員瀏覽器，實際回傳老師試算表尚未驗證。
-- 第四至第六堂投影片仍為「準備中」（第三堂已完成，待提交部署），六堂講義與問卷已有入口。
+- 第四至第六堂投影片仍為「準備中」（第三堂已部署），六堂講義與問卷已有入口。
 - 尚未驗證真實麥克風、實體喇叭、iOS／Android 裝置與 Safari，也未提交測試問卷或上傳錄音。
 - 桌面 Chrome 自動化曾無法啟用，因此改用已安裝 Chrome 的無介面渲染驗證。`.qa/` 包含本機驗證暫存與畫面，已忽略，不應提交瀏覽器設定檔。
 - `AGENTS.md` 與本工作記憶檔案是在本輪紅色視覺修訂前新增的專案指引與記錄，納入本輪提交範圍。
