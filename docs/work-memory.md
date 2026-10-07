@@ -28,7 +28,7 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 ## 2026-10-07 視覺修訂回復
 
 - 使用者認為紅色視覺與新版 LOGO 不符合預期，要求回復上一階段。已將網站樣式、投影片、講義、問卷、列印頁與 PDF 還原至 `a757875` 視覺版本，並移除該次新增 LOGO 資產。
-- `a757875` 是先前已確認部署成功的版本；回復內容正重新發布至 GitHub Pages，請以最新 Actions 部署紀錄確認完成狀態。
+- 回復 commit `8a61cc24e6fba0d849ff58587c0a94154b7f2310` 已推送並部署成功；GitHub Actions run `37592297268` 結果為 success。線上首頁 HTTP 200，已恢復舊 LOGO 引用與原配色；舊 LOGO HTTP 200、新 LOGO 引用已移除，下載 PDF HTTP 200 且為 4,980,496 bytes。
 - 保留專案 `AGENTS.md` 與本工作記憶，並記錄這次回復決策。
 
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
