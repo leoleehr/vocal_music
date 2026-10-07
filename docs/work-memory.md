@@ -77,6 +77,11 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - `handbook-print.html` 與下載講義 PDF 同步更新；保留原有內容與 33 頁結構。已渲染檢查封面與末頁，舊的雙行方塊 Logo 已替換為新版小寫彩色字標。
 - commit `2edea9ff3b49bdf9db5d92cb97135ef770bfb199` 已推送至 `main`；GitHub Pages workflow `37635259409` 成功。線上首頁 HTTP 200 且含新 About 文案；新版 Logo 資產 HTTP 200；線上講義 PDF 共 33 頁，與本機更新檔 SHA-256 一致。
 
+## 2026-10-07 首頁 About 文案調整
+
+- 首頁 About 區塊依使用者最新文案調整標題大小寫與冒號、保留三行主張但移除末句句點，核心 slogan 加上中文引號，並將介紹與聲音藝術理念拆成兩段；更新「最獨一無二」及「一件事情」措辭。
+- 已檢查原文案字串與 `git diff --check`；尚未 commit 或部署。
+
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
 ## 驗證與部署
