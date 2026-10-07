@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#1c1c21;--muted:#6f6b64;--faint:#a5a19a;--line:#e6e2da;--soft:#f6f4ef;--amber:#e54842;--display:"Space Grotesk","Noto Sans TC",sans-serif;
-  --rainbow:linear-gradient(90deg,#a91e25,#c83232,#e54842,#f2766d)}
+:root{--ink:#1c1c21;--muted:#6f6b64;--faint:#a5a19a;--line:#e6e2da;--soft:#f6f4ef;--amber:#d98a12;--display:"Space Grotesk","Noto Sans TC",sans-serif;
+  --rainbow:linear-gradient(90deg,#e8412b,#e2407f,#8a4fc0,#2f5fc4,#45b3e6,#6cbb4b,#d6e03a,#f4a62a)}
 @page{size:A4;margin:20mm 17mm 18mm 17mm;
   @bottom-left{content:"亞東吉他社 流行歌唱班｜講義與教案";font:500 7.5pt "Noto Sans TC",sans-serif;color:#a5a19a;letter-spacing:.06em}
   @bottom-right{content:counter(page);font:700 8pt "Space Grotesk",sans-serif;color:#a5a19a}
@@ -21,20 +21,20 @@ html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 body{font-family:"Noto Sans TC",sans-serif;color:var(--ink);font-size:10.2pt;line-height:1.78;background:#fff}
 a{color:inherit;text-decoration:none}
 /* 螢幕預覽 */
-@media screen{body{background:#e9e6e0;padding:24px 0}.sheet{width:210mm;margin:0 auto 24px;background:#fff;box-shadow:0 10px 40px rgba(0,0,0,.12);padding:20mm 17mm}.cover{padding:0!important}.toolbar{position:sticky;top:0;z-index:5;display:flex;gap:10px;justify-content:center;padding:10px;margin:-24px 0 24px;background:rgba(28,28,33,.9)}.toolbar a,.toolbar button{font:700 13px "Noto Sans TC";color:#1a1200;background:#e54842;border:0;border-radius:10px;padding:8px 16px;cursor:pointer}.toolbar a.ghost{background:#33333b;color:#fff}}
+@media screen{body{background:#e9e6e0;padding:24px 0}.sheet{width:210mm;margin:0 auto 24px;background:#fff;box-shadow:0 10px 40px rgba(0,0,0,.12);padding:20mm 17mm}.cover{padding:0!important}.toolbar{position:sticky;top:0;z-index:5;display:flex;gap:10px;justify-content:center;padding:10px;margin:-24px 0 24px;background:rgba(28,28,33,.9)}.toolbar a,.toolbar button{font:700 13px "Noto Sans TC";color:#1a1200;background:#f4a62a;border:0;border-radius:10px;padding:8px 16px;cursor:pointer}.toolbar a.ghost{background:#33333b;color:#fff}}
 @media print{.toolbar{display:none}.sheet{width:auto;margin:0;padding:0;box-shadow:none}}
 
 /* 封面 */
-.cover{position:relative;height:297mm;background:#000;color:#f3f0e9;overflow:hidden;break-after:page;display:flex;flex-direction:column;justify-content:space-between;padding:28mm 22mm 22mm!important}
+.cover{position:relative;height:297mm;background:#09090b;color:#f3f0e9;overflow:hidden;break-after:page;display:flex;flex-direction:column;justify-content:space-between;padding:28mm 22mm 22mm!important}
 .cover::before{content:"";position:absolute;left:0;right:0;top:0;height:3mm;background:var(--rainbow)}
-.cover::after{content:"";position:absolute;right:-30mm;bottom:-30mm;width:150mm;height:150mm;opacity:.22;background:linear-gradient(135deg,#a91e25,#c83232 35%,#e54842 70%,#f2766d);
+.cover::after{content:"";position:absolute;right:-30mm;bottom:-30mm;width:150mm;height:150mm;opacity:.22;background:linear-gradient(135deg,#e8412b,#e2407f 18%,#8a4fc0 34%,#2f5fc4 50%,#45b3e6 62%,#6cbb4b 76%,#d6e03a 90%,#f4a62a);
   -webkit-mask:repeating-linear-gradient(90deg,#000 0 9mm,transparent 9mm 10.4mm),repeating-linear-gradient(#000 0 9mm,transparent 9mm 10.4mm),radial-gradient(circle at 70% 70%,#000 0 25%,transparent 70%);-webkit-mask-composite:source-in,source-in}
 .cover .logo{width:86mm}
-.cover .logo{opacity:1;filter:none}
+.cover .logo{opacity:.55;filter:drop-shadow(0 0 6mm rgba(140,110,255,.35)) drop-shadow(0 0 3mm rgba(255,120,80,.2))}
 .cover .brandblock{display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:1}
 .cover .brandblock .cn{font-family:"Noto Sans TC",sans-serif;font-weight:500;font-size:13pt;letter-spacing:.3em;padding-left:.3em;color:#f3f0e9;margin-top:5mm}
 .cover .mid{position:relative;z-index:1}
-.cover .eyebrow{font-family:var(--display);font-size:9pt;letter-spacing:.3em;color:#e54842;margin-bottom:6mm}
+.cover .eyebrow{font-family:var(--display);font-size:9pt;letter-spacing:.3em;color:#f4a62a;margin-bottom:6mm}
 .cover h1{font-size:34pt;line-height:1.25;font-weight:700;letter-spacing:.04em}
 .cover .sub{font-size:12pt;color:#c9c5bd;margin-top:5mm;letter-spacing:.06em}
 .cover .foot{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:flex-end;font-size:9pt;color:#9d998f;line-height:1.7}
@@ -96,7 +96,7 @@ a{color:inherit;text-decoration:none}
 <div class="toolbar"><button type="button" onclick="window.print()">列印／另存 PDF</button><a class="ghost" href="docs/vocal-class-handbook.pdf" download="流行歌唱班_講義與教案.pdf">下載 PDF</a><a class="ghost" href="handbook.html">回網頁版</a></div>
 
 <div class="sheet cover">
-  <div class="brandblock"><img class="logo" src="assets/pixel-studio-67-black-bg.png" alt="PIXEL STUDIO"><div class="cn">畫素音樂工作坊</div></div>
+  <div class="brandblock"><img class="logo" src="assets/logo-color-dark-notag.png" alt="PIXEL STUDIO"><div class="cn">畫素音樂工作坊</div></div>
   <div class="mid">
     <div class="eyebrow">VOCAL CLASS HANDBOOK</div>
     <h1>流行歌唱班<br>講義與教案</h1>
@@ -117,7 +117,7 @@ a{color:inherit;text-decoration:none}
 
 <main class="sheet md" id="content"></main>
 
-<div class="sheet end"><img class="endlogo" src="assets/pixel-studio-67-white-bg.png" alt="PIXEL STUDIO"><p class="endcn">畫素音樂工作坊</p><p>Pixel Studio・Established Since 2008</p></div>
+<div class="sheet end"><img class="endlogo" src="assets/logo-mono-black.png" alt="PIXEL STUDIO"><p class="endcn">畫素音樂工作坊</p><p>Pixel Studio・Established Since 2008</p></div>
 
 <script src="assets/songs.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
@@ -125,7 +125,7 @@ a{color:inherit;text-decoration:none}
 <script>
 (function () {
   var NUM = { '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6 };
-  var COLOR = ['', '#e54842', '#df4d48', '#c83b38', '#ec6259', '#d9443d', '#f2766d'];
+  var COLOR = ['', '#e8412b', '#e2407f', '#8a4fc0', '#2f8fc4', '#4f9e3a', '#b5a400'];
   var DESC = ['', '聲音如何形成、如何擴大？怎樣才算一個好主唱？', '歌唱的氣從哪裡來？如何讓氣息穩定又持久？', '聲音如何變亮、變厚、變遠？', '每個字如何唱得清楚又圓潤？', '如何將技巧轉化成表情？', '哪些歌適合我？該用什麼調演唱？'];
   var main = document.getElementById('content'), toc = document.getElementById('toc');
   fetch('docs/course-handbook.md').then(function (r) { return r.text(); }).then(function (md) {

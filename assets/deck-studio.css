@@ -1,13 +1,13 @@
 /* Shared studio palette; lesson colors retain their teaching roles. */
-:root{--bg:#101010;--paper:#171514;--card:#211b1a;--card-2:#292220;--ink:#f1f0e8;--muted:#b2a9a5;--faint:#988d89;--amber:#e54842;--line:rgba(237,241,225,.13);--line-2:rgba(237,241,225,.23);--frame:rgba(237,241,225,.2);--r-lg:6px;--r:4px;--r-sm:3px}
+:root{--bg:#101210;--paper:#141912;--card:#1c2319;--card-2:#252d20;--ink:#f1f0e8;--muted:#aab2a2;--faint:#929c88;--amber:#d3ed89;--line:rgba(237,241,225,.13);--line-2:rgba(237,241,225,.23);--frame:rgba(237,241,225,.2);--r-lg:6px;--r:4px;--r-sm:3px}
 body::before{display:none}
-.slide{background:radial-gradient(ellipse at 90% 0%,#e5484208,transparent 60%),#141912}
+.slide{background:radial-gradient(ellipse at 90% 0%,#d3ed8908,transparent 60%),#141912}
 .slide::before{height:2px}
 .cover::after{opacity:.12}
-.ui{background:#171514ed}
-.appbar{background:#101010f5}
-.pb-box{background:#1d1918;border-color:var(--line-2);border-radius:6px}.pb-save{background:var(--amber);color:#17200f}.pb-chip svg{color:var(--amber);background:#e5484210}.pb-chip.icon.empty svg{box-shadow:0 0 0 2px #e5484270}
-::selection{background:#e54842;color:#101010}
+.ui{background:#141912ed}
+.appbar{background:#101210f5}
+.pb-box{background:#181c17;border-color:var(--line-2);border-radius:6px}.pb-save{background:var(--amber);color:#17200f}.pb-chip svg{color:var(--amber);background:#d3ed8910}.pb-chip.icon.empty svg{box-shadow:0 0 0 2px #d3ed8970}
+::selection{background:#d3ed89;color:#101210}
 :focus-visible{outline:2px solid var(--amber);outline-offset:4px}
 @media(max-width:900px),(orientation:portrait) and (max-width:1100px){
   .slide{overflow-wrap:anywhere}
