@@ -80,7 +80,7 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 ## 2026-10-07 首頁 About 文案調整
 
 - 首頁 About 區塊依使用者最新文案調整標題大小寫與冒號、保留三行主張但移除末句句點，核心 slogan 加上中文引號，並將介紹與聲音藝術理念拆成兩段；更新「最獨一無二」及「一件事情」措辭。
-- 已檢查原文案字串與 `git diff --check`；尚未 commit 或部署。
+- 已檢查原文案字串與 `git diff --check`。Commit `81e29fb` 已在本機建立；多次 push 遭 GitHub 回覆 `Internal Server Error`，GitHub 內容 API 備援也回覆內部錯誤，因此尚未推送或部署。遠端 `main` 仍在 `922e01c`。
 
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
