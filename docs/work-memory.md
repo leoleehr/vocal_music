@@ -64,7 +64,7 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 
 - 依使用者要求，將主介面、按鈕、強調字、問卷、互動教材、課堂投影片與列印講義的藍青強調色改為較沉穩的暖金黃 `#C7AF4A`；按鈕底色文字保持深色。彩虹聲紋與霓虹字標維持原設計。
 - 黃色對深底對比為 8.65:1，深色按鈕字對黃色底為 8.08:1；`node --check assets/interact.js`、`node --check assets/studio.js` 與 `git diff --check` 通過。
-- 尚未提交、推送或部署。列印講義 HTML 的強調色已更新；PDF 重新產生遇到瀏覽器非同步載入失敗，已保留原有 33 頁 PDF，待後續重新產生。
+- commit `9ab95db2c31e873265b21208e20da05d68e5dc79` 已推送至 `main`。GitHub Pages deployment `6911555334`（workflow `37630670974`）狀態成功；線上首頁 HTTP 200，帶版本參數重新讀取的 `assets/studio.css` 已含 `#C7AF4A` 且不再含舊藍青色。列印講義 HTML 的強調色已更新；PDF 重新產生遇到瀏覽器非同步載入失敗，已保留原有 33 頁 PDF，待後續重新產生。
 
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
