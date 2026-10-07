@@ -1,7 +1,7 @@
 /* ===== Pixel Studio 課堂互動元件 =====
  * 互動狀態存在這台裝置的瀏覽器（localStorage）；作答與成果經 backend.js 送到課程試算表。
  * 元件以 class 宣告在投影片中，載入時自動建立：
- *   .quiz .poll .reveal .picker .score .wavelab .pitch .siren .rhythm-game .breath .recorder
+ *   .quiz .poll .reveal .picker .score .wavelab .pitch .siren .stopwatch .mirror .rhythm-game .breath .recorder
  *   .order .flips .phase .lyricmark .exit .log7 .qr   以及 .checks[data-id]
  */
 (function () {
@@ -214,7 +214,12 @@
     var cv = p.querySelector('canvas'), noteEl = p.querySelector('.pt-note'), hz = p.querySelector('.pt-hz'), tg = p.querySelector('.pt-target'), needle = p.querySelector('.pt-needle i'), sc = p.querySelector('.pt-score b');
     var an = null, buf = new Float32Array(2048), raf = 0, hist = [], target = null, holdStart = 0, score = 0, frame = 0, micT0 = 0, askT0 = 0, muteUntil = 0, clock = p.querySelector('.pt-clock');
     function playTarget() { tone(freqOf(target), 1.2, 0.3, 'triangle'); muteUntil = performance.now() + 1500; askT0 = muteUntil; }
-    function pickTarget() { var r = ranges[range]; target = r[0] + Math.floor(Math.random() * (r[1] - r[0] + 1)); var n = nameOf(target); tg.textContent = '目標：' + n.name + '（' + n.solf + '）'; playTarget(); }
+    // data-seq="scale"：依 C 大調音階依序出題（男聲 C3–C4、女聲 C4–C5）
+    var SEQ = p.getAttribute('data-seq') === 'scale' ? [0, 2, 4, 5, 7, 9, 11, 12] : null, si = 0;
+    function pickTarget() {
+      if (SEQ) { target = (range === 'male' ? 48 : 60) + SEQ[si]; var q = nameOf(target); tg.textContent = '第 ' + (si + 1) + ' / 8 音：' + q.name + '（' + q.solf + '）'; playTarget(); return; }
+      var r = ranges[range]; target = r[0] + Math.floor(Math.random() * (r[1] - r[0] + 1)); var n = nameOf(target); tg.textContent = '目標：' + n.name + '（' + n.solf + '）'; playTarget();
+    }
     function loop() {
       raf = requestAnimationFrame(loop);
       var now = performance.now(), el2 = Math.floor((now - micT0) / 1000);
@@ -230,7 +235,7 @@
         var off = target !== null ? (m - target) * 100 : cents;
         needle.style.left = (50 + Math.max(-50, Math.min(50, off / 2))) + '%';
         var ok = Math.abs(off) <= 30; p.classList.toggle('hit', ok);
-        if (target !== null && ok) { if (!holdStart) holdStart = performance.now(); if (performance.now() - holdStart > 700) { score++; sc.textContent = score; report(p, 'pitch', { item: nameOf(target).name + '（' + nameOf(target).solf + '）', result: '命中', value: +Math.max(0, (holdStart - askT0) / 1000).toFixed(1) }); chime(); muteUntil = performance.now() + 700; target = null; tg.textContent = '命中！用時 ' + Math.max(0, (holdStart - askT0) / 1000).toFixed(1) + ' 秒，按「出題並播放」繼續'; holdStart = 0; } }
+        if (target !== null && ok) { if (!holdStart) holdStart = performance.now(); if (performance.now() - holdStart > 700) { score++; sc.textContent = score; report(p, 'pitch', { item: nameOf(target).name + '（' + nameOf(target).solf + '）', result: '命中', value: +Math.max(0, (holdStart - askT0) / 1000).toFixed(1) }); chime(); muteUntil = performance.now() + 700; target = null; tg.textContent = '命中！用時 ' + Math.max(0, (holdStart - askT0) / 1000).toFixed(1) + ' 秒，按「出題並播放」繼續'; holdStart = 0; if (SEQ) { if (si < SEQ.length - 1) { si++; setTimeout(function () { if (an) pickTarget(); }, 900); } else { si = 0; tg.textContent = '音階完成！按「從 C 開始」再唱一次'; } } } }
         else holdStart = 0;
       } else { p.classList.remove('hit'); holdStart = 0; }
       draw();
@@ -250,9 +255,10 @@
       micStart().then(function (a) { an = a; micT0 = performance.now(); p.querySelector('.mic').textContent = '■ 停止'; hz.textContent = '計時中，對著麥克風唱出聲音'; loop(); })
         .catch(function () { hz.textContent = '無法使用麥克風：請允許瀏覽器使用麥克風，並以 https 網址開啟'; });
     };
-    p.querySelector('.ask').onclick = pickTarget;
+    p.querySelector('.ask').onclick = function () { if (SEQ) si = 0; pickTarget(); };
+    if (SEQ) p.querySelector('.ask').textContent = '從 C 開始';
     p.querySelector('.again').onclick = function () { if (target !== null) playTarget(); };
-    ['male', 'female'].forEach(function (k) { p.querySelector('.' + k).onclick = function () { range = k; p.querySelector('.male').classList.toggle('on', k === 'male'); p.querySelector('.female').classList.toggle('on', k === 'female'); draw(); }; });
+    ['male', 'female'].forEach(function (k) { p.querySelector('.' + k).onclick = function () { range = k; p.querySelector('.male').classList.toggle('on', k === 'male'); p.querySelector('.female').classList.toggle('on', k === 'female'); si = 0; draw(); }; });
     draw(); onLeave(p, stop);
   });
 
@@ -321,6 +327,40 @@
     p.querySelector('.clear').onclick = function () { hist = []; marks = []; last = null; lo = hi = brk = null; LS.set(key, null); show(); draw(); st.textContent = '已清除，按「開始滑音」再試一次'; };
     if (saved) { lo = saved.lo; hi = saved.hi; brk = saved.brk; st.textContent = '上次紀錄：' + nm(lo) + ' 到 ' + nm(hi) + (brk !== null ? '，換聲點 ' + nm(brk) : ''); }
     show(); draw(); window.addEventListener('resize', draw); onLeave(p, stop);
+  });
+
+  /* ---------- 碼表：繞口令計時，保留每一位的成績 ---------- */
+  $$('.stopwatch').forEach(function (w) {
+    var key = 'stopwatch-' + LESSON + '-' + (w.getAttribute('data-id') || '0'), runs = LS.get(key, []), t0 = 0, raf = 0;
+    w.innerHTML = '<div class="sw-time">0.00</div><div class="btn-row"><button type="button" class="btn primary go">開始</button><button type="button" class="btn clear">清除紀錄</button></div><ol class="sw-runs"></ol>';
+    var tm = w.querySelector('.sw-time'), go = w.querySelector('.go'), list = w.querySelector('.sw-runs');
+    function show() {
+      var best = runs.length ? Math.min.apply(null, runs) : 0;
+      list.innerHTML = runs.map(function (s, k) { return '<li class="' + (s === best ? 'best' : '') + '">第 ' + (k + 1) + ' 位　' + s.toFixed(2) + ' 秒' + (s === best ? '　最快' : '') + '</li>'; }).join('');
+    }
+    function loop() { tm.textContent = ((performance.now() - t0) / 1000).toFixed(2); raf = requestAnimationFrame(loop); }
+    function stop(save) {
+      cancelAnimationFrame(raf); raf = 0; go.textContent = '開始'; w.classList.remove('on');
+      if (save) { var sec = (performance.now() - t0) / 1000; tm.textContent = sec.toFixed(2); runs.push(+sec.toFixed(2)); if (runs.length > 12) runs.shift(); LS.set(key, runs); show(); }
+    }
+    go.onclick = function () { if (raf) return stop(true); t0 = performance.now(); go.textContent = '停止'; w.classList.add('on'); loop(); };
+    w.querySelector('.clear').onclick = function () { stop(false); runs = []; LS.set(key, runs); tm.textContent = '0.00'; show(); };
+    show(); onLeave(w, function () { if (raf) stop(false); });
+  });
+
+  /* ---------- 鏡子：手機前鏡頭，對照口型（畫面不錄製、不上傳） ---------- */
+  $$('.mirror').forEach(function (m) {
+    m.innerHTML = '<div class="mr-view"><video playsinline muted></video><p class="mr-hint">按「打開鏡子」，用前鏡頭看自己的口型<br><small>畫面只在這支手機上顯示，不會錄製或上傳</small></p></div><div class="btn-row"><button type="button" class="btn primary go">打開鏡子</button></div>';
+    var v = m.querySelector('video'), go = m.querySelector('.go'), hint = m.querySelector('.mr-hint'), stream = null;
+    function stop() { if (stream) { stream.getTracks().forEach(function (t) { t.stop(); }); stream = null; } v.srcObject = null; m.classList.remove('on'); go.textContent = '打開鏡子'; }
+    go.onclick = function () {
+      if (stream) return stop();
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { hint.textContent = '這個瀏覽器無法使用鏡頭，請改用手機的自拍模式'; return; }
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false }).then(function (s) {
+        stream = s; v.srcObject = s; v.play(); m.classList.add('on'); go.textContent = '關閉鏡子';
+      }).catch(function () { hint.textContent = '無法使用鏡頭：請允許瀏覽器使用相機，並以 https 網址開啟'; });
+    };
+    onLeave(m, stop);
   });
 
   /* ---------- 節奏挑戰：聽節奏 → 唱出 Ta → 比對拍點 ---------- */
@@ -630,10 +670,13 @@
   /* ---------- 13. 歌詞換氣點標記 ----------
    * 歌詞來源（依序）：老師在這台電腦貼上的歌詞 → 後台「歌詞」分頁（需課程代碼）→ data-lines 預設片段
    * 歌詞格式：一行一句、空行分段、【主歌】這類標題行；字後面加 ∨ 或 | 為老師版大換氣，ˇ 或 ^ 為小換氣
+   * data-marks 可改用其他記號（例："●|ŋ" 標韻腳與後鼻音），data-hint 為操作說明
    */
   $$('.lyricmark').forEach(function (l) {
     var lid = l.getAttribute('data-id') || '0', base = 'lyric-' + LESSON + '-' + lid;
     var fallback = l.getAttribute('data-lines').split(';').join('\n');
+    var MK = (l.getAttribute('data-marks') || '∨|ˇ').split('|'), hint = l.getAttribute('data-hint') || '點字的後面加上換氣記號：點一次 ∨ 大換氣，再點一次 ˇ 小換氣，再點一次取消 ';
+    function mkOf(ch) { var k = MK.indexOf(ch); if (k > -1) return MK[k]; if (MK[0] === '∨') { if (ch === '|') return '∨'; if (ch === '^') return 'ˇ'; } return ''; }
     var marks = {}, teacher = {}, key = '', src = '';
     var box = el('div', 'lm-lines');
     var foot = el('div', 'btn-row'), sd = btn('送出我的標記', 'primary'), tv = btn('對照老師版'), cl = btn('清除我的標記'), ed = btn('貼上完整歌詞');
@@ -653,10 +696,10 @@
         if (/^[【\[［(（].*[】\]］)）]$/.test(line)) { box.appendChild(el('p', 'lm-label', esc(line.replace(/^[【\[［(（]|[】\]］)）]$/g, '')))); return; }
         var row = el('p', 'lm-line'), ci = 0, n = li++;
         line.split('').forEach(function (ch) {
-          if ('|∨^ˇ'.indexOf(ch) > -1 && ci > 0) { teacher[n + ':' + (ci - 1)] = (ch === '^' || ch === 'ˇ') ? 'ˇ' : '∨'; return; }
+          if (mkOf(ch) && ci > 0) { teacher[n + ':' + (ci - 1)] = mkOf(ch); return; }
           if (ch === ' ' || ch === '　') { row.appendChild(el('span', 'lm-sp', ' ')); return; }
           var id = n + ':' + ci, s = el('span', 'lm-ch', esc(ch)); s.setAttribute('data-id', id);
-          s.onclick = function () { var v = marks[id]; marks[id] = !v ? '∨' : v === '∨' ? 'ˇ' : ''; if (!marks[id]) delete marks[id]; LS.set(key, marks); paint(); };
+          s.onclick = function () { var k = MK.indexOf(marks[id] || ''); marks[id] = MK[k + 1] || ''; if (!marks[id]) delete marks[id]; LS.set(key, marks); paint(); };
           row.appendChild(s); ci++;
         });
         box.appendChild(row);
@@ -669,18 +712,18 @@
       var showT = l.classList.contains('show-t'), hit = 0, tot = Object.keys(teacher).length;
       $$('.lm-ch', l).forEach(function (s) {
         var id = s.getAttribute('data-id'), m = marks[id] || '', t = teacher[id] || '';
-        s.setAttribute('data-m', m); s.setAttribute('data-t', showT ? t : '');
+        s.setAttribute('data-m', m); s.setAttribute('data-k', MK.indexOf(m)); s.setAttribute('data-t', showT ? t : '');
         s.classList.toggle('match', showT && !!t && m === t);
         if (t && m === t) hit++;
       });
       var note = src === 'sheet' ? '（歌詞來自課程試算表）' : src === 'local' ? '（老師貼上的完整歌詞）' : '（預設片段，可按「貼上完整歌詞」換成整首主副歌）';
-      msg.textContent = showT ? '和老師版相同的記號：' + hit + ' / ' + tot + '。換氣點沒有唯一解，重點是唱到句尾還有氣。' : '點字的後面加上換氣記號：點一次 ∨ 大換氣，再點一次 ˇ 小換氣，再點一次取消 ' + note;
+      msg.textContent = showT ? '和老師版相同的記號：' + hit + ' / ' + tot + '。' + (MK[0] === '∨' ? '換氣點沒有唯一解，重點是唱到句尾還有氣。' : '') : hint + note;
     }
     sd.onclick = function () {
-      if (!Object.keys(marks).length) { say('請先在歌詞上點出換氣點', 'warn'); return; }
+      if (!Object.keys(marks).length) { say('請先在歌詞上點出記號', 'warn'); return; }
       var text = $$('.lm-line', l).map(function (row) { return $$('.lm-ch', row).map(function (s) { return s.textContent + (marks[s.getAttribute('data-id')] || ''); }).join(''); }).join(' / ');
       var hit = Object.keys(teacher).filter(function (k) { return marks[k] === teacher[k]; }).length;
-      if (window.PixelBackend) window.PixelBackend.send('lyric', { item: lid, result: text, value: hit, detail: { teacherMarks: Object.keys(teacher).length, source: src } }, { slide: slideNo(l), okMsg: '換氣點已送出' });
+      if (window.PixelBackend) window.PixelBackend.send('lyric', { item: lid, result: text, value: hit, detail: { teacherMarks: Object.keys(teacher).length, source: src } }, { slide: slideNo(l), okMsg: MK[0] === '∨' ? '換氣點已送出' : '標記已送出' });
     };
     tv.onclick = function () { l.classList.toggle('show-t'); tv.textContent = l.classList.contains('show-t') ? '隱藏老師版' : '對照老師版'; paint(); };
     cl.onclick = function () { marks = {}; LS.set(key, marks); paint(); };

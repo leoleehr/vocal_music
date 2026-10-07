@@ -153,6 +153,27 @@
     go.onclick = function () { mid ? stop() : start(); };
     m.querySelector('.up').onclick = function () { bpm = Math.min(200, bpm + 5); label(); if (mid) start(); };
     m.querySelector('.dn').onclick = function () { bpm = Math.max(40, bpm - 5); label(); if (mid) start(); };
+    // data-presets="70|100|140"：一鍵切換速度
+    (m.getAttribute('data-presets') || '').split('|').filter(Boolean).forEach(function (v) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'preset'; b.textContent = v;
+      b.onclick = function () { bpm = parseInt(v, 10); label(); start(); }; m.appendChild(b);
+    });
+    // data-challenge="id"：加速挑戰，唱穩一輪就 +5，記下班級紀錄（存在這台電腦）
+    var cid = m.getAttribute('data-challenge');
+    if (cid) {
+      var key = 'pixel:metro-' + cid, rec = 0, base = bpm;
+      try { rec = parseInt(localStorage.getItem(key), 10) || 0; } catch (e) {}
+      var ok = document.createElement('button'); ok.type = 'button'; ok.className = 'pass'; ok.textContent = '唱穩了 +5';
+      var rb = document.createElement('span'); rb.className = 'record';
+      var rs = document.createElement('button'); rs.type = 'button'; rs.className = 'restart'; rs.textContent = '回到 ' + base;
+      function showRec() { rb.textContent = rec ? '班級紀錄 ' + rec + ' BPM' : '班級紀錄 —'; }
+      ok.onclick = function () {
+        if (bpm > rec) { rec = bpm; try { localStorage.setItem(key, rec); } catch (e) {} showRec(); }
+        bpm = Math.min(200, bpm + 5); label(); start();
+      };
+      rs.onclick = function () { bpm = base; label(); if (mid) start(); };
+      m.appendChild(ok); m.appendChild(rs); m.appendChild(rb); showRec();
+    }
     label();
     var slide = m.closest('.slide');
     new MutationObserver(function () { if (!mq.matches && !slide.classList.contains('active')) stop(); })
