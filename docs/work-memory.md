@@ -212,6 +212,13 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 節拍聲改依每輪實際起點計算；新的一輪第一個音出現時更新五線譜調號。第 9 張說明改為「第一輪前 4 拍預備……之後最後的 1 唱滿四拍就直接接下一輪」。
 - 驗證（140 BPM 模擬）：最後的 1（C3）之後直接是下一輪「Do C#3」，間隔 1720ms（四拍理論 1714ms），整段只有第一輪的 4 個預備拍；五線譜最後為全音符、簡譜格顯示 4 拍。講義第四堂第 9 列、README 更新；Claude Doc（rev 100）、md、PDF（33 頁）同步；資產版本 `?v=20261008q`。
 
+## 2026-10-08 Rebranding：首頁與講義換新標誌
+
+- 使用者完成 Pixel Studio CI（Codex 製作，來源 `C:\Agent\UIUX\brand\Pixel-Studio-CI-v1\01-logos`）。複製三份 SVG 到 `assets/brand/`：`pixel-studio-horizontal.svg`（橫式，取透明版）、`pixel-studio-primary-dark.svg`、`pixel-studio-primary-transparent.svg`。暗色版與透明版 SVG 內容相同，只差一個黑色背景矩形。
+- 首頁左上角（原「pixel studio」文字）與頁尾（原「pixel studio.」大字）改為橫式標誌圖片；首頁底色是深綠黑，所以用透明版避免出現黑框。SVG 有內建安全邊距，以高度與負邊距對齊：頂欄 64px（平板 52、手機 46），頁尾 120px（88／70）。
+- 講義依背景換標誌：黑底封面用 primary-dark，白底封底用 primary-transparent；沿用先前的寬 82mm、不透明度 .8。PDF 重新產生，33 頁、4.62MB。用 SVG 不用 6000px PNG（每張 2–7MB）。
+- 問卷、講義網頁、投影片頁尾仍是舊字標（使用者這次只指定首頁與講義）。資產版本 `?v=20261008s`。commit `4ebb2e7`。
+
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
 ## 驗證與部署
