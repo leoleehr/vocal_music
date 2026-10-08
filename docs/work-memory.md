@@ -264,3 +264,28 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 ## 2026-10-08 正式 Logo 字標刷淡
 
 - 依使用者要求，下方彩色字標 opacity 改為 0.9（刷淡 10%），上方 220 Hz 聲波維持原樣。正式 Logo PNG 與 SVG 已同步更新；Chrome 渲染並目視確認。
+
+## 2026-10-08 Pixel Studio CI v1.0
+
+- 依使用者要求，以已確認的 220 Hz 聲波 + 刷淡 10% 字標製作 CI。新交付放在 brand/Pixel-Studio-CI-v1，另提供同名 ZIP。標準直式 1600×1440：字標寬 1344、聲波寬 860（64%）、中線對齊，外圍 128 單位安全距離，垂直間距約 93 單位。
+- 字標由來源 PNG 輪廓擷取，保留幾何端點並修整曲線、圓點及字腔；漸層按來源重建，彩色字標維持 opacity .9。14 份標誌 SVG 全部為路徑，不含點陣圖或文字字型依賴。聲波沿用首頁 220 Hz 公式與 54 線，加密為 241 取樣點；另提供 9 線小尺寸版。
+- 高解析主標誌 PNG 6000×5400，橫式 6000×1800；19 份 PNG（14 標誌 + 5 應用）含 300 ppi 中繼資料，透明版本 alpha 已確認。10 頁 CI 手冊 PDF / HTML、純向量主標誌 PDF、JSON / CSS 品牌參數，及名片正背面、社群方形、品牌橫幅、A4 信紙設計稿。
+- 驗證：20 份 SVG XML 有效，標誌 14 份皆無 image / text 元素；兩份 PDF 分別 10 頁 / 1 頁，均無點陣圖片；逐頁渲染目視確認排版、圖片、字腔與頁尾；PNG 尺寸、透明度、ppi 驗證通過。ZIP 已檢查 CRC。
+- 限制：此為 sRGB CI，本次未指定印刷 ICC / CMYK / Pantone；交印需轉色打樣，名片尚未填入個人聯絡資料、未含出血。未替換網站引用或部署，既有及其他進行中的檔案修改保留。
+
+## 2026-10-08 CI 白底彩色橫式版
+
+- 使用者指出橫式只有黑底，新增 horizontal-light.svg 與 horizontal-light-6000.png（6000×1800，純白底，原有彩色聲波與字標 90% 不透明度）。
+- CI 標誌母檔增為 15 份。來源建置程式、README、手冊 HTML / PDF（10 頁，第 5 頁白底彩色範例及第 10 頁數量）、品質記錄、manifest 與 ZIP 同步更新。白底像素、尺寸、PDF 向量及受影響頁面渲染均驗證。
+
+## 2026-10-08 CI 正式 Slogan 與品牌資訊
+
+- 使用者提供正式 Slogan：We Perform the Pixel of Music；畫素音樂工作坊成立於 2008 年，結合音樂製作、音樂教學與藝術展演。以使用者本輪提供內容為品牌資訊來源，已同步進 CI 手冊、README、brand-tokens.json 與五份應用設計稿。
+- 新增 horizontal-slogan-dark / horizontal-slogan-light SVG 與 6000×2000 PNG。Slogan 為 Arial Regular 的向量字形輪廓，保留原始大小寫，與字標左側對齊。標誌母檔合計 17 份，全部不含 image / text 元素；原本無 Slogan 的黑底及白底版本保留。
+- CI 手冊 10 頁重繪並逐頁驗證，成立年份、三項業務與正式 Slogan 的 PDF 文字均驗證；PDF 不含點陣圖片。應用 PNG、品質記錄、manifest、ZIP 已更新，CRC 通過。未替換網站或部署。
+
+## 2026-10-08 UIUX 產出位置修正
+
+- 使用者指定：網站原始專案為 C:/Agent/vocal_music，但 UIUX 設計產出必須放在 C:/Agent/UIUX/brand。
+- 已將完整 CI 資料夾與 ZIP 移至 C:/Agent/UIUX/brand/Pixel-Studio-CI-v1 與 C:/Agent/UIUX/brand/Pixel-Studio-CI-v1.zip；初版 Logo PNG / SVG 及獨立 220 Hz 聲波 SVG 從網站 assets 移至 C:/Agent/UIUX/brand/initial-logo。
+- 61 個檔案移動前後 SHA-256 一致，目的地未覆蓋既有檔案。這三個初版資產無網站 HTML / CSS / JS 引用。網站 brand 目錄僅剩空目錄。後續 CI 修改與交付均以 UIUX/brand 為準。
