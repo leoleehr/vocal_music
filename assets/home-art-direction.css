@@ -84,7 +84,7 @@
 .home .about .since{font-size:15px;margin-bottom:20px}
 .home .about-credit a{min-height:44px;display:inline-flex;align-items:center}
 .home footer{padding:64px 0 28px;background:#0c0e0c}
-.footer-manifesto{font:500 clamp(25.2px,4.76vw,68.6px)/1.12 var(--display);letter-spacing:-.065em;margin-bottom:44px;color:var(--ink)}
+.footer-manifesto{font:500 clamp(20.16px,3.808vw,54.88px)/1.12 var(--display);letter-spacing:-.065em;margin-bottom:44px;color:var(--ink)}
 .footer-manifesto span{color:var(--amber)}
 .home .footer-logo{height:88px;margin-left:-14px}
 .home .footer-bottom{font-size:11px;padding-top:24px;border-top:1px solid var(--line);margin-top:24px}
@@ -133,7 +133,7 @@
  .home .rhythm{display:grid;grid-template-columns:1fr 1fr}.home .rhythm div{padding:20px!important;font-size:12px}.home .rhythm div:last-child{grid-column:1 / -1}
  .home .rhythm b{font-size:30px}.home .rhythm small{font-size:12px}.home .about{padding-top:48px;gap:32px}
  .home .about-statement{font-size:clamp(28px,8vw,40px)}.home .about p{font-size:14px}.home .about .since{font-size:14px}
- .home footer{padding-top:40px}.footer-manifesto{font-size:28px;margin-bottom:28px}.home .footer-logo{height:64px;margin-left:-10px}
+ .home footer{padding-top:40px}.footer-manifesto{font-size:22.4px;margin-bottom:28px}.home .footer-logo{height:64px;margin-left:-10px}
  .home .footer-bottom{font-size:10px;gap:10px;line-height:1.8}.home .footer-main{gap:12px}.home .footer-main a{white-space:nowrap}
 }
 @media(prefers-reduced-motion:reduce){.motion-toggle{display:none}.home .voice-lines{transform:none!important}.home .voice-art:hover .voice-lines{transform:none}}

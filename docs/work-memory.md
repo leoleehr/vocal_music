@@ -1,5 +1,20 @@
 # 工作記憶
 
+## 2026-10-09 Slogan 再縮小與 VOCAL LAB Google 文件
+
+- 使用者要求電腦／手機頁尾 Slogan 再縮小 20%：桌面 `clamp(20.16px,3.808vw,54.88px)`，手機 22.4px；首頁 CSS 版本 `20261009b`。延續先前部署授權提交並推送此修改。
+- 文章標題依指定更正為「VOCAL LAB：將十多年的歌唱教學，彙整成一個聲樂實驗室」，全文名稱同步更正，保留原有建置事實與待驗證限制。本機文章檔名維持 `docs/voice-lab-build-story.md`，文章未加入網站公開頁面。
+- 已建立原生 Google Docs，放在 My Drive 的 ChatGPT 資料夾；文件網址：https://docs.google.com/document/d/10pfjZ67eQLxRK6oScG2KHn9AopQVrimuKGOIFxRRKsA/edit 。使用原生標題、四個章節標題、網站連結及兩個日期 chip，並以完整 readback 核對新名稱、結尾與結構。
+- Google 文件維持既有帳戶的預設分享設定，未開啟公開分享。後台設定筆記保留未追蹤，本機文章保留供後續修訂。
+
+## 2026-10-09 Slogan 部署與網站建置文章（最新狀態）
+
+- 使用者要求提交與部署，Slogan 修改及當時工作記憶已提交並推送：`8a81d39d335ee8203bf711cdfb8c2a2069b8a4b8`。GitHub Pages workflow `37808145806` completed／success。
+- 部署後實際查證：首頁與 `home-art-direction.css?v=20261009a` HTTP 200；首頁含新版 CSS 引用，線上 CSS 含電腦版縮小 30% 的 clamp 與手機 28px。此次未進行瀏覽器目視驗證。
+- 依使用者引言與 leo-voice 技能撰寫 `docs/voice-lab-build-story.md`，整理教材、互動、品牌、驗證與教學反思；文稿與本段部署紀錄先保留本機，未加入網站導覽或公開文章頁。
+- 「三天內」指 Git 可佐證的 10 月 5 日晚間首次教材提交至 10 月 8 日六堂整合與首頁改版；不代表完整工時或從零產生十多年教學內容。文章保留使用者所述下週亞東吉他社授課計畫，明確交代後台回傳及真機／教室實測待完成。
+- 文稿禁用句型掃描與 `git diff --check` 通過。原有未追蹤 `docs/apps-script-setup-notes.md` 保留；其他既有待辦不變。
+
 ## 2026-10-09 頁尾 Slogan 尺寸修正
 
 - 依使用者指定，首頁頁尾 Slogan 電腦版字級縮小 30%：`clamp(36px,6.8vw,98px)` 改為 `clamp(25.2px,4.76vw,68.6px)`；599px 以下手機版固定為 28px。保留原有兩行、行高與留白。
