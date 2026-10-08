@@ -232,6 +232,11 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 六堂封面由 `deck.js` 自動加入：右側大型彩色聲波 `assets/brand/pixel-studio-symbol-color.svg`（透明底，560px，緩慢上下浮動與呼吸光暈，支援減少動態效果），右下角白色直式標誌 `pixel-studio-primary-mono-white.svg`（寬 118px、不透明度 .55）；移除舊的彩色格紋裝飾。手機版聲波縮為 200px 置於標題上方、隱藏右下標誌。
 - 未使用 avatar-dark（含黑底方塊）與 symbol-compact（線條數少，適合小圖示）。資產版本 `?v=20261008u`。
 
+## 2026-10-08 講義：課程回饋問卷與封面標誌
+
+- 講義「課程回饋問卷」改為與網站 `surveys.js` 的 feedback 問卷一致（12 題）：五構面滿意度表、課程整體 6 題（標示選填）、六堂學習成效自評表、進步紀錄 3 題（/s/ 秒數、可用音域、整體進步）。Claude Doc（rev 101）、md、PDF 同步；PDF 因此由 33 頁增為 34 頁。
+- 講義封面標誌改為黑底彩字原色顯示：`.cover .logo-new{opacity:1}`，取消先前刷淡 20%（封底黑色單色版仍維持 .8）。CI 的 primary-dark 與 primary-transparent SVG 除黑色背景外完全相同，色彩與 PNG 一致。
+
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
 ## 驗證與部署
