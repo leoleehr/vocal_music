@@ -729,7 +729,57 @@
    * 格式：一行一句；行首可加時間「0:45」對應影片秒數，播放時自動跟著換行；沒有時間就用 ◀ ▶ 手動換行
    * 同一張投影片的分段計時進入 data-phase（預設第 1 段）時自動展開
    */
+  var SOLFA_N = { '1': 'Do', '2': 'Re', '3': 'Mi', '4': 'Fa', '5': 'Sol', '6': 'La', '7': 'Si', '0': '' };
+  function solfaScore(b) { // data-score="拍點|簡譜|歌詞;…"：一次只顯示一小節，依拍速逐音亮起
+    var bpm = parseFloat(b.getAttribute('data-bpm')) || 68, keyTxt = b.getAttribute('data-key') || '', want = parseInt(b.getAttribute('data-phase') || '0', 10);
+    var notes = b.getAttribute('data-score').split(';').map(function (x) { var a = x.split('|'); return { at: parseFloat(a[0]), n: a[1].replace(',', ''), low: a[1].indexOf(',') > -1, high: a[1].indexOf("'") > -1, w: a[2] || '' }; });
+    var bars = Math.ceil(Math.max.apply(null, notes.map(function (n) { return n.at; })) / 4 + 0.001), total = bars * 4;
+    var key = 'solfa-start-' + LESSON + '-' + (b.getAttribute('data-id') || 'solfa'), startAt = LS.get(key, null), t0 = 0, tick = 0, mode = '', shown = -1, open = false;
+    b.classList.add('score');
+    b.innerHTML = '<div class="sf-head"><b>唱名提示</b><span class="sf-src muted">' + esc(keyTxt) + '・' + bpm + ' BPM・副歌前 ' + bars + ' 小節</span><span class="sf-btns"><button type="button" class="btn go">▶ 跟唱</button><button type="button" class="btn mark">設定副歌起點</button><button type="button" class="btn tog">顯示</button></span></div>' +
+      '<div class="sf-body"><div class="sf-bar"></div><p class="sf-hint muted"></p></div>';
+    var barEl = b.querySelector('.sf-bar'), hint = b.querySelector('.sf-hint');
+    function digit(n) { return '<span class="sf-d">' + n.n + (n.low ? '<i class="lo"></i>' : '') + (n.high ? '<i class="hi"></i>' : '') + '</span>'; }
+    function renderBar(k) {
+      shown = k;
+      var inBar = notes.filter(function (n) { return n.at >= k * 4 && n.at < k * 4 + 4; });
+      barEl.innerHTML = '<span class="sf-no">第 ' + (k + 1) + ' / ' + bars + ' 小節</span><div class="sf-notes">' + inBar.map(function (n) { return '<span class="sf-n" data-at="' + n.at + '">' + digit(n) + '<small>' + SOLFA_N[n.n] + '</small><em>' + esc(n.w) + '</em></span>'; }).join('') + '</div>';
+    }
+    function hl(beat) {
+      var k = Math.min(bars - 1, Math.max(0, Math.floor(beat / 4)));
+      if (k !== shown) renderBar(k);
+      var curN = null; notes.forEach(function (n) { if (n.at <= beat) curN = n; });
+      $$('.sf-n', barEl).forEach(function (el) { var at = parseFloat(el.getAttribute('data-at')); el.classList.toggle('on', curN && at === curN.at); el.classList.toggle('past', at < beat && !(curN && at === curN.at)); });
+    }
+    function videoCtl() { return window.PixelYT && window.PixelYT.find ? window.PixelYT.find(b.closest('.slide')) : null; }
+    function loop() {
+      var beat;
+      if (mode === 'video') { var c = videoCtl(), pl = c && c.player; if (!pl || !pl.getCurrentTime || startAt === null) return; beat = (pl.getCurrentTime() - startAt) * bpm / 60; if (beat < -4 || beat > total + 2) { hint.textContent = '影片到 ' + fmt(startAt) + ' 自動跟唱，或按「▶ 跟唱」'; return; } }
+      else { beat = (performance.now() - t0) / 1000 * bpm / 60 - 4; if (beat > total + 1) { stopRun(); hint.textContent = '四小節唱完了，按「▶ 跟唱」再來一次'; return; } }
+      hint.textContent = '第 ' + (Math.min(bars - 1, Math.max(0, Math.floor(beat / 4))) + 1) + ' / ' + bars + ' 小節・' + (beat < 0 ? '預備 ' + Math.ceil(-beat) : '跟著亮起的唱名唱');
+      if (beat >= 0) hl(beat); else if (shown !== 0) renderBar(0);
+    }
+    function fmt(t) { return Math.floor(t / 60) + ':' + String(Math.floor(t % 60)).padStart(2, '0'); }
+    function run(m) { stopRun(); mode = m; if (m === 'manual') t0 = performance.now(); tick = setInterval(loop, 40); }
+    function stopRun() { clearInterval(tick); tick = 0; mode = ''; }
+    function show(on) {
+      open = on; b.classList.toggle('open', on); b.querySelector('.tog').textContent = on ? '收起' : '顯示';
+      if (on) { renderBar(0); hint.textContent = startAt !== null ? '影片到 ' + fmt(startAt) + ' 自動跟唱，或按「▶ 跟唱」' : '按「▶ 跟唱」開始；副歌開始時按「設定副歌起點」可同步影片'; run('video'); }
+      else stopRun();
+    }
+    b.querySelector('.tog').onclick = function () { show(!open); };
+    b.querySelector('.go').onclick = function () { if (!open) show(true); run('manual'); };
+    b.querySelector('.mark').onclick = function () {
+      var c = videoCtl(), pl = c && c.player;
+      if (!pl || !pl.getCurrentTime) { say('先播放影片，在副歌第一句「不是因為」開始時按下', 'warn'); return; }
+      startAt = Math.max(0, pl.getCurrentTime() - 1.5 * 60 / bpm); LS.set(key, startAt); say('已設定副歌起點 ' + fmt(startAt), 'ok'); if (!open) show(true); else run('video');
+    };
+    var slide = b.closest('.slide');
+    if (slide) slide.addEventListener('phase:change', function (e) { var d = e.detail || {}; if (d.running && d.index === want) show(true); else if (d.running && d.index !== want) show(false); });
+    renderBar(0); onLeave(b, stopRun);
+  }
   $$('.solfa').forEach(function (b) {
+    if (b.hasAttribute('data-score')) return solfaScore(b);
     var lid = b.getAttribute('data-id') || 'solfa', key = 'solfa-' + LESSON + '-' + lid, want = parseInt(b.getAttribute('data-phase') || '0', 10);
     var rows = [], cur = 0, src = '', tick = 0, open = false;
     b.innerHTML = '<div class="sf-head"><b>唱名提示</b><span class="sf-src muted"></span><span class="sf-btns"><button type="button" class="btn prev" aria-label="上一句">◀</button><button type="button" class="btn next" aria-label="下一句">▶</button><button type="button" class="btn tog">顯示</button><button type="button" class="btn edit">貼上唱名</button></span></div>' +
@@ -1240,11 +1290,13 @@
     function fmt(s) { return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
     function emit() { p.dispatchEvent(new CustomEvent('phase:change', { bubbles: true, detail: { index: idx, name: ph[idx].name, running: !!tid } })); }
     function draw() { setTimeout(emit, 0); nm.textContent = (loop ? '第 ' + round + ' 位　' : '') + ph[idx].name; tm.textContent = fmt(left); $$('span', steps).forEach(function (s, k) { s.classList.toggle('on', k === idx); s.classList.toggle('past', k < idx); }); }
-    function next() { if (idx < ph.length - 1) { idx++; left = ph[idx].sec; chime(); } else if (loop) { idx = 0; left = ph[0].sec; round++; tone(660, 0.5, 0.3); stop(); go.textContent = '下一位開始'; } else { stop(); left = 0; nm.textContent = '時間到'; tone(660, 0.6, 0.3); } draw(); }
+    function next() { if (idx < ph.length - 1) { idx++; left = ph[idx].sec; chime(); var v = video(); if (v && tid && v.player && v.player.seekTo) { v.player.seekTo(0, true); v.play(); } } else if (loop) { idx = 0; left = ph[0].sec; round++; tone(660, 0.5, 0.3); stop(); go.textContent = '下一位開始'; } else { stop(); left = 0; nm.textContent = '時間到'; tone(660, 0.6, 0.3); } draw(); }
     function stop() { clearInterval(tid); tid = 0; go.textContent = '開始'; }
-    go.onclick = function () { if (tid) { stop(); go.textContent = '繼續'; emit(); return; } go.textContent = '暫停'; tid = setInterval(function () { left--; if (left <= 0) next(); else draw(); }, 1000); emit(); };
+    // data-video：開始／繼續時一併播放同一張投影片的影片，暫停時暫停，重設時停止，換段時從頭播放
+    function video() { return p.hasAttribute('data-video') && window.PixelYT && window.PixelYT.find ? window.PixelYT.find(p.closest('.slide')) : null; }
+    go.onclick = function () { var v = video(); if (tid) { stop(); go.textContent = '繼續'; if (v) v.pause(); emit(); return; } go.textContent = '暫停'; if (v) v.play(); tid = setInterval(function () { left--; if (left <= 0) next(); else draw(); }, 1000); emit(); };
     p.querySelector('.next').onclick = next;
-    p.querySelector('.reset').onclick = function () { stop(); idx = 0; left = ph[0].sec; round = 1; draw(); };
+    p.querySelector('.reset').onclick = function () { stop(); idx = 0; left = ph[0].sec; round = 1; var v = video(); if (v) v.stop(); draw(); };
     draw(); onLeave(p, function () { if (tid) { stop(); go.textContent = '繼續'; } });
   });
 
