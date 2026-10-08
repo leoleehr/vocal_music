@@ -139,6 +139,7 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - `assets/responsive.css`（網站與投影片都載入）加上 `html` 與按鈕等互動元素 `touch-action: manipulation`：關閉雙擊放大、保留雙指縮放與捲動；按鈕類加 `user-select:none` 與透明點擊高亮；觸控裝置上輸入欄、選單一律 16px，避免 iOS 聚焦自動放大。未使用 `user-scalable=no`，保留無障礙縮放。
 - 節奏挑戰「拍點」鍵改用 `pointerdown` 立即記錄（不等 click 延遲），鍵盤啟動（click detail 0）仍有效，不會重複計拍。
 - 驗證：第一、四堂投影片、首頁、問卷的 html、按鈕、拍點鍵、拍速鍵計算樣式皆為 manipulation。尚需真機（iOS Safari、Android Chrome）確認。
+- 部署：commit `ee4231b`（含共鳴觀測站 `4ba80d3`、第四堂跟唱 `9c020e0`、連點修正）已推送至 `main`；GitHub Pages workflow `37711513976` 成功。線上第三、四堂 HTTP 200 且含新元件，線上腳本與樣式已更新，線上 PDF 與本機 SHA-256 一致。
 
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
