@@ -237,6 +237,11 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 講義「課程回饋問卷」改為與網站 `surveys.js` 的 feedback 問卷一致（12 題）：五構面滿意度表、課程整體 6 題（標示選填）、六堂學習成效自評表、進步紀錄 3 題（/s/ 秒數、可用音域、整體進步）。Claude Doc（rev 101）、md、PDF 同步；PDF 因此由 33 頁增為 34 頁。
 - 講義封面標誌改為黑底彩字原色顯示：`.cover .logo-new{opacity:1}`，取消先前刷淡 20%（封底黑色單色版仍維持 .8）。CI 的 primary-dark 與 primary-transparent SVG 除黑色背景外完全相同，色彩與 PNG 一致。
 
+## 2026-10-08 首頁頁尾白色標誌與聲波流動修正
+
+- 首頁左下角頁尾標誌改為白色單色橫式 `pixel-studio-horizontal-mono-white.svg`；左上角維持彩色橫式。講義封面依使用者確認不變。
+- 首頁 FIG. 01 聲波彩虹流動在手機上不動：原本用 SVG SMIL `animateTransform` 移動 `gradientTransform`，iOS Safari 不會重繪。改為 `requestAnimationFrame` 每約 33ms 移動漸層 `x1`／`x2`（spreadMethod repeat，12 秒一循環）；離開畫面（IntersectionObserver）或切到背景時暫停；系統開啟「減少動態效果」時仍不動（手機若開了這個設定，流動停止是正常的）。資產版本 `?v=20261008v`。
+
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
 ## 驗證與部署

@@ -7,11 +7,18 @@
   var button = document.getElementById('voice-play');
   var context, oscillator, gain, timer, playing = false;
   var gradient = document.getElementById('voice-gradient');
+  // 彩虹流動：改用 requestAnimationFrame 移動漸層起訖點（iOS Safari 對 SVG animateTransform 漸層不會重繪）
+  // 系統開啟「減少動態效果」時不動；離開畫面或切到背景時暫停，省電
   if (gradient && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
-    var ns = 'http://www.w3.org/2000/svg', flow = document.createElementNS(ns, 'animateTransform');
-    flow.setAttribute('attributeName', 'gradientTransform'); flow.setAttribute('type', 'translate');
-    flow.setAttribute('from', '0 0'); flow.setAttribute('to', '500 0'); flow.setAttribute('dur', '12s');
-    flow.setAttribute('repeatCount', 'indefinite'); gradient.appendChild(flow);
+    var art = gradient.ownerSVGElement, visible = true, last = 0, flowRaf = 0;
+    function flowTick(now) {
+      flowRaf = requestAnimationFrame(flowTick);
+      if (!visible || document.hidden || now - last < 33) return; last = now;
+      var t = (now / 12000 * 500) % 500;
+      gradient.setAttribute('x1', (t).toFixed(1)); gradient.setAttribute('x2', (t + 500).toFixed(1));
+    }
+    if ('IntersectionObserver' in window && art) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }).observe(art);
+    flowRaf = requestAnimationFrame(flowTick);
   }
   function draw() {
     var frequency = Number(slider.value), markup = '';
