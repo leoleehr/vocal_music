@@ -108,4 +108,6 @@ chrome --headless=new --no-pdf-header-footer --generate-pdf-document-outline --v
 
 複製 `slides/lesson-02/index.html`，保留 `<head>` 與底部的 `<script>`，替換 `<section class="slide">` 內容即可沿用同一套設計。新的歌曲請先加進 `assets/songs.js`。
 
+> 修改 `assets/` 裡的 CSS 或 JS 後，請把各頁 HTML 引用後面的版本參數（`?v=…`）一併更新，避免學員瀏覽器沿用舊快取。
+
 原始 PDF 講義與歌曲和弦譜涉及第三方著作權，所以沒有放進這個 repo。

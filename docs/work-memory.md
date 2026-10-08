@@ -152,6 +152,13 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 驗證：模擬 AudioContext 確認音階 16 音順序與四拍結尾、促音和弦進行與五線譜重畫；模擬重疊標記得出兩個聲區與音高；以 LINE 使用者代理測試出現長按儲存視窗；第一到六堂 iframe 稽核無橫向溢出。分享選單與 LINE 實際儲存需真機確認。
 - 部署：commit `a883eee` 已推送至 `main`；GitHub Pages workflow `37717163012` 成功。線上第三、四堂 HTTP 200，第四堂載入 Noto Music，線上腳本含聲區、五線譜與儲存視窗，樣式含刷淡設定，線上 PDF 與本機 SHA-256 一致。
 
+## 2026-10-08 流程圖刷淡修正與快取版本參數
+
+- 使用者回報電腦簡報流程圖沒有變淡。原因：GitHub Pages 的 CSS 快取 `max-age=600`，加上 filter 刷淡在深色底上不明顯。
+- 改為直接在 `deck-studio.css` 覆寫 `.bar-*` 為低飽和配色（起 #52699f、承 #cdc57a 深字、休 #3b3b43、轉 #b05a4d、合 #5c8456；課表 teal #4f8297、orange #a77b48、pink #9c5a70、purple #7b62a0），白字對比皆不低於原配色。
+- 所有頁面（首頁、問卷、講義、列印講義、六堂投影片，共 111 處）引用的本地 CSS／JS 加上 `?v=20261008c`。**之後修改 assets 的 CSS 或 JS 時，要同步更新版本參數**，否則使用者可能沿用舊快取。
+- 驗證：第一堂流程圖、第二堂課表截圖確認變淡；第一到六堂 iframe 稽核無橫向溢出；首頁、問卷、講義正常渲染。
+
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
 ## 驗證與部署
