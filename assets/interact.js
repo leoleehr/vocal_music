@@ -496,7 +496,7 @@
       (function tick() { if (!playing) return; draw(au.currentTime); if (sel && au.currentTime >= sel.b) { au.pause(); return; } requestAnimationFrame(tick); })();
     };
     au.onpause = au.onended = function () { playing = false; play.textContent = '▶ 播放'; draw(); };
-    function px(e) { var r = cv.getBoundingClientRect(); return e.clientX - r.left; }
+    function px(e) { var r = cv.getBoundingClientRect(); return (e.clientX - r.left) * (cv.clientWidth / (r.width || 1)); } // 投影片整體縮放時，換算回畫布的版面座標
     cv.addEventListener('pointerdown', function (e) { if (raf || !data.length) return; var g = geo(); drag = g.Tm(px(e)); sel = { a: drag, b: drag }; cv.setPointerCapture(e.pointerId); draw(); });
     cv.addEventListener('pointermove', function (e) { if (drag === null) return; var t = geo().Tm(px(e)); sel = { a: Math.min(drag, t), b: Math.max(drag, t) }; draw(); });
     cv.addEventListener('pointerup', function () { if (drag === null) return; drag = null; if (sel && sel.b - sel.a < 0.2) sel = null; refresh(); });

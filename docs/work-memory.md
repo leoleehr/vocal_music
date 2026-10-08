@@ -160,6 +160,12 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 驗證：第一堂流程圖、第二堂課表截圖確認變淡；第一到六堂 iframe 稽核無橫向溢出；首頁、問卷、講義正常渲染。
 - 部署：commit `02bfef9` 已推送；GitHub Pages workflow `37717676715` 成功，線上第一堂引用 `deck-studio.css?v=20261008c`，線上樣式為新配色。
 
+## 2026-10-08 觀測站拖曳落差與講義 Logo
+
+- 共鳴觀測站在電腦上拖曳選段有位移：投影片以 CSS transform 整體縮放，`getBoundingClientRect` 是縮放後座標，畫布繪圖用未縮放的版面寬度。`px()` 改為乘上 `cv.clientWidth / rect.width` 換算。以 1920×1080（1.4 倍）、1600×1000、1280×720（0.9 倍）測試拖曳 2–6 秒，標記皆為 2.0–6.0 秒。
+- 講義封面與封底 Logo（`handbook-print.html` 的 `.logo-new`）寬度 164mm → 82mm，加 `opacity:.8` 刷淡 20%；PDF 重新產生，仍為 33 頁。
+- 資產版本參數更新為 `?v=20261008d`。
+
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
 ## 驗證與部署
