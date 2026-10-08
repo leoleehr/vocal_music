@@ -603,3 +603,28 @@ table.mini-scale th{width:5.5em;text-align:left}
 .solfa.score .sf-n small{margin-top:2px}
 .solfa.score .sf-hint{font-size:12px;margin-top:4px}
 .solfa{position:relative;z-index:2}
+
+/* ===== 旋律偵測（第四堂三步驟學唱） ===== */
+.melodyscope{margin-top:10px;padding:8px 12px;position:relative;z-index:2}
+.ms-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ms-head b{font-size:15px}
+.ms-key{font-size:12px}
+.ms-btns{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap}
+.melodyscope .btn{padding:4px 10px;font-size:13px}
+.melodyscope .pr-seg .btn.on{background:var(--amber);color:#17150f;border-color:var(--amber);font-weight:700}
+.ms-now{display:flex;align-items:baseline;gap:10px;margin:4px 0 4px}
+.ms-big{font-family:var(--display);font-size:26px;font-weight:700;min-width:2.4em}
+.melodyscope.on .ms-big{color:var(--amber)}
+.ms-sub{font-size:13px}
+.ms-staff{margin-bottom:4px}
+.melodyscope .pr-staff svg{height:104px}
+.pr-staff .sf-jp{font:700 17px var(--display);fill:#1b1a17;text-anchor:middle}
+.pr-staff .sf-jpd{fill:#1b1a17}
+.pr-staff .sn.on .sf-jp,.pr-staff .sn.on .sf-jpd{fill:#b8921f}
+.ms-state{font-size:12px;margin:0;min-height:1.4em}
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){.ms-btns{margin-left:0;width:100%}.ms-btns .btn{flex:1 1 auto}.melodyscope .pr-staff svg{height:88px}}
+.melo-col .yt{max-width:430px;margin:0 auto}
+.melo-col .melodyscope{margin-top:8px}
+.melodyscope .ms-now{margin:2px 0}
+.melodyscope .ms-big{font-size:22px}
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){.melo-col .yt{max-width:none}}
