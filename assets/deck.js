@@ -18,7 +18,7 @@
     s.appendChild(c);
     var b = document.createElement('div');
     b.className = 'slide-brand';
-    b.innerHTML = '<img src="../../assets/pixel-studio-67-dark.png" alt="Pixel Studio 畫素音樂工作坊">';
+    b.innerHTML = '<img src="../../assets/brand/pixel-studio-horizontal-mono-white.svg" alt="Pixel Studio 畫素音樂工作坊">';
     s.appendChild(b);
   });
 

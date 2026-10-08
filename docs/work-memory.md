@@ -219,6 +219,13 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 講義依背景換標誌：黑底封面用 primary-dark，白底封底用 primary-transparent；沿用先前的寬 82mm、不透明度 .8。PDF 重新產生，33 頁、4.62MB。用 SVG 不用 6000px PNG（每張 2–7MB）。
 - 問卷、講義網頁、投影片頁尾仍是舊字標（使用者這次只指定首頁與講義）。資產版本 `?v=20261008s`。commit `4ebb2e7`。
 
+## 2026-10-08 Rebranding 第二輪：依背景選用標誌
+
+- 講義白底封底改用 primary-mono-black（`assets/brand/pixel-studio-primary-mono-black.svg`），移除上一輪的 primary-transparent。
+- 依背景與用途選用：首頁、問卷、講義網頁左上角與頁尾 → 彩色橫式（不含黑底的 horizontal-dark，三頁頂欄一致）；投影片右下角 → 白色單色橫式 `pixel-studio-horizontal-mono-white.svg`（高 34px、不透明度 .38），小尺寸彩色會變成雜點並與流程圖、圖表搶色；講義封面維持彩色 primary-dark。horizontal-light 與 horizontal-mono-black 目前沒有淺底位置，未使用。
+- `pixel.js` 的舊 Logo 產生函式沒有頁面使用，未更動；講義內頁頁首仍是文字「PIXEL STUDIO」（列印頁邊距區無法控制圖片尺寸）。
+- PDF 重新產生，33 頁。資產版本 `?v=20261008t`。
+
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
 ## 驗證與部署

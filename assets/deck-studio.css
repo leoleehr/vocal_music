@@ -28,3 +28,4 @@ body::before{display:none}
 .slide-brand img{height:15px;width:auto;opacity:.42;display:block}
 @media (max-width:900px),(orientation:portrait) and (max-width:1100px){.slide-chapter{display:none}}
 @media print{.slide-chapter,.slide-brand{display:none}}
+.slide-brand img{height:34px;opacity:.38;margin:-10px -14px -10px 0} /* 白色單色橫式標誌（SVG 含安全邊距） */
