@@ -158,6 +158,7 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 改為直接在 `deck-studio.css` 覆寫 `.bar-*` 為低飽和配色（起 #52699f、承 #cdc57a 深字、休 #3b3b43、轉 #b05a4d、合 #5c8456；課表 teal #4f8297、orange #a77b48、pink #9c5a70、purple #7b62a0），白字對比皆不低於原配色。
 - 所有頁面（首頁、問卷、講義、列印講義、六堂投影片，共 111 處）引用的本地 CSS／JS 加上 `?v=20261008c`。**之後修改 assets 的 CSS 或 JS 時，要同步更新版本參數**，否則使用者可能沿用舊快取。
 - 驗證：第一堂流程圖、第二堂課表截圖確認變淡；第一到六堂 iframe 稽核無橫向溢出；首頁、問卷、講義正常渲染。
+- 部署：commit `02bfef9` 已推送；GitHub Pages workflow `37717676715` 成功，線上第一堂引用 `deck-studio.css?v=20261008c`，線上樣式為新配色。
 
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
