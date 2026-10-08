@@ -225,6 +225,7 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 依背景與用途選用：首頁、問卷、講義網頁左上角與頁尾 → 彩色橫式（不含黑底的 horizontal-dark，三頁頂欄一致）；投影片右下角 → 白色單色橫式 `pixel-studio-horizontal-mono-white.svg`（高 34px、不透明度 .38），小尺寸彩色會變成雜點並與流程圖、圖表搶色；講義封面維持彩色 primary-dark。horizontal-light 與 horizontal-mono-black 目前沒有淺底位置，未使用。
 - `pixel.js` 的舊 Logo 產生函式沒有頁面使用，未更動；講義內頁頁首仍是文字「PIXEL STUDIO」（列印頁邊距區無法控制圖片尺寸）。
 - PDF 重新產生，33 頁。資產版本 `?v=20261008t`。
+- 部署：commit `28d8a36`（含分享視窗修正、首調簡譜、音階全音符銜接、兩輪 Rebranding）已推送；GitHub Pages workflow `37725527763` 成功。首頁、問卷、講義網頁、第二堂與四份標誌 SVG 皆 HTTP 200，三頁頂欄為新標誌，投影片頁尾為白色單色標誌，線上 PDF 與本機 SHA-256 一致。
 
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
