@@ -133,6 +133,13 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 講義第四堂第 9、10 列與 README 更新；Claude Doc（rev 87）、md、PDF（33 頁）同步。
 - 驗證：以模擬 AudioContext 測試音階 C3→C4→C3 與促音 C E G E C E G E C、吸、Dm 的進行；半音、男女聲、加速紀錄、下行選項正確；1440px 與 390px 版面；第一到六堂 iframe 稽核無橫向溢出。實際聲音尚未在教室喇叭試聽。
 
+## 2026-10-08 行動裝置連點放大
+
+- 使用者回報手機上連點會放大畫面，節拍 tap 鍵與拍速 ± 難以操作。
+- `assets/responsive.css`（網站與投影片都載入）加上 `html` 與按鈕等互動元素 `touch-action: manipulation`：關閉雙擊放大、保留雙指縮放與捲動；按鈕類加 `user-select:none` 與透明點擊高亮；觸控裝置上輸入欄、選單一律 16px，避免 iOS 聚焦自動放大。未使用 `user-scalable=no`，保留無障礙縮放。
+- 節奏挑戰「拍點」鍵改用 `pointerdown` 立即記錄（不等 click 延遲），鍵盤啟動（click detail 0）仍有效，不會重複計拍。
+- 驗證：第一、四堂投影片、首頁、問卷的 html、按鈕、拍點鍵、拍速鍵計算樣式皆為 manipulation。尚需真機（iOS Safari、Android Chrome）確認。
+
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
 ## 驗證與部署

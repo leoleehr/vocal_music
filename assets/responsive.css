@@ -119,3 +119,14 @@
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
+
+/* ---------- 觸控：防止連點放大 ----------
+ * manipulation 關閉雙擊放大（保留雙指縮放與捲動），快速連點按鈕、拍點鍵、拍速 ± 不會再把畫面放大。
+ * iOS 在字體小於 16px 的輸入欄聚焦時會自動放大，觸控裝置上一律用 16px。
+ */
+html{touch-action:manipulation}
+button,a,label,input,select,textarea,summary,[role="button"],.btn,.flip,.lm-ch,.dm-cell,.poll-hit,.order-tile,.pr-cell,.score-team{touch-action:manipulation}
+button,.btn,.flip,.dm-cell,.poll-hit,.order-tile{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+@media (pointer:coarse){
+  input,select,textarea{font-size:16px!important}
+}
