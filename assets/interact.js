@@ -1,7 +1,7 @@
 /* ===== Pixel Studio 課堂互動元件 =====
  * 互動狀態存在這台裝置的瀏覽器（localStorage）；作答與成果經 backend.js 送到課程試算表。
  * 元件以 class 宣告在投影片中，載入時自動建立：
- *   .quiz .poll .reveal .picker .score .wavelab .pitch .siren .resolab .stopwatch .mirror .dynmap .range .transpose .zero
+ *   .quiz .poll .reveal .picker .score .wavelab .pitch .siren .resolab .scalepractice .staccato .stopwatch .mirror .dynmap .range .transpose .zero
  *   .rhythm-game .breath .recorder
  *   .order .flips .phase .lyricmark .exit .log7 .qr   以及 .checks[data-id]
  */
@@ -339,7 +339,7 @@
     var an = null, raf = 0, t0 = 0, last = 0, rec = null, chunks = [], blob = null, url = '', recent = [], playing = false;
     p.innerHTML = '<div class="rl-read"><div><small>音高</small><b class="rl-note">--</b><span class="rl-hz"></span></div><div><small>音量</small><b class="rl-db">--</b><span class="rl-bar"><i></i></span></div><div><small>錄製</small><b class="rl-time">0.0 秒</b></div></div>' +
       '<canvas class="rl-cv"></canvas><div class="rl-legend"><span class="lg-pitch">— 音高</span><span class="lg-vol">▇ 音量</span><span class="muted">錄完後在圖上拖曳選一段，再按腔體按鈕標記</span></div>' +
-      '<div class="btn-row rl-main"><button type="button" class="btn primary go">● 開始錄製</button><button type="button" class="btn play" disabled>▶ 播放</button><button type="button" class="btn clear">清除</button><span class="rl-sep"></span>' + ZONES.map(function (z) { return '<button type="button" class="btn tag" data-z="' + z.k + '" disabled style="--zc:' + z.col + '">標記為' + z.name + '</button>'; }).join('') + '</div>' +
+      '<div class="btn-row rl-main"><button type="button" class="btn primary go">● 開始錄製</button><button type="button" class="btn play" disabled>▶ 播放</button><button type="button" class="btn clear">清除</button><span class="rl-sep"></span>' + ZONES.map(function (z) { return '<button type="button" class="btn rl-z" data-z="' + z.k + '" disabled style="--zc:' + z.col + '">標記為' + z.name + '</button>'; }).join('') + '</div>' +
       '<ul class="rl-marks"></ul><p class="rl-sum"></p>' +
       '<div class="btn-row rl-out"><button type="button" class="btn png">下載觀測圖</button><a class="btn wav" download>下載錄音</a><button type="button" class="btn primary up">上傳給老師</button></div><audio class="rl-audio"></audio>';
     var cv = p.querySelector('canvas'), go = p.querySelector('.go'), play = p.querySelector('.play'), au = p.querySelector('audio'), wav = p.querySelector('.wav');
@@ -396,7 +396,7 @@
       } else sum.textContent = marks.length ? '再標記一段胸腔與一段頭腔，就能比較音高與音量的變化。' : '';
     }
     function save() { LS.set(key, { data: data, marks: marks }); }
-    function refresh() { listMarks(); draw(); $$('.tag', p).forEach(function (b) { b.disabled = !sel || !data.length; }); }
+    function refresh() { listMarks(); draw(); $$('.rl-z', p).forEach(function (b) { b.disabled = !sel || !data.length; }); }
     function loop() {
       raf = requestAnimationFrame(loop);
       var now = performance.now(); if (now - last < FPS_MS) return; last = now;
@@ -450,7 +450,7 @@
     cv.addEventListener('pointerdown', function (e) { if (raf || !data.length) return; var g = geo(); drag = g.Tm(px(e)); sel = { a: drag, b: drag }; cv.setPointerCapture(e.pointerId); draw(); });
     cv.addEventListener('pointermove', function (e) { if (drag === null) return; var t = geo().Tm(px(e)); sel = { a: Math.min(drag, t), b: Math.max(drag, t) }; draw(); });
     cv.addEventListener('pointerup', function () { if (drag === null) return; drag = null; if (sel && sel.b - sel.a < 0.2) sel = null; refresh(); });
-    $$('.tag', p).forEach(function (b) {
+    $$('.rl-z', p).forEach(function (b) {
       b.onclick = function () { if (!sel) return; marks = marks.filter(function (m) { return m.b <= sel.a || m.a >= sel.b; }); marks.push({ z: b.getAttribute('data-z'), a: +sel.a.toFixed(2), b: +sel.b.toFixed(2) }); marks.sort(function (x, y) { return x.a - y.a; }); sel = null; save(); refresh(); };
     });
     p.querySelector('.clear').onclick = function () { if (raf) stop(); data = []; marks = []; sel = null; blob = null; p.classList.remove('has'); play.disabled = true; go.textContent = '● 開始錄製'; save(); refresh(); timeEl.textContent = '0.0 秒'; };
@@ -485,6 +485,145 @@
     window.addEventListener('resize', function () { draw(); });
     refresh(); onLeave(p, function () { if (raf) stop(); au.pause(); });
   });
+
+  /* ---------- 跟唱練習：音階發聲（.scalepractice）與促音和弦（.staccato），不用麥克風 ----------
+   * 男聲／女聲選起始音，拍速與半音可調；每輪前 4 拍預備（主和弦提示音高），可設定每輪自動升半音、輪換母音
+   */
+  var KEYN = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
+  var MAJ = [0, 2, 4, 5, 7, 9, 11], SOLFA = ['Do', 'Re', 'Mi', 'Fa', 'Sol', 'La', 'Si'], QUAL = ['', 'm', 'm', '', '', 'm', 'dim'], VOWELS = ['[a]', '[i]', '[u]', '[e]', '[o]'];
+  function degMidi(start, k) { return start + 12 * Math.floor(k / 7) + MAJ[((k % 7) + 7) % 7]; }
+  var SHARP = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'], FLAT = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'G♭', 'G', 'A♭', 'A', 'B♭', 'B'];
+  function chordName(start, d) { var k = start % 12, names = [2, 4, 6, 7, 9, 11].indexOf(k) > -1 ? SHARP : FLAT; return names[(start + MAJ[d]) % 12] + QUAL[d]; } // 升記號調用升名、降記號調用降名
+  function practice(p, kind) {
+    var isScale = kind === 'scale', key = kind + '-' + LESSON;
+    var RANGE = { male: [40, 57], female: [52, 69] }, DEF = { male: 48, female: 60 };
+    var st = LS.get(key, null) || { voice: 'male', start: 48, bpm: 70, vowel: 0, rotate: true, up: isScale, loop: true, click: true, back: false, rec: 0 };
+    var ctx = null, master = null, events = [], t0 = 0, raf = 0, timer = 0, round = 0, cur = -1, playing = false, pend = null;
+    function opts() { var r = RANGE[st.voice], h = ''; for (var m = r[0]; m <= r[1]; m++) h += '<option value="' + m + '"' + (m === st.start ? ' selected' : '') + '>' + nameOf(m).name + '（' + KEYN[m % 12] + ' 調）</option>'; return h; }
+    p.innerHTML = '<div class="pr-ctrl">' +
+      '<div class="pr-seg voice"><button type="button" class="btn" data-v="male">男聲</button><button type="button" class="btn" data-v="female">女聲</button></div>' +
+      '<label class="pr-f">起始音<select class="start"></select></label>' +
+      '<div class="pr-f">音高<span class="pr-step"><button type="button" class="btn dn">− 半音</button><button type="button" class="btn upk">＋ 半音</button></span></div>' +
+      '<div class="pr-f">拍速<span class="pr-step"><button type="button" class="btn bdn">−5</button><b class="bpm"></b><button type="button" class="btn bup">＋5</button></span></div></div>' +
+      '<div class="pr-ctrl pr-opt"><span class="pr-vowels">' + VOWELS.map(function (v, i) { return '<button type="button" class="btn vw" data-i="' + i + '">' + v + '</button>'; }).join('') + '</span>' +
+      '<label><input type="checkbox" class="o-rotate"> 每輪換母音</label><label><input type="checkbox" class="o-up"> 每輪升半音</label><label><input type="checkbox" class="o-loop"> 連續練習</label><label><input type="checkbox" class="o-click"> 節拍聲</label>' +
+      (isScale ? '' : '<label><input type="checkbox" class="o-back"> 和弦走完再下行</label>') + '</div>' +
+      '<div class="pr-now"><div class="pr-big">--</div><div class="pr-sub"></div></div>' +
+      (isScale ? '' : '<div class="pr-chords"></div>') + '<div class="pr-cells"></div>' +
+      '<div class="btn-row pr-run"><button type="button" class="btn primary go">▶ 開始跟唱</button>' + (isScale ? '' : '<button type="button" class="btn pass">唱穩了 +5 BPM</button><span class="pr-rec"></span>') + '<span class="pr-msg muted"></span></div>';
+    var sel = p.querySelector('.start'), big = p.querySelector('.pr-big'), sub = p.querySelector('.pr-sub'), cells = p.querySelector('.pr-cells'), chordsEl = p.querySelector('.pr-chords'), msg = p.querySelector('.pr-msg'), go = p.querySelector('.go');
+    function save() { LS.set(key, st); }
+    function chordOrder() { var up = [0, 1, 2, 3, 4, 5, 6]; return st.back ? up.concat([5, 4, 3, 2, 1, 0]) : up; }
+    var SCALE_DEG = [0, 1, 2, 3, 4, 5, 6, 7, 6, 5, 4, 3, 2, 1, 0], ST_PAT = [0, 2, 4, 2, 0, 2, 4, 2];
+    function jian(k) { return (k % 7 + 1) + (k >= 7 ? '̇' : ''); }
+    function paintStatic() {
+      $$('.voice .btn', p).forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-v') === st.voice); });
+      sel.innerHTML = opts(); p.querySelector('.bpm').textContent = st.bpm + ' BPM';
+      $$('.vw', p).forEach(function (b) { b.classList.toggle('on', +b.getAttribute('data-i') === st.vowel); });
+      ['rotate', 'up', 'loop', 'click', 'back'].forEach(function (o) { var c = p.querySelector('.o-' + o); if (c) c.checked = !!st[o]; });
+      if (isScale) cells.innerHTML = SCALE_DEG.map(function (k, i) { return '<span class="pr-cell" data-i="' + i + '"><b>' + jian(k) + '</b><small>' + SOLFA[k % 7] + '</small></span>'; }).join('');
+      else {
+        chordsEl.innerHTML = chordOrder().map(function (d, i) { return '<span class="pr-chip" data-i="' + i + '">' + chordName(st.start, d) + '</span>'; }).join('');
+        cells.innerHTML = ST_PAT.map(function (o, i) { return '<span class="pr-cell sm" data-i="' + i + '"><b>' + ['1', '', '3', '', '5'][o] + '</b></span>'; }).join('') + '<span class="pr-cell sm root" data-i="8"><b>1</b></span><span class="pr-cell sm pr-breath" data-i="9"><b>吸</b></span>';
+        var r = p.querySelector('.pr-rec'); if (r) r.textContent = st.rec ? '班級紀錄 ' + st.rec + ' BPM' : '班級紀錄 —';
+      }
+      if (!playing) { big.textContent = KEYN[st.start % 12] + ' 調'; sub.textContent = '起始音 ' + nameOf(st.start).name + '・' + st.bpm + ' BPM・母音 ' + VOWELS[st.vowel] + '　按「開始跟唱」，先聽 4 拍預備'; }
+    }
+    function changed() { save(); paintStatic(); if (playing) { pend = true; msg.textContent = '設定會在下一輪套用'; } }
+    // 聲音：鋼琴感的撥弦音與節拍聲，全部接到 master，停止時一次切斷
+    function note(m, t, dur, vol) {
+      var o = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain(), f = freqOf(m);
+      o.type = 'triangle'; o.frequency.value = f; o2.type = 'sine'; o2.frequency.value = f * 2;
+      var g2 = ctx.createGain(); g2.gain.value = 0.25; o2.connect(g2); g2.connect(g); o.connect(g); g.connect(master);
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + 0.008); g.gain.exponentialRampToValueAtTime(0.0008, t + dur);
+      o.start(t); o2.start(t); o.stop(t + dur + 0.05); o2.stop(t + dur + 0.05);
+    }
+    function click(t, acc) {
+      var o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = acc ? 1500 : 1000;
+      g.gain.setValueAtTime(acc ? 0.22 : 0.12, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+      o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.06);
+    }
+    function build() { // 回傳一輪的事件（單位：拍）
+      var ev = [], s = st.start, b = 0;
+      var triad = [degMidi(s, 0), degMidi(s, 2), degMidi(s, 4)];
+      for (var i = 0; i < 4; i++) ev.push({ b: i, kind: 'prep', n: 4 - i, chord: i === 0 ? triad : null });
+      b = 4;
+      if (isScale) {
+        SCALE_DEG.forEach(function (k, i) { ev.push({ b: b, kind: 'note', m: degMidi(s, k), dur: i === SCALE_DEG.length - 1 ? 2 : 1, cell: i, k: k }); b += 1; });
+        b += 1;
+      } else {
+        var order = chordOrder();
+        order.forEach(function (d, ci) {
+          ST_PAT.forEach(function (o, i) { ev.push({ b: b + i * 0.5, kind: 'note', m: degMidi(s, d + o), dur: 0.18, cell: i, chord: ci, d: d, k: d + o, stac: true }); });
+          ev.push({ b: b + 4, kind: 'note', m: degMidi(s, d), dur: 0.22, cell: 8, chord: ci, d: d, k: d, stac: true });
+          var nx = order[ci + 1];
+          ev.push({ b: b + 5, kind: 'breath', cell: 9, chord: ci, d: d, cue: nx === undefined ? null : [degMidi(s, nx), degMidi(s, nx + 2), degMidi(s, nx + 4)], cueAt: b + 6 });
+          b += 8;
+        });
+      }
+      return { ev: ev, beats: b };
+    }
+    function schedule() {
+      var r = build(), spb = 60 / st.bpm, start = ctx.currentTime + 0.12;
+      events = r.ev.map(function (e) { var x = {}; for (var k in e) x[k] = e[k]; x.t = start + e.b * spb; return x; });
+      events.forEach(function (e) {
+        if (e.kind === 'prep') { click(e.t, e.n === 4); if (e.chord) e.chord.forEach(function (m) { note(m, e.t, spb * 2.2, 0.16); }); }
+        if (e.kind === 'note') { note(e.m, e.t, e.stac ? Math.min(spb * e.dur * 2, 0.22) : spb * e.dur * 0.95, e.stac ? 0.3 : 0.26); }
+        if (e.kind === 'breath' && e.cue) e.cue.forEach(function (m) { note(m, start + e.cueAt * spb, spb * 1.2, 0.1); });
+      });
+      if (st.click) for (var bt = 4; bt < r.beats; bt++) click(start + bt * spb, (bt - 4) % 4 === 0);
+      t0 = start; cur = -1;
+      var endMs = (start + r.beats * spb - ctx.currentTime) * 1000;
+      clearTimeout(timer); timer = setTimeout(nextRound, endMs);
+    }
+    function nextRound() {
+      if (!playing) return;
+      if (!st.loop) { stop('練習完成'); return; }
+      if (st.up) { if (st.start < RANGE[st.voice][1]) st.start++; else { stop('已到最高起始音，按「− 半音」降回來再練'); return; } }
+      if (st.rotate) st.vowel = (st.vowel + 1) % VOWELS.length;
+      round++; pend = false; msg.textContent = ''; save(); paintStatic(); schedule();
+    }
+    function frame() {
+      var now = ctx.currentTime, idx = -1;
+      for (var i = 0; i < events.length; i++) if (events[i].t <= now) idx = i; else break;
+      if (idx === cur || idx < 0) return; cur = idx;
+      var e = events[idx];
+      $$('.pr-cell', cells).forEach(function (c) { c.classList.remove('on'); });
+      if (e.kind === 'prep') { big.textContent = '預備 ' + e.n; sub.textContent = '第 ' + (round + 1) + ' 輪・' + KEYN[st.start % 12] + ' 調・起始音 ' + nameOf(st.start).name + '・母音 ' + VOWELS[st.vowel] + (e.n === 4 ? '　吸氣' : ''); if (chordsEl) $$('.pr-chip', chordsEl).forEach(function (c) { c.classList.remove('on', 'done'); }); return; }
+      var cell = cells.querySelector('[data-i="' + e.cell + '"]'); if (cell) cell.classList.add('on');
+      if (isScale) { big.textContent = SOLFA[e.k % 7] + '　' + nameOf(e.m).name; sub.textContent = '母音 ' + VOWELS[st.vowel] + '・' + (e.cell < 8 ? '上行' : '下行') + '・第 ' + (round + 1) + ' 輪'; }
+      else {
+        $$('.pr-chip', chordsEl).forEach(function (c, i) { c.classList.toggle('on', i === e.chord); c.classList.toggle('done', i < e.chord); });
+        if (e.kind === 'breath') { big.textContent = '吸'; sub.textContent = e.cue ? '下一個和弦：' + chordName(st.start, chordOrder()[e.chord + 1]) : '最後一個和弦，準備下一輪'; }
+        else { big.textContent = chordName(st.start, e.d) + '　' + nameOf(e.m).name; sub.textContent = '母音 ' + VOWELS[st.vowel] + '・短、促、有力・第 ' + (round + 1) + ' 輪'; }
+      }
+    }
+    function start() {
+      ctx = ac(); master = ctx.createGain(); master.gain.value = 1; master.connect(ctx.destination);
+      playing = true; round = 0; go.textContent = '■ 停止'; msg.textContent = ''; p.classList.add('playing');
+      schedule(); raf = setInterval(frame, 25);
+    }
+    function stop(m) {
+      playing = false; clearTimeout(timer); clearInterval(raf);
+      if (master) { try { master.gain.setValueAtTime(0, ctx.currentTime); master.disconnect(); } catch (e) {} master = null; }
+      go.textContent = '▶ 開始跟唱'; p.classList.remove('playing'); msg.textContent = m || '';
+      $$('.pr-cell', cells).forEach(function (c) { c.classList.remove('on'); }); paintStatic();
+    }
+    go.onclick = function () { playing ? stop() : start(); };
+    $$('.voice .btn', p).forEach(function (b) { b.onclick = function () { st.voice = b.getAttribute('data-v'); st.start = DEF[st.voice]; changed(); }; });
+    sel.onchange = function () { st.start = +sel.value; changed(); };
+    p.querySelector('.dn').onclick = function () { st.start = Math.max(RANGE[st.voice][0], st.start - 1); changed(); };
+    p.querySelector('.upk').onclick = function () { st.start = Math.min(RANGE[st.voice][1], st.start + 1); changed(); };
+    p.querySelector('.bdn').onclick = function () { st.bpm = Math.max(40, st.bpm - 5); changed(); };
+    p.querySelector('.bup').onclick = function () { st.bpm = Math.min(160, st.bpm + 5); changed(); };
+    $$('.vw', p).forEach(function (b) { b.onclick = function () { st.vowel = +b.getAttribute('data-i'); changed(); }; });
+    ['rotate', 'up', 'loop', 'click', 'back'].forEach(function (o) { var c = p.querySelector('.o-' + o); if (c) c.onchange = function () { st[o] = c.checked; changed(); }; });
+    var pass = p.querySelector('.pass');
+    if (pass) pass.onclick = function () { if (st.bpm > (st.rec || 0)) st.rec = st.bpm; st.bpm = Math.min(160, st.bpm + 5); changed(); say('下一輪 ' + st.bpm + ' BPM', 'ok'); };
+    paintStatic(); onLeave(p, function () { if (playing) stop(); });
+  }
+  $$('.scalepractice').forEach(function (p) { practice(p, 'scale'); });
+  $$('.staccato').forEach(function (p) { practice(p, 'staccato'); });
 
   /* ---------- 碼表：繞口令計時，保留每一位的成績 ---------- */
   $$('.stopwatch').forEach(function (w) {

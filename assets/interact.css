@@ -423,9 +423,9 @@ table.mini-scale th{width:5.5em;text-align:left}
 .rl-legend .lg-pitch{color:var(--amber);font-weight:700}
 .rl-legend .lg-vol{color:var(--navy);font-weight:700}
 .rl-tag{margin-top:8px}
-.rl-main .tag{border-color:var(--zc)}
-.rl-main .tag:not(:disabled){color:var(--zc);font-weight:700}
-.rl-main .tag:disabled{opacity:.45;cursor:default}
+.rl-main .rl-z{border-color:var(--zc)}
+.rl-main .rl-z:not(:disabled){color:var(--zc);font-weight:700}
+.rl-main .rl-z:disabled{opacity:.45;cursor:default}
 .rl-marks{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:4px;font-size:14px;font-variant-numeric:tabular-nums}
 .rl-marks li{border-left:4px solid var(--zc);padding:3px 8px;background:var(--card-2);border-radius:0 6px 6px 0}
 .rl-marks li b{color:var(--zc)}
@@ -452,3 +452,51 @@ table.mini-scale th{width:5.5em;text-align:left}
 .resolab .rl-cv{height:165px}
 .rl-sep{width:1px;align-self:stretch;background:var(--line-2);margin:0 4px}
 @media (max-width:900px),(orientation:portrait) and (max-width:1100px){.rl-sep{display:none}}
+
+/* ===== 跟唱練習：音階發聲、促音和弦（第四堂） ===== */
+.pr-ctrl{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 16px;margin-bottom:10px}
+.pr-seg{display:flex;gap:4px}
+.pr-seg .btn.on,.pr-vowels .btn.on{background:var(--amber);color:#17150f;border-color:var(--amber);font-weight:700}
+.pr-f{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+.pr-f select{font:inherit;font-size:15px;background:#0d0d10;color:var(--ink);border:1px solid var(--line-2);border-radius:var(--r-sm);padding:7px 10px}
+.pr-step{display:flex;align-items:center;gap:6px}
+.pr-step b{font-family:var(--display);font-size:17px;color:var(--ink);min-width:72px;text-align:center}
+.pr-opt{align-items:center;font-size:14px;color:var(--muted)}
+.pr-opt label{display:flex;align-items:center;gap:4px;cursor:pointer}
+.pr-vowels{display:flex;gap:4px}
+.pr-vowels .btn{padding:5px 10px;font-size:14px}
+.scalepractice .btn,.staccato .btn{padding:6px 12px;font-size:14px}
+.pr-now{display:flex;align-items:baseline;gap:16px;background:var(--card-2);border-radius:var(--r-sm);padding:10px 14px;margin-bottom:10px;min-height:68px}
+.pr-big{font-family:var(--display);font-size:40px;font-weight:700;line-height:1.1;min-width:5.5em}
+.playing .pr-big{color:var(--amber)}
+.pr-sub{font-size:14px;color:var(--muted)}
+.pr-cells{display:flex;gap:4px;margin-bottom:10px}
+.pr-cell{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid var(--line-2);border-radius:8px;padding:6px 0;background:var(--card);transition:background .05s,transform .05s}
+.pr-cell b{font-family:var(--display);font-size:20px;line-height:1.1}
+.pr-cell small{font-size:11px;color:var(--muted)}
+.pr-cell.on{background:var(--amber);border-color:var(--amber);color:#17150f;transform:translateY(-2px)}
+.pr-cell.on small{color:#17150f}
+.pr-cell.sm b{font-size:18px}
+.pr-cell.root{flex:1.4}
+.pr-cell.pr-breath{flex:1.4;color:var(--navy)}
+.pr-cell.pr-breath.on{background:var(--navy);border-color:var(--navy)}
+.pr-chords{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.pr-chip{font-family:var(--display);font-weight:700;font-size:15px;padding:4px 10px;border:1px solid var(--line-2);border-radius:999px;color:var(--muted)}
+.pr-chip.on{background:var(--amber);border-color:var(--amber);color:#17150f}
+.pr-chip.done{color:var(--ink);border-color:var(--amber)}
+.pr-run{align-items:center}
+.pr-rec{font-family:var(--display);font-weight:700;color:var(--amber);font-size:15px}
+.pr-msg{font-size:14px}
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){
+  .pr-big{font-size:28px;min-width:0}
+  .pr-now{flex-direction:column;gap:2px}
+  .pr-cell b{font-size:15px}.pr-cell small{display:none}
+  .pr-cells{gap:2px}
+}
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){
+  table.mini-scale{display:table!important;width:100%;table-layout:fixed}
+  table.mini-scale tbody{display:table-row-group!important}
+  table.mini-scale tr{display:table-row!important;padding:0!important;border:0!important;background:none!important}
+  table.mini-scale th,table.mini-scale td{display:table-cell!important;width:auto!important;padding:4px 2px!important;font-size:12px!important;text-align:center!important;border-bottom:1px solid var(--line)!important}
+  table.mini-scale td::before{content:none!important}
+}
