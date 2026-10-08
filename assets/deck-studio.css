@@ -21,3 +21,10 @@ body::before{display:none}
 /* 起承轉合流程圖與課表色塊：刷淡（降低飽和度），白字對比維持在原本水準以上 */
 .bar-qi{background:#52699f}.bar-cheng{background:#cdc57a;color:#1f1d0c!important}.bar-rest{background:#3b3b43}.bar-zhuan{background:#b05a4d}.bar-he{background:#5c8456}
 .bar-teal{background:#4f8297}.bar-orange{background:#a77b48}.bar-pink{background:#9c5a70}.bar-purple{background:#7b62a0}
+
+/* 投影片頁尾：左下章節、右下刷淡 Logo */
+.slide-chapter{position:absolute;left:40px;bottom:26px;font-size:13px;color:var(--faint);letter-spacing:.08em;pointer-events:none}
+.slide-brand{pointer-events:none}
+.slide-brand img{height:15px;width:auto;opacity:.42;display:block}
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){.slide-chapter{display:none}}
+@media print{.slide-chapter,.slide-brand{display:none}}

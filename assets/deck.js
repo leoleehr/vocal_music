@@ -7,13 +7,18 @@
   var title = document.body.getAttribute('data-title') || document.title;
   var i = 0;
 
-  // 每張投影片加上品牌標記與錨點
+  // 每張投影片加上錨點、左下角章節標註、右下角刷淡的 PIXEL STUDIO Logo
+  var chapter = document.body.getAttribute('data-title') || '';
   slides.forEach(function (s, k) {
     s.id = 's' + (k + 1);
     if (s.classList.contains('cover')) return;
+    var c = document.createElement('div');
+    c.className = 'slide-chapter';
+    c.textContent = chapter;
+    s.appendChild(c);
     var b = document.createElement('div');
     b.className = 'slide-brand';
-    b.innerHTML = '<span>畫素音樂工作坊</span>';
+    b.innerHTML = '<img src="../../assets/pixel-studio-67-dark.png" alt="Pixel Studio 畫素音樂工作坊">';
     s.appendChild(b);
   });
 

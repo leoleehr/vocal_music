@@ -144,6 +144,8 @@
     if (e.detail && e.detail.mobile) return;
     all.forEach(function (c) { var sl = c.root.closest('.slide'); if (sl && !sl.classList.contains('active')) c.pause(); });
   });
-  window.PixelYT = { card: card, chip: chip, mount: mount, open: openDock, songs: SONGS };
+  // 找出某個元素裡的影片卡，讓其他元件讀取播放時間（例：唱名提示同步）
+  function find(el) { for (var k = 0; k < all.length; k++) if (el === all[k].root || (el.contains && el.contains(all[k].root))) return all[k]; return null; }
+  window.PixelYT = { card: card, chip: chip, mount: mount, open: openDock, songs: SONGS, find: find };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { mount(); }); else mount();
 })();

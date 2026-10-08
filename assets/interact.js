@@ -1,7 +1,7 @@
 /* ===== Pixel Studio 課堂互動元件 =====
  * 互動狀態存在這台裝置的瀏覽器（localStorage）；作答與成果經 backend.js 送到課程試算表。
  * 元件以 class 宣告在投影片中，載入時自動建立：
- *   .quiz .poll .reveal .picker .score .wavelab .pitch .siren .resolab .scalepractice .staccato .stopwatch .mirror .dynmap .range .transpose .zero
+ *   .quiz .poll .reveal .picker .score .wavelab .pitch .siren .resolab .scalepractice .staccato .solfa .stopwatch .mirror .dynmap .range .transpose .zero
  *   .rhythm-game .breath .recorder
  *   .order .flips .phase .lyricmark .exit .log7 .qr   以及 .checks[data-id]
  */
@@ -22,6 +22,8 @@
   function report(root, type, data) { if (window.PixelBackend) window.PixelBackend.log(type, data, { slide: slideNo(root) }); }
   function say(msg, kind) { if (window.PixelBackend) window.PixelBackend.toast(msg, kind); }
   function onLeave(root, fn) { stoppers.push({ slide: root.closest('.slide'), fn: fn }); }
+  // backend.js 在本檔之後載入：需要 PixelBackend 的動作等所有腳本載入後再執行
+  function later(fn) { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else setTimeout(fn, 0); }
 
   /* ---------- 下載／分享檔案 ----------
    * 手機優先用系統分享選單（可存到照片、檔案）；LINE、Facebook 等 App 內建瀏覽器會擋下載，改用長按儲存或提示改用瀏覽器開啟。
@@ -722,6 +724,59 @@
   $$('.scalepractice').forEach(function (p) { practice(p, 'scale'); });
   $$('.staccato').forEach(function (p) { practice(p, 'staccato'); });
 
+  /* ---------- 唱名提示：唱名練習時在影片下方顯示目前旋律的唱名 ----------
+   * 內容來源（依序）：老師在這台電腦貼上 → 後台「歌詞」分頁（代碼 data-id）→ 尚未設定
+   * 格式：一行一句；行首可加時間「0:45」對應影片秒數，播放時自動跟著換行；沒有時間就用 ◀ ▶ 手動換行
+   * 同一張投影片的分段計時進入 data-phase（預設第 1 段）時自動展開
+   */
+  $$('.solfa').forEach(function (b) {
+    var lid = b.getAttribute('data-id') || 'solfa', key = 'solfa-' + LESSON + '-' + lid, want = parseInt(b.getAttribute('data-phase') || '0', 10);
+    var rows = [], cur = 0, src = '', tick = 0, open = false;
+    b.innerHTML = '<div class="sf-head"><b>唱名提示</b><span class="sf-src muted"></span><span class="sf-btns"><button type="button" class="btn prev" aria-label="上一句">◀</button><button type="button" class="btn next" aria-label="下一句">▶</button><button type="button" class="btn tog">顯示</button><button type="button" class="btn edit">貼上唱名</button></span></div>' +
+      '<div class="sf-body"><p class="sf-prev"></p><p class="sf-cur"></p><p class="sf-next"></p></div>' +
+      '<div class="sf-editor"><p class="muted">一行一句簡譜，例如「0:45 3 3 2 1 | 6̣ 1 2 –」。行首的時間對應影片播放秒數，播放時會自動換行；不寫時間就用 ◀ ▶ 換行。內容只存在這台電腦；要讓學員手機也看得到，請貼到課程試算表「歌詞」分頁，代碼 ' + esc(lid) + '。</p><textarea rows="8"></textarea><div class="btn-row"><button type="button" class="btn primary save">儲存並顯示</button><button type="button" class="btn cancel">取消</button></div></div>';
+    var ta = b.querySelector('textarea'), srcEl = b.querySelector('.sf-src');
+    function tsec(t) { var m = t.match(/^\[?(\d+):(\d{1,2})\]?\s*/); return m ? { s: +m[1] * 60 + +m[2], rest: t.slice(m[0].length) } : null; }
+    function parse(text) {
+      rows = text.replace(/\r/g, '').split('\n').map(function (l) { return l.trim(); }).filter(Boolean).map(function (l) { var t = tsec(l); return t ? { t: t.s, txt: t.rest } : { t: null, txt: l }; });
+      cur = 0; paint();
+    }
+    function paint() {
+      var none = !rows.length;
+      b.classList.toggle('empty', none);
+      b.querySelector('.sf-cur').textContent = none ? '老師尚未設定唱名：按「貼上唱名」輸入這首歌的簡譜' : rows[cur].txt;
+      b.querySelector('.sf-prev').textContent = none || cur === 0 ? '' : rows[cur - 1].txt;
+      b.querySelector('.sf-next').textContent = none || cur >= rows.length - 1 ? '' : rows[cur + 1].txt;
+      srcEl.textContent = none ? '' : (src === 'sheet' ? '來自課程試算表' : '老師貼上的內容') + '・' + (cur + 1) + ' / ' + rows.length;
+    }
+    function show(on) { open = on; b.classList.toggle('open', on); b.querySelector('.tog').textContent = on ? '收起' : '顯示'; if (on) startSync(); else stopSync(); }
+    function startSync() { // 有時間標記時，跟著影片播放時間換行
+      stopSync(); if (!rows.some(function (r) { return r.t !== null; })) return;
+      var slide = b.closest('.slide');
+      tick = setInterval(function () {
+        var c = window.PixelYT && window.PixelYT.find && window.PixelYT.find(slide), pl = c && c.player;
+        if (!pl || !pl.getCurrentTime) return;
+        var now = pl.getCurrentTime(), k = 0;
+        rows.forEach(function (r, i) { if (r.t !== null && r.t <= now + 0.15) k = i; });
+        if (k !== cur) { cur = k; paint(); }
+      }, 200);
+    }
+    function stopSync() { clearInterval(tick); tick = 0; }
+    b.querySelector('.prev').onclick = function () { if (cur > 0) { cur--; paint(); } };
+    b.querySelector('.next').onclick = function () { if (cur < rows.length - 1) { cur++; paint(); } };
+    b.querySelector('.tog').onclick = function () { show(!open); };
+    b.querySelector('.edit').onclick = function () { ta.value = LS.get(key, '') || rows.map(function (r) { return (r.t !== null ? Math.floor(r.t / 60) + ':' + String(r.t % 60).padStart(2, '0') + ' ' : '') + r.txt; }).join('\n'); b.classList.add('editing'); ta.focus(); };
+    b.querySelector('.cancel').onclick = function () { b.classList.remove('editing'); };
+    b.querySelector('.save').onclick = function () { var v = ta.value.trim(); LS.set(key, v); src = 'local'; b.classList.remove('editing'); parse(v); show(true); };
+    ta.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    var slide = b.closest('.slide');
+    if (slide) slide.addEventListener('phase:change', function (e) { var d = e.detail || {}; if (d.running && d.index === want) show(true); else if (d.running && d.index !== want) show(false); });
+    var mine = LS.get(key, '');
+    if (mine) { src = 'local'; parse(mine); }
+    else { paint(); later(function () { if (window.PixelBackend && window.PixelBackend.fetchLyrics) window.PixelBackend.fetchLyrics(lid).then(function (t) { if (t && !LS.get(key, '')) { src = 'sheet'; parse(t); } }); }); }
+    onLeave(b, stopSync);
+  });
+
   /* ---------- 碼表：繞口令計時，保留每一位的成績 ---------- */
   $$('.stopwatch').forEach(function (w) {
     var key = 'stopwatch-' + LESSON + '-' + (w.getAttribute('data-id') || '0'), runs = LS.get(key, []), t0 = 0, raf = 0;
@@ -1183,10 +1238,11 @@
     var steps = p.querySelector('.ph-steps'), nm = p.querySelector('.ph-name'), tm = p.querySelector('.ph-time'), go = p.querySelector('.go');
     ph.forEach(function (s) { steps.appendChild(el('span', '', esc(s.name) + ' <small>' + (s.sec < 60 ? s.sec + ' 秒' : Math.round(s.sec / 60 * 10) / 10 + ' 分') + '</small>')); });
     function fmt(s) { return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
-    function draw() { nm.textContent = (loop ? '第 ' + round + ' 位　' : '') + ph[idx].name; tm.textContent = fmt(left); $$('span', steps).forEach(function (s, k) { s.classList.toggle('on', k === idx); s.classList.toggle('past', k < idx); }); }
+    function emit() { p.dispatchEvent(new CustomEvent('phase:change', { bubbles: true, detail: { index: idx, name: ph[idx].name, running: !!tid } })); }
+    function draw() { setTimeout(emit, 0); nm.textContent = (loop ? '第 ' + round + ' 位　' : '') + ph[idx].name; tm.textContent = fmt(left); $$('span', steps).forEach(function (s, k) { s.classList.toggle('on', k === idx); s.classList.toggle('past', k < idx); }); }
     function next() { if (idx < ph.length - 1) { idx++; left = ph[idx].sec; chime(); } else if (loop) { idx = 0; left = ph[0].sec; round++; tone(660, 0.5, 0.3); stop(); go.textContent = '下一位開始'; } else { stop(); left = 0; nm.textContent = '時間到'; tone(660, 0.6, 0.3); } draw(); }
     function stop() { clearInterval(tid); tid = 0; go.textContent = '開始'; }
-    go.onclick = function () { if (tid) { stop(); go.textContent = '繼續'; return; } go.textContent = '暫停'; tid = setInterval(function () { left--; if (left <= 0) next(); else draw(); }, 1000); };
+    go.onclick = function () { if (tid) { stop(); go.textContent = '繼續'; emit(); return; } go.textContent = '暫停'; tid = setInterval(function () { left--; if (left <= 0) next(); else draw(); }, 1000); emit(); };
     p.querySelector('.next').onclick = next;
     p.querySelector('.reset').onclick = function () { stop(); idx = 0; left = ph[0].sec; round = 1; draw(); };
     draw(); onLeave(p, function () { if (tid) { stop(); go.textContent = '繼續'; } });
@@ -1264,7 +1320,7 @@
     if (custom) render(custom, 'local');
     else {
       render(fallback, 'default');
-      if (window.PixelBackend && window.PixelBackend.fetchLyrics) window.PixelBackend.fetchLyrics(lid).then(function (t) { if (t && !LS.get(base + '-custom', '')) render(t, 'sheet'); });
+      later(function () { if (window.PixelBackend && window.PixelBackend.fetchLyrics) window.PixelBackend.fetchLyrics(lid).then(function (t) { if (t && !LS.get(base + '-custom', '')) render(t, 'sheet'); }); });
     }
   });
 

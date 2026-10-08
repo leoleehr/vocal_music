@@ -555,3 +555,22 @@ table.mini-scale th{width:5.5em;text-align:left}
   .resolab .rl-marks{max-height:none;overflow:visible}
   .resolab .rl-cv{height:170px}
 }
+
+/* ===== 唱名提示（第四堂三步驟學唱） ===== */
+.solfa{margin-top:10px;padding:10px 14px}
+.sf-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sf-head b{font-size:15px}
+.sf-src{font-size:12px}
+.sf-btns{margin-left:auto;display:flex;gap:4px}
+.solfa .btn{padding:4px 10px;font-size:13px}
+.sf-body{display:none;text-align:center;padding:6px 0 2px}
+.solfa.open .sf-body{display:block}
+.sf-cur{font-family:var(--display);font-size:30px;font-weight:700;color:var(--amber);letter-spacing:.12em;line-height:1.35;margin:2px 0}
+.solfa.empty .sf-cur{font-family:inherit;font-size:15px;font-weight:500;color:var(--muted);letter-spacing:0}
+.sf-prev,.sf-next{font-family:var(--display);font-size:15px;color:var(--faint);letter-spacing:.1em;min-height:1.3em;margin:0}
+.sf-next{color:var(--muted)}
+.sf-editor{display:none;margin-top:8px}
+.solfa.editing .sf-editor{display:block}
+.sf-editor p{font-size:13px;margin-bottom:6px}
+.sf-editor textarea{width:100%;font:inherit;font-size:16px;background:#0d0d10;color:var(--ink);border:1px solid var(--line-2);border-radius:var(--r-sm);padding:8px 10px;font-family:var(--display)}
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){.sf-cur{font-size:22px}}
