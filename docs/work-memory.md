@@ -242,6 +242,11 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 首頁左下角頁尾標誌改為白色單色橫式 `pixel-studio-horizontal-mono-white.svg`；左上角維持彩色橫式。講義封面依使用者確認不變。
 - 首頁 FIG. 01 聲波彩虹流動在手機上不動：原本用 SVG SMIL `animateTransform` 移動 `gradientTransform`，iOS Safari 不會重繪。改為 `requestAnimationFrame` 每約 33ms 移動漸層 `x1`／`x2`（spreadMethod repeat，12 秒一循環）；離開畫面（IntersectionObserver）或切到背景時暫停；系統開啟「減少動態效果」時仍不動（手機若開了這個設定，流動停止是正常的）。資產版本 `?v=20261008v`。
 
+## 2026-10-08 新版 favicon
+
+- 依 CI 的 symbol-color 聲波（`C:/Agent/UIUX/brand/pixel-studio/01-current/.../symbol-color-2400.png`）產生：裁去四周留白後置中；`favicon.ico`（16／32／48／64）與 `favicon.png`（48px）線條加粗、透明度提高 2.6 倍，避免細線在 16px 分頁圖示中消失；`favicon-192.png`（Android）與 `apple-touch-icon.png`（180px，深色 #101210 底，iPhone 主畫面）較輕微加強。
+- 所有頁面改為四條連結（ico、48px、192px、apple-touch-icon），加 `?v=2` 讓瀏覽器重新抓圖。瀏覽器對 favicon 快取很頑固，上線後可能要強制重新整理或重開分頁。
+
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
 ## 驗證與部署
