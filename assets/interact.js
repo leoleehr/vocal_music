@@ -98,8 +98,11 @@
   }
   function rmsOf(an, buf) { an.getFloatTimeDomainData(buf); var s = 0; for (var i = 0; i < buf.length; i++) s += buf[i] * buf[i]; return Math.sqrt(s / buf.length); }
   function canvasFit(cv) {
-    var r = window.devicePixelRatio || 1, w = cv.clientWidth || 600, h = cv.clientHeight || 140;
-    if (cv.width !== Math.round(w * r)) { cv.width = Math.round(w * r); cv.height = Math.round(h * r); }
+    // 投影片在電腦上以 transform 整體縮放，畫布要依實際顯示大小 × 螢幕像素密度繪製，放大後才不會糊
+    var w = cv.clientWidth || 600, h = cv.clientHeight || 140, box = cv.getBoundingClientRect();
+    var zoom = box.width && cv.clientWidth ? box.width / cv.clientWidth : 1;
+    var r = Math.min(4, (window.devicePixelRatio || 1) * Math.max(1, zoom));
+    if (cv.width !== Math.round(w * r) || cv.height !== Math.round(h * r)) { cv.width = Math.round(w * r); cv.height = Math.round(h * r); }
     var x = cv.getContext('2d'); x.setTransform(r, 0, 0, r, 0, 0); return { x: x, w: w, h: h };
   }
   function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim() || '#fff'; }
@@ -561,7 +564,7 @@
       var x = xs[i], y = Y(nt.s), up = inGroup[i] ? inGroup[i].up : nt.s < 4, led = '';
       for (var a = -2; a >= nt.s; a -= 2) led += '<line class="sf-l" x1="' + (x - 9) + '" x2="' + (x + 9) + '" y1="' + Y(a) + '" y2="' + Y(a) + '"/>';
       for (var b = 10; b <= nt.s; b += 2) led += '<line class="sf-l" x1="' + (x - 9) + '" x2="' + (x + 9) + '" y1="' + Y(b) + '" y2="' + Y(b) + '"/>';
-      var head = nt.len === 'w' ? '<ellipse class="sf-open" cx="' + x + '" cy="' + y + '" rx="6.4" ry="4.4" transform="rotate(-20 ' + x + ' ' + y + ')"/>' : '<ellipse cx="' + x + '" cy="' + y + '" rx="5.6" ry="4" transform="rotate(-20 ' + x + ' ' + y + ')"/>';
+      var head = nt.len === 'w' || nt.len === 'h' ? '<ellipse class="sf-open" cx="' + x + '" cy="' + y + '" rx="6.4" ry="4.4" transform="rotate(-20 ' + x + ' ' + y + ')"/>' : '<ellipse cx="' + x + '" cy="' + y + '" rx="5.6" ry="4" transform="rotate(-20 ' + x + ' ' + y + ')"/>';
       var stem = '', sx = up ? x + 5.2 : x - 5.2;
       if (nt.len !== 'w') {
         var tip = up ? y - 30 : y + 30;
@@ -599,7 +602,7 @@
     var SCALE_DEG = [0, 1, 2, 3, 4, 5, 6, 7, 7, 6, 5, 4, 3, 2, 1, 0], ST_PAT = [0, 2, 4, 2, 0, 2, 4, 2];
     function drawStaff(ci) {
       var male = st.voice === 'male', ts = tonicStep(st.start, male);
-      if (isScale) staffEl.innerHTML = staffSVG(SCALE_DEG.map(function (k, i) { return { s: ts + k, len: i === SCALE_DEG.length - 1 ? 'w' : 'q' }; }), st.start, male, [], [3, 7, 11]);
+      if (isScale) staffEl.innerHTML = staffSVG(SCALE_DEG.map(function (k, i) { return { s: ts + k, len: i === SCALE_DEG.length - 1 ? (st.loop ? 'h' : 'w') : 'q' }; }), st.start, male, [], [3, 7, 11]);
       else { var d = chordOrder()[ci || 0]; staffEl.innerHTML = staffSVG(ST_PAT.map(function (o) { return { s: ts + d + o, len: 'e', dot: true }; }).concat([{ s: ts + d, len: 'q', dot: true }]), st.start, male, [[0, 1, 2, 3], [4, 5, 6, 7]], [7]); }
       shownChord = ci || 0;
     }
@@ -609,7 +612,7 @@
       sel.innerHTML = opts(); p.querySelector('.bpm').textContent = st.bpm + ' BPM';
       $$('.vw', p).forEach(function (b) { b.classList.toggle('on', +b.getAttribute('data-i') === st.vowel); });
       ['rotate', 'up', 'loop', 'click', 'back'].forEach(function (o) { var c = p.querySelector('.o-' + o); if (c) c.checked = !!st[o]; });
-      if (isScale) cells.innerHTML = SCALE_DEG.map(function (k, i) { var last = i === SCALE_DEG.length - 1; return '<span class="pr-cell' + (last ? ' hold' : '') + '" data-i="' + i + '"><b>' + jian(k) + '</b><small>' + SOLFA[k % 7] + (last ? '・4 拍' : '') + '</small></span>'; }).join('');
+      if (isScale) cells.innerHTML = SCALE_DEG.map(function (k, i) { var last = i === SCALE_DEG.length - 1; return '<span class="pr-cell' + (last ? ' hold' : '') + '" data-i="' + i + '"><b>' + jian(k) + '</b><small>' + SOLFA[k % 7] + (last ? '・' + (st.loop ? 2 : 4) + ' 拍' : '') + '</small></span>'; }).join('');
       else {
         chordsEl.innerHTML = chordOrder().map(function (d, i) { return '<span class="pr-chip" data-i="' + i + '">' + chordName(st.start, d) + '</span>'; }).join('');
         cells.innerHTML = ST_PAT.map(function (o, i) { return '<span class="pr-cell sm" data-i="' + i + '"><b>' + ['1', '', '3', '', '5'][o] + '</b></span>'; }).join('') + '<span class="pr-cell sm root" data-i="8"><b>1</b></span><span class="pr-cell sm pr-breath" data-i="9"><b>吸</b></span>';
@@ -638,8 +641,9 @@
       for (var i = 0; i < 4; i++) ev.push({ b: i, kind: 'prep', n: 4 - i, chord: i === 0 ? triad : null });
       b = 4;
       if (isScale) {
-        SCALE_DEG.forEach(function (k, i) { ev.push({ b: b, kind: 'note', m: degMidi(s, k), dur: i === SCALE_DEG.length - 1 ? 4 : 1, cell: i, k: k }); b += 1; });
-        b += 3; // 最後的 1 唱滿四拍
+        var endBeats = st.loop ? 2 : 4; // 連續練習：最後的 1 唱兩拍（二分音符），另外兩拍讓給下一輪預備拍；單輪：唱滿四拍
+        SCALE_DEG.forEach(function (k, i) { ev.push({ b: b, kind: 'note', m: degMidi(s, k), dur: i === SCALE_DEG.length - 1 ? endBeats : 1, cell: i, k: k }); b += 1; });
+        b += endBeats - 1;
       } else {
         var order = chordOrder();
         order.forEach(function (d, ci) {
@@ -652,8 +656,9 @@
       }
       return { ev: ev, beats: b };
     }
-    function schedule() {
-      var r = build(), spb = 60 / st.bpm, start = ctx.currentTime + 0.12;
+    var roundEnd = 0;
+    function schedule(at) { // at：上一輪的結束時間，讓下一輪無縫接上、拍子不漂移
+      var r = build(), spb = 60 / st.bpm, start = at && at > ctx.currentTime + 0.02 ? at : ctx.currentTime + 0.12;
       events = r.ev.map(function (e) { var x = {}; for (var k in e) x[k] = e[k]; x.t = start + e.b * spb; return x; });
       events.forEach(function (e) {
         if (e.kind === 'prep') { click(e.t, e.n === 4); if (e.chord) e.chord.forEach(function (m) { note(m, e.t, spb * 2.2, 0.16); }); }
@@ -661,16 +666,16 @@
         if (e.kind === 'breath' && e.cue) e.cue.forEach(function (m) { note(m, start + e.cueAt * spb, spb * 1.2, 0.1); });
       });
       if (st.click) for (var bt = 4; bt < r.beats; bt++) click(start + bt * spb, (bt - 4) % 4 === 0);
-      t0 = start; cur = -1;
-      var endMs = (start + r.beats * spb - ctx.currentTime) * 1000;
-      clearTimeout(timer); timer = setTimeout(nextRound, endMs);
+      t0 = start; roundEnd = start + r.beats * spb;
+      var endMs = (roundEnd - ctx.currentTime) * 1000 - 250; // 提前排程下一輪
+      clearTimeout(timer); timer = setTimeout(nextRound, Math.max(0, endMs));
     }
     function nextRound() {
       if (!playing) return;
-      if (!st.loop) { stop('練習完成'); return; }
-      if (st.up) { if (st.start < RANGE[st.voice][1]) st.start++; else { stop('已到最高起始音，按「− 半音」降回來再練'); return; } }
+      if (!st.loop) { clearTimeout(timer); timer = setTimeout(function () { if (playing) stop('練習完成'); }, Math.max(0, (roundEnd - ctx.currentTime) * 1000)); return; }
+      if (st.up) { if (st.start < RANGE[st.voice][1]) st.start++; else { clearTimeout(timer); timer = setTimeout(function () { if (playing) stop('已到最高起始音，按「− 半音」降回來再練'); }, Math.max(0, (roundEnd - ctx.currentTime) * 1000)); return; } }
       if (st.rotate) st.vowel = (st.vowel + 1) % VOWELS.length;
-      round++; pend = false; msg.textContent = ''; save(); paintStatic(); schedule();
+      round++; pend = false; msg.textContent = ''; save(); paintStatic(); schedule(roundEnd);
     }
     function frame() {
       var now = ctx.currentTime, idx = -1;
@@ -683,7 +688,7 @@
       if (e.kind === 'prep') { if (shownChord !== 0 || round) drawStaff(0); big.textContent = '預備 ' + e.n; sub.textContent = '第 ' + (round + 1) + ' 輪・' + KEYN[st.start % 12] + ' 調・起始音 ' + nameOf(st.start).name + '・母音 ' + VOWELS[st.vowel] + (e.n === 4 ? '　吸氣' : ''); if (chordsEl) $$('.pr-chip', chordsEl).forEach(function (c) { c.classList.remove('on', 'done'); }); return; }
       var cell = cells.querySelector('[data-i="' + e.cell + '"]'); if (cell) cell.classList.add('on');
       var sn = staffEl.querySelector('.sn[data-i="' + e.cell + '"]'); if (sn) sn.classList.add('on');
-      if (isScale) { big.textContent = SOLFA[e.k % 7] + '　' + nameOf(e.m).name; sub.textContent = '母音 ' + VOWELS[st.vowel] + '・' + (e.cell < 8 ? '上行' : e.cell === 8 ? '高音 1 再唱一次，準備下行' : e.cell === SCALE_DEG.length - 1 ? '下行・唱滿四拍' : '下行') + '・第 ' + (round + 1) + ' 輪'; }
+      if (isScale) { big.textContent = SOLFA[e.k % 7] + '　' + nameOf(e.m).name; sub.textContent = '母音 ' + VOWELS[st.vowel] + '・' + (e.cell < 8 ? '上行' : e.cell === 8 ? '高音 1 再唱一次，準備下行' : e.cell === SCALE_DEG.length - 1 ? (st.loop ? '下行・唱兩拍，接著預備下一輪' : '下行・唱滿四拍') : '下行') + '・第 ' + (round + 1) + ' 輪'; }
       else {
         $$('.pr-chip', chordsEl).forEach(function (c, i) { c.classList.toggle('on', i === e.chord); c.classList.toggle('done', i < e.chord); });
         if (e.kind === 'breath') { big.textContent = '吸'; sub.textContent = e.cue ? '下一個和弦：' + chordName(st.start, chordOrder()[e.chord + 1]) : '最後一個和弦，準備下一輪'; }
@@ -1334,5 +1339,7 @@
   document.addEventListener('slide:change', function (e) {
     if (e.detail && e.detail.mobile) return;
     stoppers.forEach(function (s) { if (s.slide && !s.slide.classList.contains('active')) s.fn(); });
+    // 換頁動畫結束後通知各圖表重畫，依最終大小取得清晰的解析度
+    setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 420);
   });
 })();
