@@ -9,16 +9,37 @@
   var gradient = document.getElementById('voice-gradient');
   // 彩虹流動：改用 requestAnimationFrame 移動漸層起訖點（iOS Safari 對 SVG animateTransform 漸層不會重繪）
   // 系統開啟「減少動態效果」時不動；離開畫面或切到背景時暫停，省電
-  if (gradient && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
-    var art = gradient.ownerSVGElement, visible = true, last = 0, flowRaf = 0;
+  var motionButton = document.getElementById('voice-motion');
+  var motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var motionPaused = false;
+  if (gradient) {
+    var art = gradient.ownerSVGElement, visible = true, last = 0, flowRaf = 0, flowTime = 0;
+    function canFlow() { return visible && !document.hidden && !motionPaused && !motionPreference.matches; }
+    function syncFlow() {
+      cancelAnimationFrame(flowRaf); flowRaf = 0; last = 0;
+      if (canFlow()) flowRaf = requestAnimationFrame(flowTick);
+      if (motionButton) {
+        motionButton.hidden = motionPreference.matches;
+        motionButton.setAttribute('aria-pressed', String(motionPaused));
+        motionButton.innerHTML = motionPaused ? '繼續動態 <span aria-hidden="true">▷</span>' : '暫停動態 <span aria-hidden="true">Ⅱ</span>';
+      }
+    }
     function flowTick(now) {
+      if (!canFlow()) { flowRaf = 0; return; }
       flowRaf = requestAnimationFrame(flowTick);
-      if (!visible || document.hidden || now - last < 33) return; last = now;
-      var t = (now / 12000 * 500) % 500;
+      if (!last) { last = now; return; }
+      if (now - last < 33) return;
+      flowTime += Math.min(now - last, 100); last = now;
+      var t = (flowTime / 12000 * 500) % 500;
       gradient.setAttribute('x1', (t).toFixed(1)); gradient.setAttribute('x2', (t + 500).toFixed(1));
     }
-    if ('IntersectionObserver' in window && art) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }).observe(art);
-    flowRaf = requestAnimationFrame(flowTick);
+    if ('IntersectionObserver' in window && art) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; syncFlow(); }).observe(art);
+    if (motionButton) motionButton.addEventListener('click', function () { motionPaused = !motionPaused; syncFlow(); });
+    motionPreference.addEventListener('change', syncFlow);
+    document.addEventListener('visibilitychange', syncFlow);
+    window.addEventListener('pagehide', function () { cancelAnimationFrame(flowRaf); flowRaf = 0; });
+    window.addEventListener('pageshow', syncFlow);
+    syncFlow();
   }
   function draw() {
     var frequency = Number(slider.value), markup = '';
@@ -34,6 +55,12 @@
     }
     group.innerHTML = markup;
     value.textContent = frequency + ' Hz';
+    var coordinate = document.querySelector('.art-coordinate');
+    if (coordinate) {
+      var notes = ['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
+      var midi = Math.round(69 + 12 * Math.log2(frequency / 440));
+      coordinate.textContent = notes[midi % 12] + (Math.floor(midi / 12) - 1) + ' / ' + frequency + ' Hz';
+    }
     if (oscillator && context) oscillator.frequency.setTargetAtTime(frequency, context.currentTime, .08);
   }
   function stop() {

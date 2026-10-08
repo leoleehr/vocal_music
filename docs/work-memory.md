@@ -1,5 +1,13 @@
 # 工作記憶
 
+## 2026-10-08 品牌網站品質深化（最新網站工作）
+
+- 依使用者要求以國際設計獎項水準為目標，完成三輪首頁實作與自查。設計為「聲音展覽 × 精密工作室」，延續正式彩色品牌標誌、暖金黃與 Find your voice. 漸層；放大主標／聲波，課程改編號索引，淺色練習區提升閱讀尺度，節奏區改細線比例格，頁尾放大正式 slogan。
+- 新增 `assets/home-art-direction.css`（只作用於首頁），修改 `index.html`、`assets/studio.js`。首頁新增聲波暫停、頻率音名；requestAnimationFrame 離屏／背景停止，支援即時減少動態設定與頁面恢復。修正 SVG 遮擋聲音按鈕，補 main 鍵盤焦點與導覽 aria-current。新資產版本 `20261008w`。
+- 驗證：9 頁 × 320／390／768／1440px 共 36 組無橫向溢出、無 JS 未處理例外；25 個首頁本機連結 HTTP 200；7 項互動測試通過；手機／平板真實點擊與方向鍵通過；首頁正常／暫停狀態 axe WCAG 標籤檢查 0 項違規；語法與 diff 檢查通過。真機 iOS、LINE、實體音色及原有教室互動仍待實測。
+- 設計與驗證紀錄：`docs/design-review-20261008.md`。預覽及 JSON 位於 `C:/Agent/UIUX/brand/pixel-studio/01-current/website-20261008/`，遵守 UIUX 產出位置偏好。
+- 本次未提交或部署；開始時 HEAD `e85fdc2`，原有未追蹤 `docs/apps-script-setup-notes.md` 保留。未重新查證線上狀態，不將先前部署紀錄當成本次上線結果。
+
 最後更新：2026-10-08（Asia/Taipei）。
 
 ## 使用者偏好
