@@ -41,3 +41,13 @@ body::before{display:none}a{color:var(--amber)}
 @media(prefers-reduced-motion:reduce){.brand-en,.footer-word,.hero-copy .english{animation:none!important}.hero-copy .english{background-position:50% 50%}}
 @media(max-width:599px){.voice-controls button{min-height:44px}.voice-controls input{height:32px}.topbar .pb-chip{min-width:40px;min-height:40px;justify-content:center}.sv-card{padding:18px}.sv-item{min-height:80px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* 2026 Rebranding：左上角與頁尾改用正式橫式標誌 */
+.topbar .brand-logo{display:block;height:44px;width:auto}
+footer .footer-logo{display:block;height:96px;width:auto;max-width:100%}
+@media(max-width:860px){.topbar .brand-logo{height:36px}footer .footer-logo{height:72px}}
+@media(max-width:599px){.topbar .brand-logo{height:32px}footer .footer-logo{height:56px}}
+.topbar .brand-logo{height:64px;margin-left:-11px;margin-right:-8px}
+footer .footer-logo{height:120px;margin-left:-20px}
+@media(max-width:860px){.topbar .brand-logo{height:52px;margin-left:-9px}footer .footer-logo{height:88px;margin-left:-15px}}
+@media(max-width:599px){.topbar .brand-logo{height:46px;margin-left:-8px}footer .footer-logo{height:70px;margin-left:-12px}}
