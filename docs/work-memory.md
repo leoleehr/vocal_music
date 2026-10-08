@@ -294,3 +294,9 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 使用者指定：網站原始專案為 C:/Agent/vocal_music，但 UIUX 設計產出必須放在 C:/Agent/UIUX/brand。
 - 已將完整 CI 資料夾與 ZIP 移至 C:/Agent/UIUX/brand/Pixel-Studio-CI-v1 與 C:/Agent/UIUX/brand/Pixel-Studio-CI-v1.zip；初版 Logo PNG / SVG 及獨立 220 Hz 聲波 SVG 從網站 assets 移至 C:/Agent/UIUX/brand/initial-logo。
 - 61 個檔案移動前後 SHA-256 一致，目的地未覆蓋既有檔案。這三個初版資產無網站 HTML / CSS / JS 引用。網站 brand 目錄僅剩空目錄。後續 CI 修改與交付均以 UIUX/brand 為準。
+
+## 2026-10-08 UIUX 雙品牌歸檔
+
+- 使用者要求整理 UIUX 工作區中的 LEO LEE HR 與 Pixel Studio CI，已按品牌分開管理。工作區根目錄僅保留 brand 與 README.md；品牌入口為 C:/Agent/UIUX/brand/leoleehr 與 C:/Agent/UIUX/brand/pixel-studio。
+- Pixel Studio 最新 CI 的位置改為 C:/Agent/UIUX/brand/pixel-studio/01-current/Pixel-Studio-CI-v1；ZIP 位於同品牌 02-packages；初版 Logo 在 03-archive/initial-logo。後續更新以此路徑為準。
+- LEO LEE HR 分為目前應用、定稿母檔、規範、歷史版本、製作資料與 ZIP 交付包；保留全部原始產出。45 項搬移、538 個檔案、1 個 node_modules junction 均核對；18 份建置程式路徑修正並保存原程式備份。各品牌導覽與移動紀錄位於 UIUX brand。未修改網站引用或重新匯出設計檔。
