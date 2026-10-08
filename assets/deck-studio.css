@@ -29,3 +29,19 @@ body::before{display:none}
 @media (max-width:900px),(orientation:portrait) and (max-width:1100px){.slide-chapter{display:none}}
 @media print{.slide-chapter,.slide-brand{display:none}}
 .slide-brand img{height:34px;opacity:.38;margin:-10px -14px -10px 0} /* 白色單色橫式標誌（SVG 含安全邊距） */
+
+/* 封面：Rebranding 聲波主視覺 */
+.cover::after{display:none}
+.cover>*:not(.cover-art):not(.cover-sig){position:relative;z-index:1;max-width:620px}
+.cover-art{position:absolute;right:40px;top:50%;width:560px;height:560px;transform:translateY(-50%);pointer-events:none;z-index:0}
+.cover-art img{position:relative;width:100%;height:100%;display:block;animation:ca-float 9s ease-in-out infinite}
+.ca-glow{position:absolute;inset:14%;border-radius:50%;background:radial-gradient(circle,rgba(110,90,220,.28),rgba(69,179,230,.12) 45%,transparent 70%);filter:blur(30px);animation:ca-breathe 9s ease-in-out infinite}
+@keyframes ca-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes ca-breathe{0%,100%{opacity:.7}50%{opacity:1}}
+.cover-sig{position:absolute;right:56px;bottom:40px;width:118px;height:auto;opacity:.55;z-index:1}
+.cover .kicker{letter-spacing:.14em}
+@media (prefers-reduced-motion:reduce){.cover-art img,.ca-glow{animation:none}}
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){
+  .cover-art{position:relative;right:auto;top:auto;transform:none;width:200px;height:200px;margin:-8px 0 4px -16px}
+  .cover-sig{display:none}
+}

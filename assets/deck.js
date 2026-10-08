@@ -11,7 +11,13 @@
   var chapter = document.body.getAttribute('data-title') || '';
   slides.forEach(function (s, k) {
     s.id = 's' + (k + 1);
-    if (s.classList.contains('cover')) return;
+    if (s.classList.contains('cover')) { // 封面：右側彩色聲波主視覺、右下角白色直式標誌
+      var art = document.createElement('div'); art.className = 'cover-art'; art.setAttribute('aria-hidden', 'true');
+      art.innerHTML = '<span class="ca-glow"></span><img src="../../assets/brand/pixel-studio-symbol-color.svg" alt="">';
+      var sig = document.createElement('img'); sig.className = 'cover-sig'; sig.src = '../../assets/brand/pixel-studio-primary-mono-white.svg'; sig.alt = 'Pixel Studio 畫素音樂工作坊';
+      s.insertBefore(art, s.firstChild); s.appendChild(sig);
+      return;
+    }
     var c = document.createElement('div');
     c.className = 'slide-chapter';
     c.textContent = chapter;
