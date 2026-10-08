@@ -198,6 +198,7 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 合成測試（人聲置中、四音和弦伴奏、雜訊）：伴奏分在兩側時，人聲音量 1、0.7、0.5 皆 60/60；伴奏置中時人聲音量 1 為 60/60、0.7 為 30/60、0.5 為 8/60。模擬分頁音訊的投影片流程測得旋律 3 4 5 4 3 7̣ 2 1 正確；純伴奏段落會顯示伴奏音。實際歌曲準確度需在教室實測。
 - `staffSVG` 新增選項（固定格數、簡譜列、不畫結束線）與臨時記號。第 16 張影片在此頁縮為最寬 430px 以容納偵測面板。講義第四堂第 16 列、README 更新；Claude Doc（rev 98）、md、PDF（33 頁）同步；資產版本 `?v=20261008o`。
 - 注意：工作目錄出現他處新增、尚未提交的 `brand/Pixel-Studio-CI-v1/` 與 `assets/pixel-studio-official-black.*`、`assets/pixel-studio-wave-220hz.svg`。這次提交一度用 `git add -A` 誤收入，已在推送前移出；之後提交一律指定檔案路徑，不收入非本次工作的檔案。
+- 部署：commit `e078d8b`（旋律偵測 `3406879`）已推送；GitHub Pages workflow `37722651569` 成功。線上第四堂含旋律偵測面板、引用 `interact.js?v=20261008o`，線上腳本含 melodyPitch，線上 PDF 與本機 SHA-256 一致。Codex 正在 `brand/` 製作 CI，那些檔案與其工作記憶段落由使用者自行處理。
 
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
