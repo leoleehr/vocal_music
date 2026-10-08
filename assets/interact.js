@@ -23,6 +23,31 @@
   function say(msg, kind) { if (window.PixelBackend) window.PixelBackend.toast(msg, kind); }
   function onLeave(root, fn) { stoppers.push({ slide: root.closest('.slide'), fn: fn }); }
 
+  /* ---------- 下載／分享檔案 ----------
+   * 手機優先用系統分享選單（可存到照片、檔案）；LINE、Facebook 等 App 內建瀏覽器會擋下載，改用長按儲存或提示改用瀏覽器開啟。
+   */
+  var IN_APP = /Line\/|FBAN|FBAV|FB_IAB|Instagram|MicroMessenger|KAKAOTALK/i.test(navigator.userAgent);
+  var TOUCH = !!(window.matchMedia && window.matchMedia('(pointer:coarse)').matches);
+  function saveFile(blob, name) {
+    var file = null; try { file = new File([blob], name, { type: blob.type }); } catch (e) {}
+    if (TOUCH && file && navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({ files: [file], title: name }).catch(function (err) { if (!err || err.name !== 'AbortError') saveSheet(blob, name); });
+      return;
+    }
+    if (IN_APP) { saveSheet(blob, name); return; }
+    var a = document.createElement('a'), u = URL.createObjectURL(blob); a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(u); }, 5000);
+  }
+  function saveSheet(blob, name) {
+    var isImg = /^image\//.test(blob.type);
+    var sh = el('div', 'save-sheet', '<div class="ss-card" role="dialog" aria-label="儲存檔案"><button type="button" class="ss-x" aria-label="關閉">×</button><h3>' + (isImg ? '長按圖片即可儲存' : '這個瀏覽器無法直接下載錄音') + '</h3><div class="ss-body"></div><p class="ss-tip">' + (isImg ? '長按上方圖片，選「儲存圖片」或「加入照片」。' : '點右上角選單，選「用預設瀏覽器開啟」（Safari 或 Chrome）後再下載；也可以直接按「上傳給老師」。') + '</p></div>');
+    var body = sh.querySelector('.ss-body'), r = new FileReader();
+    r.onload = function () { body.innerHTML = isImg ? '<img alt="">' : '<audio controls></audio>'; body.firstChild.src = r.result; };
+    r.readAsDataURL(blob);
+    sh.addEventListener('click', function (e) { if (e.target === sh || e.target.classList.contains('ss-x')) sh.remove(); });
+    document.body.appendChild(sh);
+  }
+
   /* ---------- 音訊 ---------- */
   var AC = null;
   function ac() { if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); return AC; }
@@ -338,10 +363,10 @@
     var data = saved ? saved.data : [], marks = saved ? saved.marks : [], sel = null, drag = null;
     var an = null, raf = 0, t0 = 0, last = 0, rec = null, chunks = [], blob = null, url = '', recent = [], playing = false;
     p.innerHTML = '<div class="rl-read"><div><small>音高</small><b class="rl-note">--</b><span class="rl-hz"></span></div><div><small>音量</small><b class="rl-db">--</b><span class="rl-bar"><i></i></span></div><div><small>錄製</small><b class="rl-time">0.0 秒</b></div></div>' +
-      '<canvas class="rl-cv"></canvas><div class="rl-legend"><span class="lg-pitch">— 音高</span><span class="lg-vol">▇ 音量</span><span class="muted">錄完後在圖上拖曳選一段，再按腔體按鈕標記</span></div>' +
+      '<canvas class="rl-cv"></canvas><div class="rl-legend"><span class="lg-pitch">— 音高</span><span class="lg-vol">▇ 音量</span><span class="lg-ov">▨ 聲區</span><span class="muted">錄完後在圖上拖曳選一段，再按腔體按鈕標記；兩種共鳴重疊的地方就是聲區</span></div>' +
       '<div class="btn-row rl-main"><button type="button" class="btn primary go">● 開始錄製</button><button type="button" class="btn play" disabled>▶ 播放</button><button type="button" class="btn clear">清除</button><span class="rl-sep"></span>' + ZONES.map(function (z) { return '<button type="button" class="btn rl-z" data-z="' + z.k + '" disabled style="--zc:' + z.col + '">標記為' + z.name + '</button>'; }).join('') + '</div>' +
       '<ul class="rl-marks"></ul><p class="rl-sum"></p>' +
-      '<div class="btn-row rl-out"><button type="button" class="btn png">下載觀測圖</button><a class="btn wav" download>下載錄音</a><button type="button" class="btn primary up">上傳給老師</button></div><audio class="rl-audio"></audio>';
+      '<div class="btn-row rl-out"><button type="button" class="btn png">下載觀測圖</button><a class="btn wav" href="#">下載錄音</a><button type="button" class="btn primary up">上傳給老師</button></div><audio class="rl-audio"></audio>';
     var cv = p.querySelector('canvas'), go = p.querySelector('.go'), play = p.querySelector('.play'), au = p.querySelector('audio'), wav = p.querySelector('.wav');
     var noteEl = p.querySelector('.rl-note'), hzEl = p.querySelector('.rl-hz'), dbEl = p.querySelector('.rl-db'), barEl = p.querySelector('.rl-bar i'), timeEl = p.querySelector('.rl-time');
     var buf = new Float32Array(2048);
@@ -368,7 +393,12 @@
       [-60, -40, -20, 0].forEach(function (d) { x.fillText(d + ' dB', g.L + g.w + 4, Math.min(g.T + g.h - 4, Math.max(g.T + 6, g.Yv(d)))); });
       x.textAlign = 'center'; x.fillStyle = 'rgba(255,255,255,.4)';
       for (var s = 0; s <= dur(); s += 5) x.fillText(s + 's', g.X(s), g.T + g.h + 12);
-      marks.forEach(function (mk) { var z = zoneOf(mk.z); x.fillStyle = z.col + '2e'; x.fillRect(g.X(mk.a), g.T, g.X(mk.b) - g.X(mk.a), g.h); x.fillStyle = z.col; x.font = '700 13px "Noto Sans TC",sans-serif'; x.fillText(z.name, (g.X(mk.a) + g.X(mk.b)) / 2, g.T + 12); x.font = '11px ' + css('--display'); });
+      marks.forEach(function (mk) { var z = zoneOf(mk.z); x.fillStyle = z.col + '2a'; x.fillRect(g.X(mk.a), g.T, g.X(mk.b) - g.X(mk.a), g.h); x.fillStyle = z.col; x.font = '700 13px "Noto Sans TC",sans-serif'; x.fillText(z.name, (g.X(mk.a) + g.X(mk.b)) / 2, g.T + 12 + (mk.z === 'mouth' ? 16 : 0)); x.font = '11px ' + css('--display'); });
+      overlaps().forEach(function (o) { // 聲區：斜線網底
+        var x1 = g.X(o.a), x2 = g.X(o.b); x.save(); x.beginPath(); x.rect(x1, g.T, x2 - x1, g.h); x.clip();
+        x.strokeStyle = 'rgba(255,255,255,.38)'; x.lineWidth = 1.5; for (var k = x1 - g.h; k < x2; k += 7) { x.beginPath(); x.moveTo(k, g.T + g.h); x.lineTo(k + g.h, g.T); x.stroke(); }
+        x.restore(); x.lineWidth = 1; x.fillStyle = '#fff'; x.font = '700 12px "Noto Sans TC",sans-serif'; x.fillText('聲區', (x1 + x2) / 2, g.T + g.h - 10); x.font = '11px ' + css('--display');
+      });
       if (sel) { x.fillStyle = 'rgba(255,255,255,.12)'; x.fillRect(g.X(sel.a), g.T, g.X(sel.b) - g.X(sel.a), g.h); x.strokeStyle = 'rgba(255,255,255,.6)'; x.setLineDash([4, 4]); x.strokeRect(g.X(sel.a), g.T, g.X(sel.b) - g.X(sel.a), g.h); x.setLineDash([]); }
       // 音量：底部的填色區
       x.fillStyle = 'rgba(69,179,230,.28)'; x.beginPath(); x.moveTo(g.X(0), g.T + g.h);
@@ -381,19 +411,38 @@
       x.stroke(); x.lineWidth = 1;
       if (head !== undefined) { x.strokeStyle = '#fff'; x.beginPath(); x.moveTo(g.X(head), g.T); x.lineTo(g.X(head), g.T + g.h); x.stroke(); }
     }
+    function rng(st) { var a = nameOf(st.lo).name, b = nameOf(st.hi).name; return a === b ? a : a + '–' + b; }
+    function zi(k) { return ZONES.map(function (z) { return z.k; }).indexOf(k); }
+    function overlaps() { // 不同共鳴的標記重疊處＝聲區（共鳴轉換的位置）
+      var out = [];
+      for (var i = 0; i < marks.length; i++) for (var j = i + 1; j < marks.length; j++) {
+        var m1 = marks[i], m2 = marks[j]; if (m1.z === m2.z) continue;
+        var a = Math.max(m1.a, m2.a), b = Math.min(m1.b, m2.b); if (b - a < 0.1) continue;
+        var lo = zi(m1.z) < zi(m2.z) ? m1 : m2, hi = lo === m1 ? m2 : m1;
+        out.push({ a: a, b: b, from: lo.z, to: hi.z });
+      }
+      return out.sort(function (x, y) { return x.a - y.a; });
+    }
     function listMarks() {
       var ul = p.querySelector('.rl-marks');
       ul.innerHTML = marks.map(function (mk, i) {
         var z = zoneOf(mk.z), st = stats(mk.a, mk.b);
-        return '<li style="--zc:' + z.col + '"><b>' + z.name + '</b> ' + mk.a.toFixed(1) + '–' + mk.b.toFixed(1) + ' 秒　' + (st ? '音高 ' + nameOf(st.lo).name + '–' + nameOf(st.hi).name + '（中位 ' + nameOf(st.mid).name + '）　平均音量 ' + Math.round(st.db) + ' dB' : '這段沒有偵測到聲音') + ' <button type="button" class="rl-del" data-i="' + i + '" aria-label="刪除標記">×</button></li>';
+        return '<li style="--zc:' + z.col + '"><b>' + z.name + '</b> ' + mk.a.toFixed(1) + '–' + mk.b.toFixed(1) + ' 秒　' + (st ? '音高 ' + rng(st) + '（中位 ' + nameOf(st.mid).name + '）　平均音量 ' + Math.round(st.db) + ' dB' : '這段沒有偵測到聲音') + ' <button type="button" class="rl-del" data-i="' + i + '" aria-label="刪除標記">×</button></li>';
+      }).join('') + overlaps().map(function (o) {
+        var st = stats(o.a, o.b);
+        return '<li class="rl-ov"><b>聲區</b> ' + zoneOf(o.from).name + '↔' + zoneOf(o.to).name + '　' + o.a.toFixed(1) + '–' + o.b.toFixed(1) + ' 秒　' + (st ? '音高 ' + rng(st) + '（約 ' + nameOf(st.mid).name + '）　平均音量 ' + Math.round(st.db) + ' dB' : '這段沒有偵測到聲音') + '</li>';
       }).join('');
       $$('.rl-del', ul).forEach(function (b) { b.onclick = function () { marks.splice(+b.getAttribute('data-i'), 1); save(); refresh(); }; });
       var ch = marks.filter(function (m) { return m.z === 'chest'; })[0], hd = marks.filter(function (m) { return m.z === 'head'; })[0], sum = p.querySelector('.rl-sum');
-      var a = ch && stats(ch.a, ch.b), b = hd && stats(hd.a, hd.b);
+      var a = ch && stats(ch.a, ch.b), b = hd && stats(hd.a, hd.b), parts = [];
+      var ov = overlaps().map(function (o) { var st = stats(o.a, o.b); return st ? zoneOf(o.from).name + '→' + zoneOf(o.to).name + ' 約 <b>' + nameOf(st.mid).name + '</b>' + (rng(st) === nameOf(st.mid).name ? '' : '（' + rng(st) + '）') : null; }).filter(Boolean);
+      if (ov.length) parts.push('共鳴轉換位置（聲區）：' + ov.join('；'));
       if (a && b) {
         var dm = Math.round(b.mid - a.mid), dd = Math.round(b.db - a.db);
-        sum.innerHTML = '胸腔 → 頭腔：音高 <b>' + (dm >= 0 ? '+' : '') + dm + ' 半音</b>（' + nameOf(a.mid).name + ' → ' + nameOf(b.mid).name + '），音量 <b>' + (dd >= 0 ? '+' : '') + dd + ' dB</b>' + (dd < -2 ? '：音高往上，音量明顯變小。' : dd > 2 ? '：音量反而變大，可能還在用胸腔往上推。' : '：音量差不多，試著讓頭腔更放鬆。');
-      } else sum.textContent = marks.length ? '再標記一段胸腔與一段頭腔，就能比較音高與音量的變化。' : '';
+        parts.push('胸腔 → 頭腔：音高 <b>' + (dm >= 0 ? '+' : '') + dm + ' 半音</b>（' + nameOf(a.mid).name + ' → ' + nameOf(b.mid).name + '），音量 <b>' + (dd >= 0 ? '+' : '') + dd + ' dB</b>' + (dd < -2 ? '：音高往上，音量明顯變小。' : dd > 2 ? '：音量反而變大，可能還在用胸腔往上推。' : '：音量差不多，試著讓頭腔更放鬆。'));
+      }
+      if (!parts.length && marks.length) parts.push('再標記一段胸腔與一段頭腔，就能比較音高與音量；兩段重疊的地方會標成聲區。');
+      sum.innerHTML = parts.join('<br>');
     }
     function save() { LS.set(key, { data: data, marks: marks }); }
     function refresh() { listMarks(); draw(); $$('.rl-z', p).forEach(function (b) { b.disabled = !sel || !data.length; }); }
@@ -431,7 +480,8 @@
           rec.ondataavailable = function (e) { if (e.data.size) chunks.push(e.data); };
           rec.onstop = function () {
             blob = new Blob(chunks, { type: type }); if (url) URL.revokeObjectURL(url); url = URL.createObjectURL(blob);
-            au.src = url; wav.href = url; wav.download = '共鳴轉換_' + stamp() + (type === 'audio/webm' ? '.webm' : '.m4a');
+            au.src = url; wav.download = '共鳴轉換_' + stamp() + (type === 'audio/webm' ? '.webm' : '.m4a');
+            wav.onclick = function (e) { e.preventDefault(); saveFile(blob, wav.download); };
             p.classList.add('has'); play.disabled = false;
           };
           rec.start();
@@ -451,11 +501,12 @@
     cv.addEventListener('pointermove', function (e) { if (drag === null) return; var t = geo().Tm(px(e)); sel = { a: Math.min(drag, t), b: Math.max(drag, t) }; draw(); });
     cv.addEventListener('pointerup', function () { if (drag === null) return; drag = null; if (sel && sel.b - sel.a < 0.2) sel = null; refresh(); });
     $$('.rl-z', p).forEach(function (b) {
-      b.onclick = function () { if (!sel) return; marks = marks.filter(function (m) { return m.b <= sel.a || m.a >= sel.b; }); marks.push({ z: b.getAttribute('data-z'), a: +sel.a.toFixed(2), b: +sel.b.toFixed(2) }); marks.sort(function (x, y) { return x.a - y.a; }); sel = null; save(); refresh(); };
+      b.onclick = function () { if (!sel) return; var zk = b.getAttribute('data-z'); marks = marks.filter(function (m) { return m.z !== zk || m.b <= sel.a || m.a >= sel.b; }); marks.push({ z: zk, a: +sel.a.toFixed(2), b: +sel.b.toFixed(2) }); marks.sort(function (x, y) { return x.a - y.a; }); sel = null; save(); refresh(); };
     });
     p.querySelector('.clear').onclick = function () { if (raf) stop(); data = []; marks = []; sel = null; blob = null; p.classList.remove('has'); play.disabled = true; go.textContent = '● 開始錄製'; save(); refresh(); timeEl.textContent = '0.0 秒'; };
     function snapshot() { // 觀測圖 PNG：標題、曲線、標記與比較結果
-      var g = geo(), out = document.createElement('canvas'), r = window.devicePixelRatio || 1, W = g.c.w, H = g.c.h + 90;
+      var lines = $$('.rl-marks li', p).map(function (li) { return li.textContent.replace('×', '').trim(); }).concat(p.querySelector('.rl-sum').innerText.split('\n')).filter(Boolean).slice(0, 8);
+      var g = geo(), out = document.createElement('canvas'), r = window.devicePixelRatio || 1, W = g.c.w, H = g.c.h + 52 + lines.length * 17;
       out.width = W * r; out.height = H * r; var x = out.getContext('2d'); x.scale(r, r);
       x.fillStyle = '#101210'; x.fillRect(0, 0, W, H);
       x.fillStyle = '#f3f0e9'; x.font = '700 16px "Noto Sans TC",sans-serif'; x.textBaseline = 'top';
@@ -463,17 +514,16 @@
       x.fillText('共鳴轉換觀測圖　' + (who.name || '') + '　' + stamp().replace('_', ' '), 12, 10);
       x.drawImage(cv, 0, 36, W, g.c.h);
       x.font = '13px "Noto Sans TC",sans-serif'; x.fillStyle = '#C7AF4A';
-      var lines = $$('.rl-marks li', p).map(function (li) { return li.textContent.replace('×', '').trim(); }).concat([p.querySelector('.rl-sum').textContent]).filter(Boolean);
-      lines.slice(0, 3).forEach(function (l, i) { x.fillText(l, 12, 42 + g.c.h + i * 17); });
+      lines.forEach(function (l, i) { x.fillText(l, 12, 44 + g.c.h + i * 17); });
       return out;
     }
     p.querySelector('.png').onclick = function () {
       if (!data.length) { say('先錄一段共鳴轉換', 'warn'); return; }
-      var a = document.createElement('a'); a.href = snapshot().toDataURL('image/png'); a.download = '共鳴觀測圖_' + stamp() + '.png'; a.click();
+      snapshot().toBlob(function (img) { saveFile(img, '共鳴觀測圖_' + stamp() + '.png'); }, 'image/png');
     };
     p.querySelector('.up').onclick = function () {
       if (!data.length) { say('先錄一段共鳴轉換', 'warn'); return; }
-      var summary = { marks: marks.map(function (mk) { var st = stats(mk.a, mk.b); return { zone: zoneOf(mk.z).name, from: mk.a, to: mk.b, low: st && nameOf(st.lo).name, high: st && nameOf(st.hi).name, db: st && Math.round(st.db) }; }), summary: p.querySelector('.rl-sum').textContent };
+      var summary = { marks: marks.map(function (mk) { var st = stats(mk.a, mk.b); return { zone: zoneOf(mk.z).name, from: mk.a, to: mk.b, low: st && nameOf(st.lo).name, high: st && nameOf(st.hi).name, db: st && Math.round(st.db) }; }), zones: overlaps().map(function (o) { var st = stats(o.a, o.b); return { between: zoneOf(o.from).name + '↔' + zoneOf(o.to).name, from: o.a, to: o.b, pitch: st && nameOf(st.mid).name, low: st && nameOf(st.lo).name, high: st && nameOf(st.hi).name }; }), summary: p.querySelector('.rl-sum').innerText };
       report(p, 'resonance', { item: '共鳴轉換', result: summary.marks.map(function (m) { return m.zone + ' ' + (m.low || '--') + '–' + (m.high || '--') + ' ' + (m.db === null ? '' : m.db + ' dB'); }).join('／') || '未標記', detail: summary });
       if (!window.PixelBackend) return;
       snapshot().toBlob(function (img) {
@@ -494,6 +544,38 @@
   function degMidi(start, k) { return start + 12 * Math.floor(k / 7) + MAJ[((k % 7) + 7) % 7]; }
   var SHARP = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'], FLAT = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'G♭', 'G', 'A♭', 'A', 'B♭', 'B'];
   function chordName(start, d) { var k = start % 12, names = [2, 4, 6, 7, 9, 11].indexOf(k) > -1 ? SHARP : FLAT; return names[(start + MAJ[d]) % 12] + QUAL[d]; } // 升記號調用升名、降記號調用降名
+  /* 五線譜：高音譜號（男聲用低八度高音譜號，譜號下標 8），依調號畫升降記號，音符以 E4（第一線）為基準計算位置 */
+  var KEY_LETTER = [0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6], KEY_SIG = { 0: 0, 7: 1, 2: 2, 9: 3, 4: 4, 11: 5, 6: 6, 5: -1, 10: -2, 3: -3, 8: -4, 1: -5 };
+  var SHARP_POS = [8, 5, 9, 6, 3, 7, 4], FLAT_POS = [4, 7, 3, 6, 2, 5, 1];
+  function tonicStep(start, male) { var w = start + (male ? 12 : 0); return KEY_LETTER[start % 12] + 7 * (Math.floor(w / 12) - 1) - 30; }
+  // notes: [{ s: 譜表位置（E4=0，每格 1）, len: 'q'|'e'|'w' }]；groups：要連桁的八分音符索引；bars：在哪個音之後畫小節線
+  function staffSVG(notes, start, male, groups, bars) {
+    var Y = function (st) { return 70 - st * 5; }, ks = KEY_SIG[start % 12], n = Math.abs(ks);
+    var x0 = 44 + n * 9 + 8, dx = Math.max(26, Math.min(40, 560 / notes.length)), W = x0 + notes.length * dx + 14, h = '';
+    for (var l = 0; l <= 8; l += 2) h += '<line class="sf-l" x1="2" x2="' + (W - 4) + '" y1="' + Y(l) + '" y2="' + Y(l) + '"/>';
+    h += '<text class="sf-clef" x="4" y="' + Y(2) + '">𝄞</text>' + (male ? '<text class="sf-8" x="15" y="' + (Y(-3) + 9) + '">8</text>' : '');
+    for (var i = 0; i < n; i++) { var pos = ks > 0 ? SHARP_POS[i] : FLAT_POS[i]; h += '<text class="sf-acc" x="' + (40 + i * 9) + '" y="' + (Y(pos) + (ks > 0 ? 5 : 3)) + '">' + (ks > 0 ? '♯' : '♭') + '</text>'; }
+    var xs = notes.map(function (_, i) { return x0 + i * dx + dx / 2; });
+    var inGroup = {}; (groups || []).forEach(function (g) { var avg = g.reduce(function (a, k) { return a + notes[k].s; }, 0) / g.length, up = avg < 4; g.forEach(function (k) { inGroup[k] = { g: g, up: up }; }); });
+    notes.forEach(function (nt, i) {
+      var x = xs[i], y = Y(nt.s), up = inGroup[i] ? inGroup[i].up : nt.s < 4, led = '';
+      for (var a = -2; a >= nt.s; a -= 2) led += '<line class="sf-l" x1="' + (x - 9) + '" x2="' + (x + 9) + '" y1="' + Y(a) + '" y2="' + Y(a) + '"/>';
+      for (var b = 10; b <= nt.s; b += 2) led += '<line class="sf-l" x1="' + (x - 9) + '" x2="' + (x + 9) + '" y1="' + Y(b) + '" y2="' + Y(b) + '"/>';
+      var head = nt.len === 'w' ? '<ellipse class="sf-open" cx="' + x + '" cy="' + y + '" rx="6.4" ry="4.4" transform="rotate(-20 ' + x + ' ' + y + ')"/>' : '<ellipse cx="' + x + '" cy="' + y + '" rx="5.6" ry="4" transform="rotate(-20 ' + x + ' ' + y + ')"/>';
+      var stem = '', sx = up ? x + 5.2 : x - 5.2;
+      if (nt.len !== 'w') {
+        var tip = up ? y - 30 : y + 30;
+        if (inGroup[i]) { var g = inGroup[i].g, ends = g.map(function (k) { return Y(notes[k].s); }); tip = up ? Math.min.apply(null, ends) - 28 : Math.max.apply(null, ends) + 28; }
+        stem = '<line class="sf-stem" x1="' + sx + '" x2="' + sx + '" y1="' + y + '" y2="' + tip + '"/>';
+        if (nt.dot) stem += '<circle cx="' + x + '" cy="' + (up ? y + 9 : y - 9) + '" r="1.8"/>';
+      }
+      h += '<g class="sn" data-i="' + i + '">' + led + head + stem + '</g>';
+    });
+    (groups || []).forEach(function (g) { var a = g[0], b = g[g.length - 1], up = inGroup[a].up, ends = g.map(function (k) { return Y(notes[k].s); }), tip = up ? Math.min.apply(null, ends) - 28 : Math.max.apply(null, ends) + 28, x1 = xs[a] + (up ? 5.2 : -5.2), x2 = xs[b] + (up ? 5.2 : -5.2); h += '<line class="sf-beam" x1="' + x1 + '" x2="' + x2 + '" y1="' + tip + '" y2="' + tip + '"/>'; });
+    (bars || []).forEach(function (k) { var bx = xs[k] + dx / 2; h += '<line class="sf-bar" x1="' + bx + '" x2="' + bx + '" y1="' + Y(8) + '" y2="' + Y(0) + '"/>'; });
+    h += '<line class="sf-bar" x1="' + (W - 8) + '" x2="' + (W - 8) + '" y1="' + Y(8) + '" y2="' + Y(0) + '"/><line class="sf-end" x1="' + (W - 4) + '" x2="' + (W - 4) + '" y1="' + Y(8) + '" y2="' + Y(0) + '"/>';
+    return '<svg viewBox="0 -8 ' + W + ' 116" role="img" aria-label="五線譜">' + h + '</svg>';
+  }
   function practice(p, kind) {
     var isScale = kind === 'scale', key = kind + '-' + LESSON;
     var RANGE = { male: [40, 57], female: [52, 69] }, DEF = { male: 48, female: 60 };
@@ -509,24 +591,31 @@
       '<label><input type="checkbox" class="o-rotate"> 每輪換母音</label><label><input type="checkbox" class="o-up"> 每輪升半音</label><label><input type="checkbox" class="o-loop"> 連續練習</label><label><input type="checkbox" class="o-click"> 節拍聲</label>' +
       (isScale ? '' : '<label><input type="checkbox" class="o-back"> 和弦走完再下行</label>') + '</div>' +
       '<div class="pr-now"><div class="pr-big">--</div><div class="pr-sub"></div></div>' +
-      (isScale ? '' : '<div class="pr-chords"></div>') + '<div class="pr-cells"></div>' +
+      (isScale ? '' : '<div class="pr-chords"></div>') + '<div class="pr-staff"></div><div class="pr-cells"></div>' +
       '<div class="btn-row pr-run"><button type="button" class="btn primary go">▶ 開始跟唱</button>' + (isScale ? '' : '<button type="button" class="btn pass">唱穩了 +5 BPM</button><span class="pr-rec"></span>') + '<span class="pr-msg muted"></span></div>';
-    var sel = p.querySelector('.start'), big = p.querySelector('.pr-big'), sub = p.querySelector('.pr-sub'), cells = p.querySelector('.pr-cells'), chordsEl = p.querySelector('.pr-chords'), msg = p.querySelector('.pr-msg'), go = p.querySelector('.go');
+    var sel = p.querySelector('.start'), big = p.querySelector('.pr-big'), sub = p.querySelector('.pr-sub'), cells = p.querySelector('.pr-cells'), staffEl = p.querySelector('.pr-staff'), shownChord = -1, chordsEl = p.querySelector('.pr-chords'), msg = p.querySelector('.pr-msg'), go = p.querySelector('.go');
     function save() { LS.set(key, st); }
     function chordOrder() { var up = [0, 1, 2, 3, 4, 5, 6]; return st.back ? up.concat([5, 4, 3, 2, 1, 0]) : up; }
-    var SCALE_DEG = [0, 1, 2, 3, 4, 5, 6, 7, 6, 5, 4, 3, 2, 1, 0], ST_PAT = [0, 2, 4, 2, 0, 2, 4, 2];
+    var SCALE_DEG = [0, 1, 2, 3, 4, 5, 6, 7, 7, 6, 5, 4, 3, 2, 1, 0], ST_PAT = [0, 2, 4, 2, 0, 2, 4, 2];
+    function drawStaff(ci) {
+      var male = st.voice === 'male', ts = tonicStep(st.start, male);
+      if (isScale) staffEl.innerHTML = staffSVG(SCALE_DEG.map(function (k, i) { return { s: ts + k, len: i === SCALE_DEG.length - 1 ? 'w' : 'q' }; }), st.start, male, [], [3, 7, 11]);
+      else { var d = chordOrder()[ci || 0]; staffEl.innerHTML = staffSVG(ST_PAT.map(function (o) { return { s: ts + d + o, len: 'e', dot: true }; }).concat([{ s: ts + d, len: 'q', dot: true }]), st.start, male, [[0, 1, 2, 3], [4, 5, 6, 7]], [7]); }
+      shownChord = ci || 0;
+    }
     function jian(k) { return (k % 7 + 1) + (k >= 7 ? '̇' : ''); }
     function paintStatic() {
       $$('.voice .btn', p).forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-v') === st.voice); });
       sel.innerHTML = opts(); p.querySelector('.bpm').textContent = st.bpm + ' BPM';
       $$('.vw', p).forEach(function (b) { b.classList.toggle('on', +b.getAttribute('data-i') === st.vowel); });
       ['rotate', 'up', 'loop', 'click', 'back'].forEach(function (o) { var c = p.querySelector('.o-' + o); if (c) c.checked = !!st[o]; });
-      if (isScale) cells.innerHTML = SCALE_DEG.map(function (k, i) { return '<span class="pr-cell" data-i="' + i + '"><b>' + jian(k) + '</b><small>' + SOLFA[k % 7] + '</small></span>'; }).join('');
+      if (isScale) cells.innerHTML = SCALE_DEG.map(function (k, i) { var last = i === SCALE_DEG.length - 1; return '<span class="pr-cell' + (last ? ' hold' : '') + '" data-i="' + i + '"><b>' + jian(k) + '</b><small>' + SOLFA[k % 7] + (last ? '・4 拍' : '') + '</small></span>'; }).join('');
       else {
         chordsEl.innerHTML = chordOrder().map(function (d, i) { return '<span class="pr-chip" data-i="' + i + '">' + chordName(st.start, d) + '</span>'; }).join('');
         cells.innerHTML = ST_PAT.map(function (o, i) { return '<span class="pr-cell sm" data-i="' + i + '"><b>' + ['1', '', '3', '', '5'][o] + '</b></span>'; }).join('') + '<span class="pr-cell sm root" data-i="8"><b>1</b></span><span class="pr-cell sm pr-breath" data-i="9"><b>吸</b></span>';
         var r = p.querySelector('.pr-rec'); if (r) r.textContent = st.rec ? '班級紀錄 ' + st.rec + ' BPM' : '班級紀錄 —';
       }
+      if (!playing) drawStaff(0);
       if (!playing) { big.textContent = KEYN[st.start % 12] + ' 調'; sub.textContent = '起始音 ' + nameOf(st.start).name + '・' + st.bpm + ' BPM・母音 ' + VOWELS[st.vowel] + '　按「開始跟唱」，先聽 4 拍預備'; }
     }
     function changed() { save(); paintStatic(); if (playing) { pend = true; msg.textContent = '設定會在下一輪套用'; } }
@@ -549,8 +638,8 @@
       for (var i = 0; i < 4; i++) ev.push({ b: i, kind: 'prep', n: 4 - i, chord: i === 0 ? triad : null });
       b = 4;
       if (isScale) {
-        SCALE_DEG.forEach(function (k, i) { ev.push({ b: b, kind: 'note', m: degMidi(s, k), dur: i === SCALE_DEG.length - 1 ? 2 : 1, cell: i, k: k }); b += 1; });
-        b += 1;
+        SCALE_DEG.forEach(function (k, i) { ev.push({ b: b, kind: 'note', m: degMidi(s, k), dur: i === SCALE_DEG.length - 1 ? 4 : 1, cell: i, k: k }); b += 1; });
+        b += 3; // 最後的 1 唱滿四拍
       } else {
         var order = chordOrder();
         order.forEach(function (d, ci) {
@@ -589,9 +678,12 @@
       if (idx === cur || idx < 0) return; cur = idx;
       var e = events[idx];
       $$('.pr-cell', cells).forEach(function (c) { c.classList.remove('on'); });
-      if (e.kind === 'prep') { big.textContent = '預備 ' + e.n; sub.textContent = '第 ' + (round + 1) + ' 輪・' + KEYN[st.start % 12] + ' 調・起始音 ' + nameOf(st.start).name + '・母音 ' + VOWELS[st.vowel] + (e.n === 4 ? '　吸氣' : ''); if (chordsEl) $$('.pr-chip', chordsEl).forEach(function (c) { c.classList.remove('on', 'done'); }); return; }
+      $$('.sn', staffEl).forEach(function (c) { c.classList.remove('on'); });
+      if (!isScale && e.kind !== 'prep' && e.chord !== shownChord) drawStaff(e.chord);
+      if (e.kind === 'prep') { if (shownChord !== 0 || round) drawStaff(0); big.textContent = '預備 ' + e.n; sub.textContent = '第 ' + (round + 1) + ' 輪・' + KEYN[st.start % 12] + ' 調・起始音 ' + nameOf(st.start).name + '・母音 ' + VOWELS[st.vowel] + (e.n === 4 ? '　吸氣' : ''); if (chordsEl) $$('.pr-chip', chordsEl).forEach(function (c) { c.classList.remove('on', 'done'); }); return; }
       var cell = cells.querySelector('[data-i="' + e.cell + '"]'); if (cell) cell.classList.add('on');
-      if (isScale) { big.textContent = SOLFA[e.k % 7] + '　' + nameOf(e.m).name; sub.textContent = '母音 ' + VOWELS[st.vowel] + '・' + (e.cell < 8 ? '上行' : '下行') + '・第 ' + (round + 1) + ' 輪'; }
+      var sn = staffEl.querySelector('.sn[data-i="' + e.cell + '"]'); if (sn) sn.classList.add('on');
+      if (isScale) { big.textContent = SOLFA[e.k % 7] + '　' + nameOf(e.m).name; sub.textContent = '母音 ' + VOWELS[st.vowel] + '・' + (e.cell < 8 ? '上行' : e.cell === 8 ? '高音 1 再唱一次，準備下行' : e.cell === SCALE_DEG.length - 1 ? '下行・唱滿四拍' : '下行') + '・第 ' + (round + 1) + ' 輪'; }
       else {
         $$('.pr-chip', chordsEl).forEach(function (c, i) { c.classList.toggle('on', i === e.chord); c.classList.toggle('done', i < e.chord); });
         if (e.kind === 'breath') { big.textContent = '吸'; sub.textContent = e.cue ? '下一個和弦：' + chordName(st.start, chordOrder()[e.chord + 1]) : '最後一個和弦，準備下一輪'; }
@@ -1025,7 +1117,7 @@
         rec.ondataavailable = function (e) { if (e.data.size) chunks.push(e.data); };
         rec.onstop = function () {
           var blob = new Blob(chunks, { type: type }), url = URL.createObjectURL(blob), d = new Date();
-          au.src = url; dl.href = url; dl.download = label + '_' + d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') + (type === 'audio/webm' ? '.webm' : '.m4a');
+          au.src = url; dl.href = url; dl.onclick = function (e) { e.preventDefault(); saveFile(blob, dl.download); }; dl.download = label + '_' + d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') + (type === 'audio/webm' ? '.webm' : '.m4a');
           r.classList.add('has'); go.textContent = '● 重新錄音'; tm.textContent = '完成'; if (usingMic) { usingMic = false; micStop(); }
           if (!up) { up = btn('上傳給老師', 'primary rec-up'); r.insertBefore(up, r.querySelector('.rec-note')); }
           var secs = max - Math.max(0, left), fname = dl.download;

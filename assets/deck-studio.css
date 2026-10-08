@@ -17,3 +17,6 @@ body::before{display:none}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
 @media(max-width:360px){.six{grid-template-columns:1fr!important}.six>div{justify-self:center}}
+
+/* 起承轉合流程圖與課表色塊：刷淡，降低飽和度 */
+.timeline>div,.routine>div{filter:saturate(.68) brightness(.97);opacity:.86}

@@ -500,3 +500,58 @@ table.mini-scale th{width:5.5em;text-align:left}
   table.mini-scale th,table.mini-scale td{display:table-cell!important;width:auto!important;padding:4px 2px!important;font-size:12px!important;text-align:center!important;border-bottom:1px solid var(--line)!important}
   table.mini-scale td::before{content:none!important}
 }
+
+/* ===== 聲區、儲存檔案視窗 ===== */
+.rl-legend .lg-ov{color:var(--ink);font-weight:700}
+.rl-marks li.rl-ov{border-left:4px solid #fff;background:repeating-linear-gradient(135deg,rgba(255,255,255,.08) 0 6px,transparent 6px 12px),var(--card-2)}
+.rl-marks li.rl-ov b{color:#fff}
+.rl-read b,.rl-read .rl-hz{white-space:nowrap}
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){
+  .rl-read{gap:6px}
+  .resolab .rl-read b{font-size:17px}
+  .rl-read .rl-hz{display:block;font-size:11px}
+  .rl-read small{font-size:11px}
+}
+.save-sheet{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:16px}
+.ss-card{position:relative;background:var(--card,#18181e);color:var(--ink,#f3f0e9);border:1px solid var(--line-2,rgba(255,255,255,.14));border-radius:16px;padding:18px 16px 14px;width:min(520px,100%);max-height:92vh;overflow:auto}
+.ss-card h3{font-size:18px;margin:0 32px 10px 0}
+.ss-body img{width:100%;height:auto;display:block;border-radius:10px;-webkit-touch-callout:default}
+.ss-body audio{width:100%}
+.ss-tip{font-size:14px;color:var(--muted,#9d998f);margin-top:10px;line-height:1.6}
+.ss-x{position:absolute;top:8px;right:10px;font:inherit;font-size:26px;line-height:1;background:none;border:0;color:var(--muted,#9d998f);cursor:pointer;padding:4px 8px}
+
+/* ===== 五線譜（音階、促音跟唱） ===== */
+.pr-staff{background:#f3f0e9;border-radius:var(--r-sm);padding:2px 6px;margin-bottom:8px;color:#1b1a17}
+.pr-staff svg{display:block;width:100%;height:auto;max-height:118px}
+.pr-staff .sf-l{stroke:#6d6a64;stroke-width:1}
+.pr-staff .sf-bar{stroke:#6d6a64;stroke-width:1.2}
+.pr-staff .sf-end{stroke:#1b1a17;stroke-width:3}
+.pr-staff .sf-clef{font-family:"Noto Music","Bravura Text","Apple Symbols","Segoe UI Symbol",serif;font-size:46px;fill:#1b1a17}
+.pr-staff .sf-8{font:700 10px var(--display);fill:#1b1a17}
+.pr-staff .sf-acc{font-family:"Noto Music","Segoe UI Symbol",serif;font-size:17px;fill:#1b1a17}
+.pr-staff .sn{fill:#1b1a17;stroke:none}
+.pr-staff .sn .sf-stem{stroke:#1b1a17;stroke-width:1.4}
+.pr-staff .sn .sf-open{fill:none;stroke:#1b1a17;stroke-width:1.8}
+.pr-staff .sn.on{fill:#b8921f}
+.pr-staff .sn.on .sf-stem{stroke:#b8921f}
+.pr-staff .sn.on .sf-open{stroke:#b8921f}
+.pr-staff .sn.on ellipse{filter:drop-shadow(0 0 3px rgba(199,175,74,.9))}
+.pr-staff .sf-beam{stroke:#1b1a17;stroke-width:4.5}
+.pr-cell.hold{flex:2}
+.pr-staff svg{height:92px;max-height:none}
+.pr-now{min-height:54px;padding:8px 12px;margin-bottom:8px}
+.pr-big{font-size:32px}
+.pr-ctrl{margin-bottom:8px;gap:8px 14px}
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){
+  .pr-staff svg{height:78px}
+  .pr-big{font-size:26px}
+}
+.scalepractice .pr-staff svg{height:104px}
+.resolab .rl-cv{height:150px}
+.resolab .rl-marks{max-height:98px;overflow-y:auto;margin-top:6px}
+.resolab .rl-legend{margin:4px 0 6px}
+.resolab .rl-sum{margin-top:6px;line-height:1.5}
+@media (max-width:900px),(orientation:portrait) and (max-width:1100px){
+  .resolab .rl-marks{max-height:none;overflow:visible}
+  .resolab .rl-cv{height:170px}
+}
