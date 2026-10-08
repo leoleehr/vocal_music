@@ -770,11 +770,16 @@
     var tonic = parseInt(p.getAttribute('data-tonic') || '60', 10), male = p.getAttribute('data-voice') !== 'female', want = parseInt(p.getAttribute('data-phase') || '0', 10);
     var LO = 43, HI = 79, SLOTS = 12, key = 'melodyscope-src', canTab = !!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) && !TOUCH;
     var src = LS.get(key, canTab ? 'tab' : 'mic'); if (!canTab) src = 'mic';
-    var stream = null, usingMic = false, anL = null, anR = null, nodes = [], tid = 0, bufL = null, bufR = null, recent = [], notes = [], curM = null, stable = 0, silent = 0, live = null;
-    p.innerHTML = '<div class="ms-head"><b>旋律偵測</b><span class="ms-key muted">1 = ' + KEYN[tonic % 12] + '・五線譜＋簡譜</span><span class="ms-btns">' +
+    var stream = null, usingMic = false, anL = null, anR = null, nodes = [], tid = 0, bufL = null, bufR = null, recent = [], notes = [], curM = null, stable = 0, silent = 0, live = null, starting = false, lastPhase = '';
+    var base = tonic, keyKey = 'melodyscope-key-' + LESSON, savedPc = LS.get(keyKey, null);
+    function tonicFor(pc) { var t = base - (((base - pc) % 12) + 12) % 12; if (base - t > 6) t += 12; return t; } // 主音取原設定附近的八度
+    if (savedPc !== null) tonic = tonicFor(savedPc);
+    p.innerHTML = '<div class="ms-head"><b>旋律偵測</b><label class="ms-key muted">首調 1 = <select class="ms-keysel">' + KEYN.map(function (k, i) { return '<option value="' + i + '">' + k + '</option>'; }).join('') + '</select></label><span class="ms-btns">' +
       (canTab ? '<span class="pr-seg ms-src"><button type="button" class="btn" data-s="tab">分頁音訊</button><button type="button" class="btn" data-s="mic">麥克風</button></span>' : '') +
       '<button type="button" class="btn primary go">● 開始偵測</button><button type="button" class="btn clear">清除</button></span></div>' +
       '<div class="ms-now"><b class="ms-big">--</b><span class="ms-sub muted"></span></div><div class="pr-staff ms-staff"></div><p class="ms-state muted"></p>';
+    var keySel = p.querySelector('.ms-keysel'); keySel.value = String(tonic % 12);
+    keySel.onchange = function () { tonic = tonicFor(+keySel.value); LS.set(keyKey, +keySel.value); draw(); if (curM !== null) { big.textContent = label(curM); sub.textContent = solf(curM); } };
     var staff = p.querySelector('.ms-staff'), big = p.querySelector('.ms-big'), sub = p.querySelector('.ms-sub'), state = p.querySelector('.ms-state'), go = p.querySelector('.go');
     function jpOf(m) { var semis = Math.round(m) - tonic, oct = Math.floor(semis / 12), pc = ((semis % 12) + 12) % 12, c = JP_CHROM[pc]; return { d: c[0], acc: c[1], oct: oct }; }
     function stepOf(m) { var jp = jpOf(m); return tonicStep(tonic, male) + jp.oct * 7 + (jp.d - 1); }
@@ -784,7 +789,6 @@
       var last = staff.querySelector('.sn[data-i="' + (shown.length - 1) + '"]'); if (last && curM !== null) last.classList.add('on');
     }
     function label(m) { var jp = jpOf(m); return (jp.acc || '') + jp.d + (jp.oct > 0 ? '̇'.repeat(jp.oct) : jp.oct < 0 ? '̣'.repeat(-jp.oct) : ''); }
-    function spell(m) { var names = KEY_SIG[tonic % 12] < 0 ? FLAT : SHARP; return names[((m % 12) + 12) % 12] + (Math.floor(m / 12) - 1); } // 依調號用升或降記號
     function solf(m) { var jp = jpOf(m); return (jp.acc === '♯' ? '升 ' : jp.acc === '♭' ? '降 ' : '') + SOLFA[jp.d - 1]; }
     function frame() {
       anL.getFloatTimeDomainData(bufL); if (anR) anR.getFloatTimeDomainData(bufR);
@@ -795,7 +799,7 @@
       if (med === null) { silent++; if (silent > 6) { curM = null; stable = 0; big.textContent = '--'; sub.textContent = '等待旋律…'; } return; }
       silent = 0; live = med;
       var q = Math.round(med);
-      big.textContent = label(q); sub.textContent = solf(q) + '　' + spell(q) + '　' + Math.round(freqOf(med)) + ' Hz';
+      big.textContent = label(q); sub.textContent = solf(q) + '（首調，1 = ' + KEYN[tonic % 12] + '）';
       if (curM !== null && Math.abs(med - curM) < 0.6) { stable = 0; return; } // 仍在同一個音
       stable++;
       if (stable >= 3) { curM = q; stable = 0; notes.push(q); if (notes.length > 200) notes.shift(); draw(); } // 約 120ms 穩定才算新音
@@ -814,20 +818,23 @@
       state.textContent = isMic ? '用麥克風收喇叭的聲音：喇叭音量開大一些，麥克風靠近喇叭' : '正在讀取這個分頁的影片聲音';
     }
     function start(auto) {
-      if (tid) return;
+      if (tid || starting) return; // 分享視窗開著時不再重複要求
       if (src === 'tab' && canTab) {
         if (stream && stream.getAudioTracks().length && stream.getAudioTracks()[0].readyState === 'live') { connect(stream, false); return; }
+        starting = true; state.textContent = '請在瀏覽器的視窗中選擇這個分頁，並勾選「分享分頁音訊」';
         navigator.mediaDevices.getDisplayMedia({ video: true, audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }, preferCurrentTab: true, selfBrowserSurface: 'include', systemAudio: 'include' })
           .then(function (s) {
+            starting = false;
             s.getVideoTracks().forEach(function (t) { t.stop(); });
             if (!s.getAudioTracks().length) { state.textContent = '沒有取得聲音：請重新開始，選這個分頁並勾選「分享分頁音訊」；或改用麥克風'; return; }
             stream = s; s.getAudioTracks()[0].onended = function () { release(); state.textContent = '已停止分享分頁音訊'; };
             connect(s, false);
           })
-          .catch(function () { state.textContent = '沒有分享分頁音訊，改用麥克風收音'; setSrc('mic'); start(auto); });
+          .catch(function () { starting = false; state.textContent = '已取消分享。要偵測時再按「開始偵測」，或改按「麥克風」收喇叭的聲音'; });
         return;
       }
-      micStart().then(function () { connect(mic.stream, true); }).catch(function () { state.textContent = '無法使用麥克風：請允許瀏覽器使用麥克風，並以 https 網址開啟'; });
+      starting = true;
+      micStart().then(function () { starting = false; connect(mic.stream, true); }).catch(function () { starting = false; state.textContent = '無法使用麥克風：請允許瀏覽器使用麥克風，並以 https 網址開啟'; });
     }
     function pause() { clearInterval(tid); tid = 0; nodes.forEach(function (n) { try { n.disconnect(); } catch (e) {} }); nodes = []; anL = anR = null; if (usingMic) { usingMic = false; micStop(); } go.textContent = '● 開始偵測'; p.classList.remove('on'); curM = null; draw(); }
     function release() { pause(); if (stream) { stream.getTracks().forEach(function (t) { t.stop(); }); stream = null; } }
@@ -835,7 +842,11 @@
     p.querySelector('.clear').onclick = function () { notes = []; curM = null; draw(); big.textContent = '--'; sub.textContent = ''; };
     $$('.ms-src .btn', p).forEach(function (b) { b.onclick = function () { var was = !!tid; release(); setSrc(b.getAttribute('data-s')); if (was) start(false); }; });
     var slide = p.closest('.slide');
-    if (slide) slide.addEventListener('phase:change', function (e) { var d = e.detail || {}; if (d.running && d.index === want) start(true); else if (tid) pause(); });
+    if (slide) slide.addEventListener('phase:change', function (e) {
+      var d = e.detail || {}, now = (d.running ? 'run' : 'stop') + ':' + d.index;
+      if (now === lastPhase) return; lastPhase = now;
+      if (d.running && d.index === want) start(true); else if (tid) pause();
+    });
     setSrc(src); draw();
     state.textContent = canTab ? '唱名段開始時自動啟動；分享時選這個分頁並勾選「分享分頁音訊」' : '唱名段開始時自動啟動，用麥克風收喇叭的聲音';
     onLeave(p, release);
