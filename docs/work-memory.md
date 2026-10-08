@@ -324,3 +324,9 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 - 使用者要求整理 UIUX 工作區中的 LEO LEE HR 與 Pixel Studio CI，已按品牌分開管理。工作區根目錄僅保留 brand 與 README.md；品牌入口為 C:/Agent/UIUX/brand/leoleehr 與 C:/Agent/UIUX/brand/pixel-studio。
 - Pixel Studio 最新 CI 的位置改為 C:/Agent/UIUX/brand/pixel-studio/01-current/Pixel-Studio-CI-v1；ZIP 位於同品牌 02-packages；初版 Logo 在 03-archive/initial-logo。後續更新以此路徑為準。
 - LEO LEE HR 分為目前應用、定稿母檔、規範、歷史版本、製作資料與 ZIP 交付包；保留全部原始產出。45 項搬移、538 個檔案、1 個 node_modules junction 均核對；18 份建置程式路徑修正並保存原程式備份。各品牌導覽與移動紀錄位於 UIUX brand。未修改網站引用或重新匯出設計檔。
+
+## 2026-10-08 首頁品質提升部署
+
+- 使用者明確要求 COMMIT PUSH DEPLOY。改版 commit fdefd4eb052f487d55f6d787936918756c792292 已推送至 main；GitHub Pages workflow 37738922314 的 build／deploy 均 success。
+- 部署後重新查證：首頁 HTTP 200，含 home-art-direction.css?v=20261008w 與 voice-motion；新 CSS、studio.js HTTP 200，腳本包含 motionPaused。
+- 原有未追蹤 docs/apps-script-setup-notes.md 留在本機。設計紀錄已更新為部署成功；真機待辦維持原紀錄。

@@ -1,6 +1,6 @@
 # Pixel Studio 品牌網站品質修整
 
-日期：2026-10-08。狀態：本機完成，未提交、未部署。
+日期：2026-10-08。狀態：改版 commit defd4e 已提交、推送並部署。GitHub Pages workflow 37738922314 成功；線上首頁、新 CSS 與 JavaScript HTTP 200，首頁含新版樣式與聲波控制。
 
 ## 設計決策
 
