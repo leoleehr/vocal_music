@@ -246,6 +246,7 @@ Pixel Studio 畫素音樂工作坊／亞東科技大學吉他社流行歌唱班�
 
 - 依 CI 的 symbol-color 聲波（`C:/Agent/UIUX/brand/pixel-studio/01-current/.../symbol-color-2400.png`）產生：裁去四周留白後置中；`favicon.ico`（16／32／48／64）與 `favicon.png`（48px）線條加粗、透明度提高 2.6 倍，避免細線在 16px 分頁圖示中消失；`favicon-192.png`（Android）與 `apple-touch-icon.png`（180px，深色 #101210 底，iPhone 主畫面）較輕微加強。
 - 所有頁面改為四條連結（ico、48px、192px、apple-touch-icon），加 `?v=2` 讓瀏覽器重新抓圖。瀏覽器對 favicon 快取很頑固，上線後可能要強制重新整理或重開分頁。
+- 部署：commit `63cc32d`（含頁尾白色標誌與聲波流動修正 `568d13a`）已推送；GitHub Pages workflow `37732798207` 成功。四個圖示檔與白色標誌 HTTP 200，首頁含新圖示連結與白色頁尾標誌，線上 studio.js 已改用 requestAnimationFrame 流動。
 
 主要改版檔案：`assets/studio.css`、`assets/studio.js`、`assets/deck-studio.css`，以及首頁、講義、問卷和兩堂投影片的 HTML。詳細設計紀錄在 `docs/design-review.md`。
 
