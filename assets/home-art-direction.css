@@ -35,6 +35,9 @@
 .home .studio-band{padding:20px 0;background:transparent;border-block:1px solid var(--line);color:var(--muted)}
 .home .studio-band .wrap{font-size:11px;letter-spacing:.16em}
 .home .studio-band i{color:var(--amber);opacity:1}
+.home .studio-band i{width:44px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.home .studio-band i img{display:block;width:64px;height:64px;max-width:none;flex-shrink:0}
+@media(max-width:599px){.home .studio-band i:nth-of-type(n+2){display:none}}
 .home section.block{padding:112px 0}
 .home .section-index{font-size:11px;letter-spacing:.18em;margin-bottom:28px}
 .home .sec-head{margin-bottom:52px;align-items:flex-end}

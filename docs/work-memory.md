@@ -1,13 +1,52 @@
 # 工作記憶
 
+## 2026-10-10 分享縮圖與首頁聲波分隔圖
+
+- 使用者回報 LINE 分享縮圖仍為舊 LOGO、首頁綠色方框雪花圖形，要求直接 COMMIT PUSH DEPLOY。已確認首頁 `og:image` 引用舊 `assets/og-image.png`，分隔符為 `✳` 字元。
+- 使用正式彩色橫式 SVG 產生 1200 × 630 PNG，新增 `assets/og-image-20261010.png` 並同步覆寫舊圖片；首頁 OG 與 Twitter 引用新版獨立網址，補圖片類型、尺寸及 alt。生成來源 `tools/build-og-image.cjs`；樣式延續網站深綠黑、暖金黃與正式 slogan。
+- 三處 `✳` 改為正式聲波 SVG，裝飾圖片 alt 空白、整區 aria-hidden；保留手機僅一處分隔圖的行為。首頁 CSS 版本 `20261010a`。
+- 驗證：320／390／768／1440px 無橫向溢出，聲波皆載入，手機 1／桌面 3 處，390 與 1440 分隔圖及分享縮圖目視確認。git diff --check 通過。此段為提交前紀錄，部署結果待後續補記。
+- 截圖上方的 traveling.musicallanding.workers.dev 為另一本旅行網站，實際首頁不是本專案；本次依下方流行歌唱班預覽卡及 GitHub Pages 首頁 OG 設定修正。既有未追蹤後台筆記與文章不收入提交。
+
+## 2026-10-10 輪播圖 Leo 個人形象版
+
+- 使用者肯定印象派版的風格、排版、構圖與色調，提供四張本人照片，要求加入個人形象及主要使用的吉他、鋼琴、錄混音設備。已使用內建 ImageGen，依正面肖像與吉他照片編修八個原場景，主角改為 Leo 李奕勳，保留原品牌色、正式 SVG LOGO、文案與排版。
+- 第 1 張吉他演唱，第 2／3 張備課與教材整合並加入音訊介面／混音控制器，第 4 張持吉他授課，第 5 張錄音與聲音觀察，第 6 張鋼琴示範，第 7 張品牌檢視，第 8 張吉他小組教學。依照片保留清晰五官與深色服裝，學員維持一般插畫人物。
+- 跨日完成；沿用開始製作時的資料夾日期：`C:/Agent/UIUX/brand/pixel-studio/01-current/vocal-lab-linkedin-leo-20261009/`。交付八張 `vocal-lab-leo-01.png` 至 `08.png`、總覽、ZIP、原貼文與完整 prompts.json；本機另保留編修母圖、HTML 與建置腳本。四張來源照片未修改、未收入交付包。
+- 八張皆輸出 1080 × 1350 px；逐張檢視人物／場景及八張總覽，未見文字裁切。前版完整保留。僅本機交付，未發佈 LinkedIn、未修改網站、未提交或部署。
+
+## 2026-10-09 輪播圖印象派品牌版
+
+- 使用者認為彩色鉛筆版太柔和，要求重新依品牌網站調性，以印象派場景製作同規格八張輪播，維持品牌 LOGO 與主視覺色彩。已生成八個印象派油彩情境，使用深綠黑、暖金黃光影及彩虹聲波重點色。
+- 色彩直接依網站 CSS：#101210、#181c17、#1e231c、#C7AF4A、#f1f0e8。正式彩色橫式 LOGO 直接使用 `assets/brand/pixel-studio-horizontal.svg`，未經 AI 重畫。繁體文字以 HTML 清晰排版，延續原八張文案與限制。
+- 成品位置：`C:/Agent/UIUX/brand/pixel-studio/01-current/vocal-lab-linkedin-impressionist-20261009/`。包含八張 `vocal-lab-impressionist-01.png` 至 `08.png`（均 1080 × 1350 px）、總覽、ZIP、原貼文、場景母圖、完整 prompts.json、sources.json、HTML 與建置腳本。
+- 使用內建 ImageGen 逐張生成場景，Chrome headless 輸出輪播；場景完整等比例置入，保留正式標誌原色與比例。已檢視八張總覽、首兩張及第七／八張原尺寸，場景母圖亦檢視，未見文字裁切。前兩版均保留。
+- 插畫人物、設備與螢幕均為情境示意，未作教學成效或實際上課證據。僅交付本機素材，未發佈 LinkedIn、未修改網站、未提交或部署。
+
+## 2026-10-09 輪播圖彩色鉛筆寫實版
+
+- 使用者認為原八張輪播專業但不夠活潑，要求彩色鉛筆素描與寫實圖片表達文字。已透過內建 image_gen 逐張產出八張新版，象牙白紙張紋理、深綠文字、彩色筆觸，涵蓋歌唱、深夜備課、教材整合、教室設備、聲音觀察、跟唱、品牌設計與返回課堂。
+- 新版另存 `C:/Agent/UIUX/brand/pixel-studio/01-current/vocal-lab-linkedin-pencil-20261009/`，原深色版本保留。八張最終 PNG 皆為 1080 × 1350 px（4:5），另附總覽、ZIP、原 LinkedIn 文案、完整 prompts.json 與 sources.json。生成母圖保留 Codex generated_images；package.ps1 僅等比例縮放／留邊及打包。
+- 已逐張檢視八張圖與總覽，文字未見裁切；第三張右側書本的生成課程名稱曾與原文不符，已用 image_gen 局部修改為歌唱序論、呼吸、共鳴、發聲練習、綜合應用、自我條件設定，並再次目視確認。
+- 插畫人物及設備／網站畫面為情境示意，未使用本人肖像或課堂照片；保留三天整合範圍、曲線的觀察限制與真機／後台待辦。未發佈 LinkedIn、未修改網站、未提交或部署。
+
+## 2026-10-09 LinkedIn 貼文與八張輪播圖
+
+- 依使用者要求，將 `docs/voice-lab-build-story.md` 改編為 LinkedIn 分享貼文及八張 1080 × 1350 px（4:5）PNG；開頭沿用「聲音稍縱即逝。演唱完一句，旋律隨即散去。」使用 leo-voice 與 design 技能。
+- 依文章順序涵蓋聲音短暫、備課累積、三天第一版、教材入口、聲音觀察、演唱條件、品牌樣貌與課堂驗證；保留三天建置的範圍、曲線的觀察限制、真機與後台待辦，未虛構教學成效。
+- 交付位置：`C:/Agent/UIUX/brand/pixel-studio/01-current/vocal-lab-linkedin-20261009/`。包含 `linkedin-post.md`、八張 `vocal-lab-01.png` 至 `vocal-lab-08.png`、`overview.jpg`、ZIP、可修改 HTML 與 `build.py`、輪播文案 JSON。
+- 使用正式品牌 SVG、深綠黑底與暖金黃；Chrome headless 輸出。八張尺寸均精確確認；八張總覽及第 1、5、8 張原尺寸目視檢查未見裁切；ZIP CRC 通過。
+- 僅產出本機素材，未發佈 LinkedIn、未修改網站、未提交或部署。既有本機未追蹤文件保留。
+
 ## 2026-10-09 Slogan 再縮小與 VOCAL LAB Google 文件
 
 - 使用者要求電腦／手機頁尾 Slogan 再縮小 20%：桌面 `clamp(20.16px,3.808vw,54.88px)`，手機 22.4px；首頁 CSS 版本 `20261009b`。延續先前部署授權提交並推送此修改。
+- 本次 commit `5cf2ee4` 已推送。部署 workflow `37811545261` completed／success；上線後首頁與 CSS HTTP 200，版本引用與電腦／手機尺寸設定皆確認存在。全文 readback 已確認日期 chip 顯示 2026 年 10 月 5 日與 10 月 8 日。部署確認紀錄保留本機。
 - 文章標題依指定更正為「VOCAL LAB：將十多年的歌唱教學，彙整成一個聲樂實驗室」，全文名稱同步更正，保留原有建置事實與待驗證限制。本機文章檔名維持 `docs/voice-lab-build-story.md`，文章未加入網站公開頁面。
 - 已建立原生 Google Docs，放在 My Drive 的 ChatGPT 資料夾；文件網址：https://docs.google.com/document/d/10pfjZ67eQLxRK6oScG2KHn9AopQVrimuKGOIFxRRKsA/edit 。使用原生標題、四個章節標題、網站連結及兩個日期 chip，並以完整 readback 核對新名稱、結尾與結構。
 - Google 文件維持既有帳戶的預設分享設定，未開啟公開分享。後台設定筆記保留未追蹤，本機文章保留供後續修訂。
 
-## 2026-10-09 Slogan 部署與網站建置文章（最新狀態）
+## 2026-10-09 Slogan 首輪部署與網站建置文章
 
 - 使用者要求提交與部署，Slogan 修改及當時工作記憶已提交並推送：`8a81d39d335ee8203bf711cdfb8c2a2069b8a4b8`。GitHub Pages workflow `37808145806` completed／success。
 - 部署後實際查證：首頁與 `home-art-direction.css?v=20261009a` HTTP 200；首頁含新版 CSS 引用，線上 CSS 含電腦版縮小 30% 的 clamp 與手機 28px。此次未進行瀏覽器目視驗證。
@@ -21,7 +60,7 @@
 - 首頁樣式版本更新為 `20261009a`。已核對 CSS 斷點與縮放比例，`git diff --check` 通過；尚未提交、推送或部署，尚未進行瀏覽器目視驗證。
 - 原有工作記憶修改與未追蹤後台設定筆記保留。
 
-## 2026-10-08 品牌網站品質深化（最新網站工作）
+## 2026-10-08 品牌網站品質深化
 
 - 依使用者要求以國際設計獎項水準為目標，完成三輪首頁實作與自查。設計為「聲音展覽 × 精密工作室」，延續正式彩色品牌標誌、暖金黃與 Find your voice. 漸層；放大主標／聲波，課程改編號索引，淺色練習區提升閱讀尺度，節奏區改細線比例格，頁尾放大正式 slogan。
 - 新增 `assets/home-art-direction.css`（只作用於首頁），修改 `index.html`、`assets/studio.js`。首頁新增聲波暫停、頻率音名；requestAnimationFrame 離屏／背景停止，支援即時減少動態設定與頁面恢復。修正 SVG 遮擋聲音按鈕，補 main 鍵盤焦點與導覽 aria-current。新資產版本 `20261008w`。
@@ -29,21 +68,23 @@
 - 設計與驗證紀錄：`docs/design-review-20261008.md`。預覽及 JSON 位於 `C:/Agent/UIUX/brand/pixel-studio/01-current/website-20261008/`，遵守 UIUX 產出位置偏好。
 - 改版已於後續依使用者指示提交、推送及部署：改版 `fdefd4e`，最新已推送 commit `c295f92`。最新 GitHub Pages workflow `37739129691` 成功；原有未追蹤 `docs/apps-script-setup-notes.md` 保留。
 
-## 下次 RESUME 優先讀取摘要（2026-10-08）
+## 下次 RESUME 優先讀取摘要（2026-10-09）
 
 - 先讀本檔並確認 Git 狀態，第一則進度訊息使用精簡繁體中文 BRIEF，包含專案用途、已完成、版本／部署與待辦。
-- 最新已推送 HEAD：`c295f92d9f9798612bb27fa1adb0ca8cbad9453a`。改版 commit `fdefd4e`；部署紀錄 `2af6ab1`；紀錄文字修正 `c295f92`。workflow `37739129691` completed／success；先前 `2af6ab1` 的 workflow 因後續推送取消，最新版本已成功取代。
-- 上次實際線上查證：首頁、新 CSS／JS、講義網頁、問卷、第一堂入口 HTTP 200；首頁含新版樣式與聲波暫停控制。這是歷史驗證，若報告目前線上狀態需重新查證。
+- 最新已推送 HEAD：`5cf2ee434006e4439c895ad2f471fd7580c656a6`，`main` 與 `origin/main` 同步。GitHub Pages workflow `37811545261` completed／success。
+- 最新首頁 Slogan：電腦版先縮小 30%，再縮小 20%，目前 `clamp(20.16px,3.808vw,54.88px)`；手機由 28px 再縮小 20% 至 22.4px。CSS 版本 `20261009b`。上次線上查證首頁與 CSS HTTP 200，引用與兩種字級設定皆存在；此次未進行瀏覽器目視驗證。這是歷史驗證，若報告目前線上狀態需重新查證。
+- 文章已依使用者指定改為「VOCAL LAB：將十多年的歌唱教學，彙整成一個聲樂實驗室」，全文名稱已更正；Google 文件已建立並讀回核對，位於 ChatGPT 資料夾：https://docs.google.com/document/d/10pfjZ67eQLxRK6oScG2KHn9AopQVrimuKGOIFxRRKsA/edit 。未修改網站其他 VOICE LAB 文案，未將文章加入網站公開頁。
+- 文章中的「三天內完成第一版」依據 10 月 5 日晚間至 10 月 8 日 Git 紀錄，指既有教材整理與網站整合，不代表完整工時。Google 文件保留待實測與後台串接限制。
 - 品質自評約 8／10，屬主觀設計評估，不是驗證工具或官方評審分數。品牌一致性、資訊導覽、響應操作各 8.5；互動創意與辨識度、整體品牌敘事各 7.5。尚未宣稱完全達成國際獎項頂尖水準。
 - 已向使用者說明提升兩項 7.5 的方向：同音不同音色、真實示範「一段歌三種表達」、探索結果連到課程；精選真實作品／案例、創作決策、創辦人聲音與合作入口。建議首頁路徑為「體驗聲音 → 看見作品 → 理解方法 → 探索課程 → 聯絡」。目前僅為建議，使用者尚未要求實作，也尚未提供作品與錄音，不得虛構作品或成果。
-- 既有待辦：Apps Script /exec endpoint、iOS／LINE／麥克風與教室音色真機驗證、兩處老師版標記確認。未追蹤後台設定筆記維持本機；本次記憶更新亦先保留本機。
-- 沒有設計或驗證作業在背景執行；本機預覽伺服器最後確認仍運行於 `http://localhost:8765`（下次以實際程序為準）。
+- 既有待辦：Apps Script /exec endpoint、iOS／LINE／麥克風與教室音色真機驗證、兩處老師版標記確認。工作目錄有 `docs/work-memory.md` 修改，以及未追蹤的 `docs/apps-script-setup-notes.md`、`docs/voice-lab-build-story.md`；均先保留本機。本次使用者僅要求更新記憶，不另行提交或部署。
+- 沒有設計或驗證作業在背景執行；本機預覽伺服器曾運行於 `http://localhost:8765`，本次未重新確認，下次以實際程序為準。
 
 ### 下次繁體中文 BRIEF 參考
 
-「這是 Pixel Studio 畫素音樂工作坊的品牌與流行歌唱教學網站。六堂投影片、34 頁講義與問卷已完成；首頁品質提升已完成三輪修整與驗證，並提交、推送、部署，最新已推送版本 `c295f92`，上次確認 Pages 部署成功。待辦是提升聲音互動與真實作品敘事、串接 Apps Script，以及 iOS／麥克風／教室真機驗證；互動與作品深化目前仍是建議，尚未開始實作。」
+「這是 Pixel Studio 畫素音樂工作坊的流行歌唱教學網站。六堂互動投影片、34 頁講義與問卷已完成；頁尾 Slogan 已再縮小並部署，最新版本 `5cf2ee4`，上次確認 Pages 部署成功。VOCAL LAB 建置文章已更正並產出 Google 文件。待辦是 Apps Script 串接、iOS／LINE／麥克風與教室實測，以及兩處教材標記確認；工作記憶與兩份未追蹤文件保留本機。」
 
-最後更新：2026-10-08（Asia/Taipei）。
+最後更新：2026-10-09（Asia/Taipei）。
 
 ## 使用者偏好
 
