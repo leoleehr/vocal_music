@@ -35,8 +35,8 @@
 .home .studio-band{padding:20px 0;background:transparent;border-block:1px solid var(--line);color:var(--muted)}
 .home .studio-band .wrap{font-size:11px;letter-spacing:.16em}
 .home .studio-band i{color:var(--amber);opacity:1}
-.home .studio-band i{width:44px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
-.home .studio-band i img{display:block;width:64px;height:64px;max-width:none;flex-shrink:0}
+.home .studio-band i{width:44px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.home .studio-band i img{display:block;width:32px;height:32px;max-width:none;flex-shrink:0}
 @media(max-width:599px){.home .studio-band i:nth-of-type(n+2){display:none}}
 .home section.block{padding:112px 0}
 .home .section-index{font-size:11px;letter-spacing:.18em;margin-bottom:28px}
@@ -73,10 +73,11 @@
 .home .feature i{color:#526044;font-size:11px}
 .home .feature-link{font-size:13px;min-height:44px}
 .home .session-total{font-size:80px;font-weight:500}
-.home .rhythm{gap:0;margin-top:32px;border-bottom:1px solid var(--line)}
-.home .rhythm div{background:transparent!important;padding:28px 24px 32px;border-right:1px solid var(--line);font-size:13px}
-.home .rhythm div:first-child{padding-left:0}
-.home .rhythm div:last-child{border-right:0}
+.home .rhythm{gap:8px;margin-top:32px;border:0}
+.home .rhythm div{background:transparent!important;padding:28px 24px 32px;border:1px solid #C7AF4A50;font-size:13px}
+.home .rhythm div:nth-child(2){border-color:var(--amber)}
+.home .rhythm div:nth-child(3){border-color:#7b8375}
+.home .rhythm div:nth-child(4){border-color:#b3cc78}
 .home .rhythm div:nth-child(3){background:#ffffff03!important}
 .home .rhythm b{font-size:36px;font-weight:500}
 .home .rhythm small{font-size:12px}
