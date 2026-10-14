@@ -110,7 +110,7 @@
 </nav>
 
 <script src="assets/config.js?v=20261008v"></script>
-<script src="assets/backend.js?v=20261008v"></script>
+<script src="assets/backend.js?v=20261014v"></script>
 <script src="assets/surveys.js?v=20261012a"></script>
 <script>
 (function () {
@@ -139,9 +139,9 @@
     (doneAt(sv.id) ? '<div class="sv-notice" style="color:var(--green);border-color:rgba(108,187,75,.4);background:rgba(108,187,75,.06)">你已在 ' + esc(doneAt(sv.id)) + ' 填寫過這份問卷，再次送出會新增一筆回覆。</div>' : '') +
     '<form novalidate><div class="sv-card who"><div class="sv-q"><span class="n">✦</span>填寫者資料</div><div class="sv-body" style="margin-left:0"><div class="grid">' +
     '<label class="f"><span>姓名</span><input type="text" name="_name" autocomplete="name" maxlength="30" value="' + esc(p.name) + '"></label>' +
-    '<label class="f"><span>科系</span><input type="text" name="_dept" list="sv-depts" maxlength="40" placeholder="例如：資訊工程系" value="' + esc(p.dept) + '"></label>' +
+    '<label class="f"><span>學校科系／公司名稱</span><input type="text" name="_dept" list="sv-depts" maxlength="40" placeholder="例如：資訊工程系、公司名稱" value="' + esc(p.dept) + '"></label>' +
     '<label class="f"><span>課程代碼</span><input type="text" name="_code" autocomplete="off" maxlength="30" placeholder="老師在課堂上公布" value="' + esc(p.code) + '"></label>' +
-    '</div><datalist id="sv-depts"><option value="資訊工程系"><option value="電機工程系"><option value="電子工程系"><option value="機械工程系"><option value="通訊工程系"><option value="材料與纖維系"><option value="工業管理系"><option value="資訊管理系"><option value="行銷與流通管理系"><option value="醫務管理系"><option value="護理系"><option value="應用外語系"></datalist><p class="sv-err">請填寫姓名、科系與課程代碼</p></div></div>';
+    '</div><datalist id="sv-depts"><option value="資訊工程系"><option value="電機工程系"><option value="電子工程系"><option value="機械工程系"><option value="通訊工程系"><option value="材料與纖維系"><option value="工業管理系"><option value="資訊管理系"><option value="行銷與流通管理系"><option value="醫務管理系"><option value="護理系"><option value="應用外語系"></datalist><p class="sv-err">請填寫姓名、學校科系／公司名稱與課程代碼</p></div></div>';
   sv.questions.forEach(function (q, k) {
     var name = 'q' + k, body = '';
     if (q.type === 'single' || q.type === 'multi') {
@@ -161,7 +161,7 @@
     html += '<div class="sv-card" data-k="' + k + '"><div class="sv-q"><span class="n">' + (k + 1) + '</span><span>' + esc(q.q) + '</span>' + (q.optional ? '<span class="opt">選填</span>' : '') + '</div>' +
       (q.hint ? '<p class="sv-hint">' + esc(q.hint) + '</p>' : '') + '<div class="sv-body">' + body + '</div><p class="sv-err">這一題還沒有填寫</p></div>';
   });
-  html += '<div class="sv-submit"><button type="submit" class="btn primary">送出問卷</button><p>送出後會附上你的姓名與科系，資料只提供給老師。</p></div></form>';
+  html += '<div class="sv-submit"><button type="submit" class="btn primary">送出問卷</button><p>送出後會附上你的姓名與學校科系／公司名稱，資料只提供給老師。</p></div></form>';
   app.innerHTML = html;
 
   var f = app.querySelector('form');

@@ -8,11 +8,11 @@
  */
 
 var TABS = {
-  students: { name: '學員名單', head: ['首次登錄', '最後活動', '姓名', '科系', '裝置代碼', '送出次數'] },
-  interactions: { name: '互動紀錄', head: ['時間', '姓名', '科系', '堂次', '投影片', '互動類型', '項目', '結果', '數值', '詳細資料'] },
-  exit: { name: '出場券', head: ['時間', '姓名', '科系', '堂次', '今天學到的', '想多練習的', '想問老師的'] },
-  log: { name: '練習紀錄', head: ['時間', '姓名', '科系', '堂次', '天數', '欄位一', '欄位二', '欄位三'] },
-  rec: { name: '錄音', head: ['時間', '姓名', '科系', '堂次', '名稱', '長度（秒）', '檔案連結'] },
+  students: { name: '學員名單', head: ['首次登錄', '最後活動', '姓名', '學校科系／公司名稱', '裝置代碼', '送出次數'] },
+  interactions: { name: '互動紀錄', head: ['時間', '姓名', '學校科系／公司名稱', '堂次', '投影片', '互動類型', '項目', '結果', '數值', '詳細資料'] },
+  exit: { name: '出場券', head: ['時間', '姓名', '學校科系／公司名稱', '堂次', '今天學到的', '想多練習的', '想問老師的'] },
+  log: { name: '練習紀錄', head: ['時間', '姓名', '學校科系／公司名稱', '堂次', '天數', '欄位一', '欄位二', '欄位三'] },
+  rec: { name: '錄音', head: ['時間', '姓名', '學校科系／公司名稱', '堂次', '名稱', '長度（秒）', '檔案連結'] },
   lyrics: { name: '歌詞', head: ['代碼', '歌名', '歌詞（一行一句、空行分段；字後加 ∨ 大換氣、ˇ 小換氣為老師版）'] }
 };
 var DEFAULT_CODE = 'PIXEL2026';
@@ -125,7 +125,7 @@ function handle(it) {
 
 function writeSurvey(it, ts, name, dept) {
   var d = it.data || {}, title = clean(d.title || '問卷'), qs = d.questions || [], ans = d.answers || [];
-  var sh = sheetOf({ name: title.slice(0, 90), head: ['時間', '姓名', '科系'] });
+  var sh = sheetOf({ name: title.slice(0, 90), head: ['時間', '姓名', '學校科系／公司名稱'] });
   var head = sh.getRange(1, 1, 1, Math.max(3, sh.getLastColumn())).getValues()[0];
   var row = [ts, name, dept];
   qs.forEach(function (q, k) {

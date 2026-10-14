@@ -34,7 +34,7 @@
       modal.querySelector('[name=name]').value = p.name || '';
       modal.querySelector('[name=dept]').value = p.dept || '';
       modal.querySelector('[name=code]').value = p.code || '';
-      modal.querySelector('.pb-reason').textContent = reason || '填寫一次即可，之後送出的問卷與課堂互動都會附上你的姓名與科系。';
+      modal.querySelector('.pb-reason').textContent = reason || '填寫一次即可，之後送出的問卷與課堂互動都會附上你的姓名與學校科系／公司名稱。';
       modal.querySelector('.pb-err').textContent = '';
       modal.querySelector('.pb-clear').style.display = p.name ? '' : 'none';
       modal.classList.add('on'); document.documentElement.classList.add('pb-open');
@@ -52,7 +52,7 @@
       '<div class="pb-head"><b>學員資料</b><button type="button" class="pb-x" aria-label="關閉">✕</button></div>' +
       '<p class="pb-reason"></p>' +
       '<label><span>姓名</span><input name="name" autocomplete="name" maxlength="30" required></label>' +
-      '<label><span>科系</span><input name="dept" list="pb-depts" maxlength="40" placeholder="例如：資訊工程系" required></label>' +
+      '<label><span>學校科系／公司名稱</span><input name="dept" list="pb-depts" maxlength="40" placeholder="例如：資訊工程系、公司名稱" required></label>' +
       '<datalist id="pb-depts"><option value="資訊工程系"><option value="電機工程系"><option value="電子工程系"><option value="機械工程系"><option value="通訊工程系"><option value="材料與纖維系"><option value="工業管理系"><option value="資訊管理系"><option value="行銷與流通管理系"><option value="醫務管理系"><option value="護理系"><option value="應用外語系"></datalist>' +
       '<label><span>課程代碼</span><input name="code" autocomplete="off" maxlength="30" placeholder="老師在課堂上公布" required></label>' +
       '<p class="pb-err" aria-live="polite"></p>' +
@@ -66,7 +66,7 @@
     f.onsubmit = function (e) {
       e.preventDefault();
       var p = { name: f.name.value.trim(), dept: f.dept.value.trim(), code: f.code.value.trim(), device: device };
-      if (!p.name || !p.dept || !p.code) { err.textContent = '請填寫姓名、科系與課程代碼'; return; }
+      if (!p.name || !p.dept || !p.code) { err.textContent = '請填寫姓名、學校科系／公司名稱與課程代碼'; return; }
       var btn = f.querySelector('.pb-save'); btn.disabled = true; btn.textContent = '確認中…';
       checkCode(p.code).then(function (ok) {
         btn.disabled = false; btn.textContent = '儲存';
