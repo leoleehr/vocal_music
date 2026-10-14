@@ -2,7 +2,7 @@
 
 亞東科技大學吉他社流行歌唱班的課程教材，主講：畫素音樂工作坊 Pixel Studio 李奕勳。
 
-課程網站（手機也能瀏覽）：https://leoleehr.github.io/vocal_music/
+本課程已遷移至 Pixel Studio：[Vocal Lab 課程網站](https://pixel-studio.musicallanding.workers.dev/vocal/)。本儲存庫保留歷史教材與舊網址相容入口；若需搬移這台裝置的練習紀錄，請開啟[舊站紀錄匯出頁](https://leoleehr.github.io/vocal_music/data-transfer.html)。
 
 六堂課、每堂 120 分鐘，每堂課的流程是：課前問卷、課堂上依起承轉合進行，最後是課後練習。
 

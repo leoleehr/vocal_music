@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>匯出 Vocal Lab 本機紀錄</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#11130f;color:#f3f0e9;font:16px/1.8 "Noto Sans TC",system-ui,sans-serif}.wrap{max-width:700px;margin:8vh auto;padding:32px 24px}.card{margin:22px 0;padding:22px;border:1px solid #383a33;border-radius:12px;background:#191c17}h1{font-size:clamp(30px,7vw,46px);line-height:1.3}p,li{color:#c9c5bd}a{color:#d4c36b}button{padding:12px 18px;border:0;border-radius:8px;background:#c7af4a;color:#17170f;font:700 16px inherit;cursor:pointer}.status{min-height:2em;color:#d4c36b}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <a href="index.html">← 舊 Vocal Lab</a>
+  <h1>匯出這台裝置的 Vocal Lab 紀錄</h1>
+  <p>請在原本使用舊站的裝置與瀏覽器開啟本頁。檔案會由瀏覽器下載，不會上傳到網站。</p>
+  <section class="card">
+    <h2>下載本機備份</h2>
+    <p>檔案包含這個舊站網址下以 pixel: 開頭的課堂練習紀錄。請自行保管，完成轉移前不要刪除。</p>
+    <button id="export" type="button">下載紀錄備份</button>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+  </section>
+  <section class="card">
+    <h2>匯入 Pixel Studio</h2>
+    <p>下載後，前往<a href="https://pixel-studio.musicallanding.workers.dev/vocal/data-transfer.html">Pixel Studio Vocal Lab 紀錄轉移頁</a>選取 JSON 檔。</p>
+    <p>送到老師試算表的回覆不在此檔案內，仍留在原本的課程後台。</p>
+  </section>
+</main>
+<script>
+(function () {
+  'use strict';
+  document.getElementById('export').addEventListener('click', function () {
+    var rows = [];
+    for (var i = 0; i < localStorage.length; i++) {
+      var key = localStorage.key(i);
+      if (key && key.indexOf('pixel:') === 0 && key.indexOf('pixel:guitar:') !== 0) rows.push({ key: key, value: localStorage.getItem(key) });
+    }
+    var status = document.getElementById('status');
+    if (!rows.length) { status.textContent = '這個瀏覽器目前沒有可匯出的 Vocal Lab 本機紀錄。'; return; }
+    var data = { schema: 'pixel-studio-local-storage-v1', exportedAt: new Date().toISOString(), entries: rows };
+    var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    var url = URL.createObjectURL(blob), a = document.createElement('a'), d = new Date();
+    a.href = url; a.download = 'vocal-music-local-backup-' + d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') + '.json';
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    status.textContent = '已準備 ' + rows.length + ' 筆本機紀錄備份。';
+  });
+})();
+</script>
+</body>
+</html>
