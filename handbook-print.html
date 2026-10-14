@@ -143,9 +143,9 @@ a{color:inherit;text-decoration:none}
 (function () {
   var NUM = { '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6 };
   var COLOR = ['', '#e8412b', '#e2407f', '#8a4fc0', '#2f8fc4', '#4f9e3a', '#b5a400'];
-  var DESC = ['', '聲音如何形成、如何擴大？怎樣才算一個好主唱？', '歌唱的氣從哪裡來？如何讓氣息穩定又持久？', '聲音如何變亮、變厚、變遠？', '每個字如何唱得清楚又圓潤？', '如何將技巧轉化成表情？', '哪些歌適合我？該用什麼調演唱？'];
+  var DESC = ['', '理解聲音的形成與擴大，認識好主唱的條件', '找到歌唱氣息的來源，讓氣息穩定又持久', '讓聲音更明亮、更厚實、傳得更遠', '讓每個字都清楚又圓潤', '將技巧轉化為歌曲的表情', '找到適合自己的歌曲與演唱的調'];
   var main = document.getElementById('content'), toc = document.getElementById('toc');
-  fetch('docs/course-handbook.md').then(function (r) { return r.text(); }).then(function (md) {
+  fetch('docs/course-handbook.md?v=20261014').then(function (r) { return r.text(); }).then(function (md) {
     var tmp = document.createElement('div'); tmp.innerHTML = marked.parse(md, { gfm: true });
     // 拿掉文件標題與署名行，改用封面
     var h1 = tmp.querySelector('h1'); if (h1) { var nx = h1.nextElementSibling; h1.remove(); if (nx && nx.tagName === 'P') nx.remove(); }

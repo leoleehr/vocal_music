@@ -143,7 +143,7 @@
     function draw() {
       var max = Math.max.apply(null, cnt.concat([1])), sum = cnt.reduce(function (a, b) { return a + b; }, 0);
       rows.forEach(function (r, k) { r.querySelector('i').style.width = (cnt[k] / max * 100) + '%'; r.querySelector('.poll-n').textContent = cnt[k]; });
-      tot.textContent = '點一下選項 +1，共 ' + sum + ' 票';
+      tot.textContent = '點選選項加一票，共 ' + sum + ' 票';
     }
     draw();
   });
@@ -160,7 +160,7 @@
     var names = LS.get('names', []), used = [];
     p.innerHTML = '<div class="picker-name">準備抽籤</div><div class="btn-row"><button type="button" class="btn primary go">抽一位</button><label class="picker-opt"><input type="checkbox" checked> 不重複</label><button type="button" class="btn edit">編輯名單</button></div><div class="picker-edit"><textarea rows="5" placeholder="一行一位，例如：&#10;王小明&#10;第 3 組"></textarea><div class="btn-row"><button type="button" class="btn save">儲存名單</button></div></div><p class="picker-meta muted"></p>';
     var out = p.querySelector('.picker-name'), ta = p.querySelector('textarea'), meta = p.querySelector('.picker-meta'), noRep = p.querySelector('input');
-    function info() { meta.textContent = names.length ? '名單 ' + names.length + ' 位，已抽 ' + used.length + ' 位（名單只存在這台電腦）' : '先按「編輯名單」貼上學員姓名或組別'; }
+    function info() { meta.textContent = names.length ? '名單 ' + names.length + ' 位，已抽 ' + used.length + ' 位（名單只存在這台電腦）' : '先按下「編輯名單」，貼上學員姓名或組別'; }
     p.querySelector('.edit').onclick = function () { ta.value = names.join('\n'); p.classList.toggle('editing'); };
     p.querySelector('.save').onclick = function () { names = ta.value.split(/\n+/).map(function (s) { return s.trim(); }).filter(Boolean); LS.set('names', names); used = []; p.classList.remove('editing'); info(); };
     p.querySelector('.go').onclick = function () {
@@ -368,7 +368,7 @@
     var data = saved ? saved.data : [], marks = saved ? saved.marks : [], sel = null, drag = null;
     var an = null, raf = 0, t0 = 0, last = 0, rec = null, chunks = [], blob = null, url = '', recent = [], playing = false;
     p.innerHTML = '<div class="rl-read"><div><small>音高</small><b class="rl-note">--</b><span class="rl-hz"></span></div><div><small>音量</small><b class="rl-db">--</b><span class="rl-bar"><i></i></span></div><div><small>錄製</small><b class="rl-time">0.0 秒</b></div></div>' +
-      '<canvas class="rl-cv"></canvas><div class="rl-legend"><span class="lg-pitch">— 音高</span><span class="lg-vol">▇ 音量</span><span class="lg-ov">▨ 聲區</span><span class="muted">錄完後在圖上拖曳選一段，再按腔體按鈕標記；兩種共鳴重疊的地方就是聲區</span></div>' +
+      '<canvas class="rl-cv"></canvas><div class="rl-legend"><span class="lg-pitch">━ 音高</span><span class="lg-vol">▇ 音量</span><span class="lg-ov">▨ 聲區</span><span class="muted">錄完後在圖上拖曳選一段，再按腔體按鈕標記；兩種共鳴重疊的地方就是聲區</span></div>' +
       '<div class="btn-row rl-main"><button type="button" class="btn primary go">● 開始錄製</button><button type="button" class="btn play" disabled>▶ 播放</button><button type="button" class="btn clear">清除</button><span class="rl-sep"></span>' + ZONES.map(function (z) { return '<button type="button" class="btn rl-z" data-z="' + z.k + '" disabled style="--zc:' + z.col + '">標記為' + z.name + '</button>'; }).join('') + '</div>' +
       '<ul class="rl-marks"></ul><p class="rl-sum"></p>' +
       '<div class="btn-row rl-out"><button type="button" class="btn png">下載觀測圖</button><a class="btn wav" href="#">下載錄音</a><button type="button" class="btn primary up">上傳給老師</button></div><audio class="rl-audio"></audio>';
@@ -626,7 +626,7 @@
       else {
         chordsEl.innerHTML = chordOrder().map(function (d, i) { return '<span class="pr-chip" data-i="' + i + '">' + chordName(st.start, d) + '</span>'; }).join('');
         cells.innerHTML = ST_PAT.map(function (o, i) { return '<span class="pr-cell sm" data-i="' + i + '"><b>' + ['1', '', '3', '', '5'][o] + '</b></span>'; }).join('') + '<span class="pr-cell sm root" data-i="8"><b>1</b></span><span class="pr-cell sm pr-breath" data-i="9"><b>吸</b></span>';
-        var r = p.querySelector('.pr-rec'); if (r) r.textContent = st.rec ? '班級紀錄 ' + st.rec + ' Bpm' : '班級紀錄 —';
+        var r = p.querySelector('.pr-rec'); if (r) r.textContent = st.rec ? '班級紀錄 ' + st.rec + ' Bpm' : '班級紀錄：尚無';
       }
       if (!playing) drawStaff(0);
       if (!playing) { big.textContent = KEYN[st.start % 12] + ' 調'; sub.textContent = '起始音 ' + nameOf(st.start).name + '・' + st.bpm + ' Bpm・母音 ' + VOWELS[st.vowel] + '　按「開始跟唱」，先聽 4 拍預備'; }
@@ -1036,7 +1036,7 @@
     p.innerHTML = '<div class="rg-read"><div><small>可用音域</small><b class="rg-use">--</b></div><div><small>完全音域</small><b class="rg-full">--</b></div><div><small>可用度數</small><b class="rg-deg">--</b></div></div>' +
       '<div class="rg-ref"><button type="button" class="btn dn" aria-label="往下一個音">▼</button><div class="rg-note"><small>參考音</small><b>C4</b><span class="rg-sung">你唱的音：--</span></div><button type="button" class="btn up" aria-label="往上一個音">▲</button></div>' +
       '<div class="btn-row"><button type="button" class="btn play">▶ 播放參考音</button><button type="button" class="btn primary mic">● 開始偵測</button><button type="button" class="btn setlo">設為可用最低</button><button type="button" class="btn sethi">設為可用最高</button><button type="button" class="btn clear">清除</button></div>' +
-      '<p class="rg-state muted">由 C4 開始，以 /a/ 逐音往下唱；聲音變虛、音準不穩時，把前一個音設為「可用最低」。再回到 C4 往上，用同樣方式設定「可用最高」。</p>';
+      '<p class="rg-state muted">由 C4 開始，以 /a/ 逐音往下演唱；聲音變虛、音準不穩時，將前一個音設為「可用最低」。再回到 C4 往上，以同樣的方式設定「可用最高」。</p>';
     var noteB = p.querySelector('.rg-note b'), sung = p.querySelector('.rg-sung'), state = p.querySelector('.rg-state'), mic = p.querySelector('.mic');
     function nm(m) { return m === null || m === undefined ? '--' : nameOf(m).name; }
     function show() {
@@ -1125,8 +1125,8 @@
   var RHYTHMS = [
     { name: '四分音符', tip: '一拍一個音，最穩定的基礎', on: [0, 1, 2, 3] },
     { name: '八分音符', tip: '一拍兩個音，平均分配', on: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5] },
-    { name: '附點節奏', tip: '長—短，像心跳的「咚—噠」', on: [0, 1.5, 2, 3.5] },
-    { name: '切分音', tip: '重音落在拍子中間，流行歌最常見', on: [0, 0.5, 1.5, 2, 3] },
+    { name: '附點節奏', tip: '長、短交替，如同心跳的「咚、噠」', on: [0, 1.5, 2, 3.5] },
+    { name: '切分音', tip: '重音落在拍子中間，流行歌曲最常見', on: [0, 0.5, 1.5, 2, 3] },
     { name: '前八後十六', tip: '一個長音接兩個短音', on: [0, 0.5, 0.75, 1, 1.5, 1.75, 2, 3] },
     { name: '反拍', tip: '全部落在「拍子之間」，最考驗穩定度', on: [0.5, 1.5, 2.5, 3.5] }
   ];
@@ -1202,9 +1202,9 @@
       var offs = hit.filter(function (h) { return h !== null; }), avg = offs.length ? offs.reduce(function (a, b) { return a + b; }, 0) / offs.length : 0;
       var pct = Math.max(0, Math.round((n - extra * 0.5) / tg.length * 100));
       result = { hit: hit.map(function (h) { return h !== null; }), det: det, n: n, extra: extra, avg: avg, pct: pct };
-      var lean = Math.abs(avg) < 25 ? '時間點很準' : avg < 0 ? '整體偏快約 ' + Math.round(-avg) + ' 毫秒（搶拍）' : '整體偏慢約 ' + Math.round(avg) + ' 毫秒（拖拍）';
+      var lean = Math.abs(avg) < 25 ? '時間點非常準確' : avg < 0 ? '整體偏快約 ' + Math.round(-avg) + ' 毫秒（搶拍）' : '整體偏慢約 ' + Math.round(avg) + ' 毫秒（拖拍）';
       scoreEl.textContent = pct + ' 分';
-      state.textContent = '命中 ' + n + ' / ' + tg.length + (extra ? '，多唱 ' + extra + ' 個' : '') + '。' + (n ? lean : '再聽一次示範，跟著節拍器唱唱看');
+      state.textContent = '命中 ' + n + ' / ' + tg.length + (extra ? '，多唱 ' + extra + ' 個' : '') + '。' + (n ? lean : '再聆聽一次示範，跟著節拍器練唱');
       if (n === tg.length && !extra) chime();
       report(g, 'rhythm', { item: RHYTHMS[idx].name + '（' + bpm + ' Bpm）', result: n + '/' + tg.length, value: pct, detail: { extra: extra, avgOffsetMs: Math.round(avg), mode: mode } });
       draw();
@@ -1239,7 +1239,7 @@
       env = { armed: true, last: -1, peak: 0, low: 0.005, floor: 0, th: 0.02 };
       var c = ac(); start = countIn(c.currentTime + 0.15); end = start + 4 * spb() + 0.35;
       running = true; go.textContent = '■ 停止'; demo.disabled = true;
-      tapB.disabled = withMic; state.textContent = withMic ? '數四拍後開始，用 Ta 唱出節奏（不要跟著拍手）' : '數四拍後開始，在每個拍點按「拍點」或 J 鍵';
+      tapB.disabled = withMic; state.textContent = withMic ? '數完四拍後開始，用 Ta 唱出節奏（雙手保持不動）' : '數完四拍後開始，在每個拍點按下「拍點」或 J 鍵';
       cancelAnimationFrame(raf); tick();
     }
     go.onclick = function () {
@@ -1255,14 +1255,14 @@
       on.forEach(function (b, k) { var nx = k + 1 < on.length ? on[k + 1] : 4; note(t0 + b * spb(), Math.min(0.35, (nx - b) * spb() * 0.8)); });
       result = null; onsets = []; scoreEl.textContent = ''; state.textContent = '示範播放中：前四下是預備拍';
       start = t0; end = t0 + 4 * spb() + 0.2; demo.disabled = true;
-      (function anim() { var t = ac().currentTime, b = (t - start) / spb(); nowBeat = b >= 0 && b < 4 ? b : -1; draw(); if (t < end) requestAnimationFrame(anim); else { nowBeat = -1; demo.disabled = false; state.textContent = '換你了：按「開始挑戰」，數四拍後用 Ta 唱出同樣的節奏'; draw(); } })();
+      (function anim() { var t = ac().currentTime, b = (t - start) / spb(); nowBeat = b >= 0 && b < 4 ? b : -1; draw(); if (t < end) requestAnimationFrame(anim); else { nowBeat = -1; demo.disabled = false; state.textContent = '輪到你了：按下「開始挑戰」，數完四拍後，用 Ta 唱出同樣的節奏'; draw(); } })();
     };
     function tap() { if (!running || mode !== 'tap') return; onsets.push((ac().currentTime - start) / spb()); draw(); }
     // 觸控用 pointerdown 立即記錄拍點（不等 click 延遲，也不觸發雙擊放大）；鍵盤啟動按鈕時仍走 click
     tapB.addEventListener('pointerdown', function (e) { e.preventDefault(); tap(); });
     tapB.onclick = function (e) { if (e.detail === 0) tap(); };
     document.addEventListener('keydown', function (e) { if (running && mode === 'tap' && (e.key === 'j' || e.key === 'J')) { e.preventDefault(); e.stopPropagation(); tap(); } }, true);
-    modeB.onclick = function () { if (running) return; mode = mode === 'mic' ? 'tap' : 'mic'; modeB.textContent = mode === 'mic' ? '改用拍點鍵' : '改用麥克風'; state.textContent = mode === 'mic' ? '麥克風模式：用 Ta 唱出節奏' : '拍點鍵模式：在每個拍點按「拍點」或 J 鍵'; };
+    modeB.onclick = function () { if (running) return; mode = mode === 'mic' ? 'tap' : 'mic'; modeB.textContent = mode === 'mic' ? '改用拍點鍵' : '改用麥克風'; state.textContent = mode === 'mic' ? '麥克風模式：用 Ta 唱出節奏' : '拍點鍵模式：在每個拍點按下「拍點」或 J 鍵'; };
     g.querySelector('.rg-up').onclick = function () { if (!running) { bpm = Math.min(132, bpm + 4); result = null; paintPats(); draw(); } };
     g.querySelector('.rg-dn').onclick = function () { if (!running) { bpm = Math.max(56, bpm - 4); result = null; paintPats(); draw(); } };
     paintPats(); draw(); window.addEventListener('resize', draw);
@@ -1379,11 +1379,11 @@
   /* ---------- 10. 排序遊戲（點兩下交換） ---------- */
   $$('.order').forEach(function (o) {
     var items = o.getAttribute('data-items').split('|'), cur = items.map(function (_, k) { return k; }), sel = -1;
-    var box = el('div', 'order-tiles'), foot = el('div', 'btn-row'), msg = el('p', 'order-msg muted', '點一張，再點另一張就會交換位置');
+    var box = el('div', 'order-tiles'), foot = el('div', 'btn-row'), msg = el('p', 'order-msg muted', '點選一張，再點選另一張，兩張就會交換位置');
     var ck = btn('檢查', 'primary'), sh = btn('重新洗牌'), an = btn('顯示答案');
     foot.appendChild(ck); foot.appendChild(sh); foot.appendChild(an);
     o.appendChild(box); o.appendChild(foot); o.appendChild(msg);
-    function shuffle() { do { cur.sort(function () { return Math.random() - 0.5; }); } while (cur.every(function (v, k) { return v === k; })); sel = -1; render(); msg.textContent = '點一張，再點另一張就會交換位置'; }
+    function shuffle() { do { cur.sort(function () { return Math.random() - 0.5; }); } while (cur.every(function (v, k) { return v === k; })); sel = -1; render(); msg.textContent = '點選一張，再點選另一張，兩張就會交換位置'; }
     function render(check) {
       box.innerHTML = '';
       cur.forEach(function (v, k) {
@@ -1547,7 +1547,7 @@
       if (!rows.some(function (r) { return r.slice(1).some(function (v) { return String(v).trim(); }); })) { say('請先填寫紀錄', 'warn'); return; }
       if (window.PixelBackend) window.PixelBackend.send('log7', { rows: rows, columns: cols }, { slide: slideNo(t), okMsg: '練習紀錄已送出' });
     };
-    t.appendChild(el('p', 'muted log7-note', '填在自己的手機上，按「送出紀錄給老師」就會存進課程試算表。'));
+    t.appendChild(el('p', 'muted log7-note', '在自己的手機上填寫，按下「送出紀錄給老師」，就會存進課程試算表。'));
   });
 
   /* ---------- 16. 作業勾選 ---------- */

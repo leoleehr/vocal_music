@@ -59,7 +59,7 @@
   var NUM = { '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6 };
   var COLOR = ['', '#e8412b', '#e2407f', '#9a5fd0', '#45b3e6', '#6cbb4b', '#e3d83a'];
   var main = document.getElementById('content'), toc = document.getElementById('toc'), prog = document.getElementById('progress');
-  fetch('docs/course-handbook.md')
+  fetch('docs/course-handbook.md?v=20261014')
     .then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })
     .then(function (md) {
       main.innerHTML = marked.parse(md, { gfm: true });

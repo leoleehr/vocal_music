@@ -177,7 +177,7 @@
       var ok = document.createElement('button'); ok.type = 'button'; ok.className = 'pass'; ok.textContent = '唱穩了 +5';
       var rb = document.createElement('span'); rb.className = 'record';
       var rs = document.createElement('button'); rs.type = 'button'; rs.className = 'restart'; rs.textContent = '回到 ' + base;
-      function showRec() { rb.textContent = rec ? '班級紀錄 ' + rec + ' Bpm' : '班級紀錄 —'; }
+      function showRec() { rb.textContent = rec ? '班級紀錄 ' + rec + ' Bpm' : '班級紀錄：尚無'; }
       ok.onclick = function () {
         if (bpm > rec) { rec = bpm; try { localStorage.setItem(key, rec); } catch (e) {} showRec(); }
         bpm = Math.min(200, bpm + 5); label(); start();
